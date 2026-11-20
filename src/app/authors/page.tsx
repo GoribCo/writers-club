@@ -15,9 +15,10 @@ export default function AuthorsPage() {
   const byCode = Object.fromEntries(getLanguages().map(l => [l.code, l]))
   const authors = getAuthors()
   // "Where we come from": countries with their authors, most authors first
-  const countries = Object.values(Object.groupBy(authors, a => a.country || '—'))
-    .map(as => ({ country: as![0].country, flag: as!.find(a => a.flag)?.flag ?? '🌍', authors: as! }))
-    .filter(c => c.country)
+  // Not Object.groupBy: CI builds on Node 20, which doesn't have it
+  const byCountry = new Map<string, typeof authors>()
+  for (const a of authors) if (a.country) byCountry.set(a.country, [...(byCountry.get(a.country) ?? []), a])
+  const countries = [...byCountry].map(([country, as]) => ({ country, flag: as.find(a => a.flag)?.flag ?? '🌍', authors: as }))
     .sort((a, b) => b.authors.length - a.authors.length || a.country.localeCompare(b.country))
   return (
     <div className="max-w-5xl mx-auto">
