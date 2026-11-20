@@ -11,6 +11,7 @@ export interface Genre {
   label: string
   icon: string
   count: number
+  names?: Record<string, string> // label per language code (genres.json)
 }
 
 export interface Writing {

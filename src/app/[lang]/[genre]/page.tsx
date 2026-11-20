@@ -24,7 +24,7 @@ export default async function GenrePage({ params }: { params: Promise<Params> })
   if (!language || !g) notFound()
 
   return (
-    <div lang={lang} dir={language.dir}>
+    <div lang={lang} dir={language.dir ?? 'ltr'}>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
         <span aria-hidden>{g.icon}</span> {g.label}
       </h1>

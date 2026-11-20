@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useI18n } from './I18n'
 
 const sizes = [0.9, 1, 1.15, 1.3]
 
@@ -9,6 +10,7 @@ export default function ReaderTools({ title, text }: { title: string; text: stri
   const [progress, setProgress] = useState(0)
   const [size, setSize] = useState(1)
   const [copied, setCopied] = useState(false)
+  const { t } = useI18n()
 
   useEffect(() => {
     try { setSize(Math.max(0, sizes.indexOf(Number(localStorage.getItem('readerScale'))))) } catch {}
@@ -41,9 +43,9 @@ export default function ReaderTools({ title, text }: { title: string; text: stri
         <div className="h-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 origin-left" style={{ transform: `scaleX(${progress})` }} />
       </div>
       <div className="flex items-center gap-2">
-        <button className={btn} onClick={() => setSize(s => s - 1)} disabled={size === 0} aria-label="Smaller text">A−</button>
-        <button className={btn} onClick={() => setSize(s => s + 1)} disabled={size === sizes.length - 1} aria-label="Larger text">A+</button>
-        <button className={`${btn} px-4`} onClick={share}>{copied ? 'Link copied ✓' : 'Share ↗'}</button>
+        <button className={btn} onClick={() => setSize(s => s - 1)} disabled={size === 0} aria-label={t('reader.smaller')}>A−</button>
+        <button className={btn} onClick={() => setSize(s => s + 1)} disabled={size === sizes.length - 1} aria-label={t('reader.larger')}>A+</button>
+        <button className={`${btn} px-4`} onClick={share}>{t(copied ? 'reader.copied' : 'reader.share')}</button>
       </div>
     </>
   )

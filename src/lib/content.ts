@@ -119,7 +119,7 @@ export function getAllGenres(): Genre[] {
   for (const l of getLanguages())
     for (const g of getGenres(l.code)) {
       const cur = all.get(g.slug)
-      all.set(g.slug, { ...g, label: genreLabel(g.slug, 'en'), count: (cur?.count ?? 0) + g.count })
+      all.set(g.slug, { ...g, label: genreLabel(g.slug, 'en'), names: genreMeta()[g.slug]?.names, count: (cur?.count ?? 0) + g.count })
     }
   return [...all.values()]
 }
@@ -252,4 +252,12 @@ export function getCollections(): (Collection & { items: ReturnType<typeof group
 export function getPage(slug: string): { title: string; description: string; body: string } | null {
   const p = readMdDir('pages').find(x => x.slug === slug)
   return p ? { title: String(p.data.title ?? titleCase(slug)), description: String(p.data.description ?? ''), body: p.content.trim() } : null
+}
+
+/** Interface dictionaries: content/ui/{code}.json (English first). */
+export function getUiDictionaries(): Record<string, Record<string, string | Record<string, string>>> {
+  const dir = path.join(contentDir, 'ui')
+  const codes = fs.readdirSync(dir).filter(f => f.endsWith('.json')).map(f => f.slice(0, -5))
+    .sort((a, b) => (a === 'en' ? -1 : b === 'en' ? 1 : a.localeCompare(b)))
+  return Object.fromEntries(codes.map(c => [c, JSON.parse(fs.readFileSync(path.join(dir, `${c}.json`), 'utf-8'))]))
 }

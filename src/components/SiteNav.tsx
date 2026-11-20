@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import ThemeToggle from './ThemeToggle'
+import { SiteLanguageSelect, useI18n, useLanguageName } from './I18n'
 import config from '@/config'
 import type { Genre, Language } from '@/lib/types'
 
@@ -23,16 +24,17 @@ const pill = (active: boolean) =>
 
 export function TopNav({ languages }: { languages: Language[] }) {
   const { lang } = useSegments()
+  const { t } = useI18n()
   return (
     <header className="sticky top-0 z-40 pt-[env(safe-area-inset-top)] backdrop-blur-md bg-white/85 dark:bg-gray-900/85 border-b border-gray-200 dark:border-gray-800">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center gap-3">
-        <Link href="/" className="flex items-center gap-2 shrink-0" aria-label={`${config.app.name} home`}>
+        <Link href="/" className="flex items-center gap-2 shrink-0" aria-label={t('nav.homeAria', { name: config.app.name })}>
           <span className="w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center text-white text-sm font-bold">✎</span>
-          <span className="text-lg font-bold text-gray-900 dark:text-white">{config.app.name}</span>
+          <span className="hidden min-[360px]:inline text-lg font-bold text-gray-900 dark:text-white">{config.app.name}</span>
         </Link>
 
         <span className="flex-1 lg:hidden" />
-        <nav aria-label="Languages" className="hidden lg:flex flex-1 min-w-0 gap-1 overflow-x-auto [scrollbar-width:none]">
+        <nav aria-label={t('nav.languages')} className="hidden lg:flex flex-1 min-w-0 gap-1 overflow-x-auto [scrollbar-width:none]">
           {languages.map(l => (
             <Link key={l.code} href={`/${l.code}/`} lang={l.code} className={pill(l.code === lang)}>
               <span aria-hidden>{l.flag}</span>
@@ -43,7 +45,7 @@ export function TopNav({ languages }: { languages: Language[] }) {
 
         <Link
           href="/authors/"
-          aria-label="Authors"
+          aria-label={t('nav.authors')}
           className="hidden lg:block p-2 rounded-xl text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -53,13 +55,14 @@ export function TopNav({ languages }: { languages: Language[] }) {
         </Link>
         <Link
           href="/search/"
-          aria-label="Search"
+          aria-label={t('nav.search')}
           className="hidden lg:block p-2 rounded-xl text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
           </svg>
         </Link>
+        <SiteLanguageSelect />
         <ThemeToggle />
       </div>
     </header>
@@ -122,6 +125,8 @@ export function BottomNav({ languages }: { languages: Language[] }) {
   const [open, setOpen] = useState(false)
   useEffect(() => setOpen(false), [pathname])
   const current = languages.find(l => l.code === lang)
+  const { t } = useI18n()
+  const languageName = useLanguageName()
 
   const tab = (active: boolean) =>
     `flex-1 flex flex-col items-center gap-0.5 pt-2 pb-1.5 text-[11px] font-medium ${
@@ -135,10 +140,10 @@ export function BottomNav({ languages }: { languages: Language[] }) {
     <div className="lg:hidden">
       {open && (
         <>
-          <button aria-label="Close languages" onClick={() => setOpen(false)} className="fixed inset-0 z-40 bg-black/40" />
-          <div role="dialog" aria-label="Languages" className="fixed inset-x-0 bottom-0 z-50 max-h-[75dvh] overflow-y-auto rounded-t-3xl bg-white dark:bg-gray-900 p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] shadow-2xl">
+          <button aria-label={t('nav.close')} onClick={() => setOpen(false)} className="fixed inset-0 z-40 bg-black/40" />
+          <div role="dialog" aria-label={t('nav.chooseLanguage')} className="fixed inset-x-0 bottom-0 z-50 max-h-[75dvh] overflow-y-auto rounded-t-3xl bg-white dark:bg-gray-900 p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] shadow-2xl">
             <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-gray-300 dark:bg-gray-700" />
-            <h2 className="mb-3 font-semibold text-gray-900 dark:text-white">Choose a language</h2>
+            <h2 className="mb-3 font-semibold text-gray-900 dark:text-white">{t('nav.chooseLanguage')}</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {languages.map(l => (
                 <Link
@@ -155,7 +160,7 @@ export function BottomNav({ languages }: { languages: Language[] }) {
                   <span className="text-2xl" aria-hidden>{l.flag}</span>
                   <span className="min-w-0">
                     <span className="block truncate font-medium text-gray-900 dark:text-white">{l.nativeName}</span>
-                    <span className="block truncate text-xs text-gray-400">{l.name}</span>
+                    <span className="block truncate text-xs text-gray-400">{languageName(l.code)}</span>
                   </span>
                 </Link>
               ))}
@@ -164,14 +169,14 @@ export function BottomNav({ languages }: { languages: Language[] }) {
         </>
       )}
 
-      <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-50 flex border-t border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md pb-[env(safe-area-inset-bottom)]">
-        <Link href="/" className={tab(pathname === '/' && !open)}>{icon(icons.home)}Home</Link>
+      <nav aria-label={t('nav.home')} className="fixed inset-x-0 bottom-0 z-50 flex border-t border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md pb-[env(safe-area-inset-bottom)]">
+        <Link href="/" className={tab(pathname === '/' && !open)}>{icon(icons.home)}{t('nav.home')}</Link>
         <button onClick={() => setOpen(o => !o)} aria-expanded={open} className={tab(open || !!current)}>
           {current && !open ? <span className="text-2xl leading-6" aria-hidden>{current.flag}</span> : icon(icons.globe)}
-          <span className="max-w-[5.5rem] truncate">{current && !open ? current.nativeName : 'Languages'}</span>
+          <span className="max-w-[5.5rem] truncate">{current && !open ? current.nativeName : t('nav.languages')}</span>
         </button>
-        <Link href="/authors/" className={tab(lang === 'authors' && !open)}>{icon(icons.authors)}Authors</Link>
-        <Link href="/search/" className={tab(lang === 'search' && !open)}>{icon(icons.search)}Search</Link>
+        <Link href="/authors/" className={tab(lang === 'authors' && !open)}>{icon(icons.authors)}{t('nav.authors')}</Link>
+        <Link href="/search/" className={tab(lang === 'search' && !open)}>{icon(icons.search)}{t('nav.search')}</Link>
       </nav>
     </div>
   )

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Language, Writing } from '@/lib/types'
 import AuthorAvatar from './AuthorAvatar'
 import { asset } from '@/lib/url'
+import { LocaleDate, T } from './I18n'
 
 const covers: Record<string, string> = {
   story: 'from-amber-200 via-orange-200 to-rose-300 dark:from-amber-900 dark:via-orange-900 dark:to-rose-900',
@@ -13,9 +14,6 @@ const covers: Record<string, string> = {
 /** Gradient "cover art" for a genre (writings have no images). */
 export const genreCover = (genre: string) =>
   covers[genre] ?? 'from-slate-200 to-slate-300 dark:from-slate-800 dark:to-slate-700'
-
-const fmtDate = (d: string) =>
-  d ? new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
 /** Pass `languages` to show which languages the writing is available in (mixed-language lists). */
 export default function WritingCard({ writing: w, languages, featured = false }:
@@ -30,22 +28,22 @@ export default function WritingCard({ writing: w, languages, featured = false }:
         {w.cover
           ? <img src={asset(w.cover)} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
           : <span aria-hidden className={`${featured ? 'text-7xl' : 'text-5xl'} drop-shadow-sm group-hover:scale-110 transition-transform duration-300`}>{w.genreIcon}</span>}
-        <span className="absolute top-3 left-3 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur px-2.5 py-1 text-[11px] font-semibold text-gray-800 dark:text-gray-100">
+        <span className="absolute top-3 start-3 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur px-2.5 py-1 text-[11px] font-semibold text-gray-800 dark:text-gray-100">
           {w.genreLabel}
         </span>
         {languages && languages.length > 0 && (
-          <span className="absolute top-3 right-3 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur px-2 py-1 text-xs" title={languages.map(l => l.name).join(', ')}>
+          <span className="absolute top-3 end-3 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur px-2 py-1 text-xs" title={languages.map(l => l.name).join(', ')}>
             {languages.map(l => l.flag).join(' ')}
           </span>
         )}
       </div>
       <div className={`flex flex-1 flex-col p-5 ${featured ? 'md:p-8 md:justify-center' : ''}`}>
-        {featured && <span className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Featured</span>}
-        <h3 className={`font-bold leading-snug text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors ${featured ? 'text-2xl md:text-3xl' : 'text-lg'}`}>
+        {featured && <span className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400"><T k="card.featured" /></span>}
+        <h3 dir="auto" className={`font-bold leading-snug text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors ${featured ? 'text-2xl md:text-3xl' : 'text-lg'}`}>
           {w.title}
         </h3>
         {w.description && (
-          <p className={`mt-2 text-gray-500 dark:text-gray-400 ${featured ? 'text-base line-clamp-3' : 'text-sm line-clamp-2'}`}>{w.description}</p>
+          <p dir="auto" className={`mt-2 text-gray-500 dark:text-gray-400 ${featured ? 'text-base line-clamp-3' : 'text-sm line-clamp-2'}`}>{w.description}</p>
         )}
         <div className="mt-auto pt-4 flex items-center gap-2.5 text-xs text-gray-500 dark:text-gray-400">
           <AuthorAvatar author={{ name: w.author }} size={28} />
@@ -53,7 +51,7 @@ export default function WritingCard({ writing: w, languages, featured = false }:
             <span className="font-semibold text-gray-800 dark:text-gray-200">{w.author}</span>
             {w.country && ` · ${w.country}`}
           </span>
-          <span className="ml-auto shrink-0">{fmtDate(w.date)} · {w.minutes} min</span>
+          <span className="ms-auto shrink-0"><LocaleDate date={w.date} /> · <T k="card.min" n={w.minutes} /></span>
         </div>
       </div>
     </Link>

@@ -23,7 +23,7 @@ export default async function LanguagePage({ params }: { params: Promise<Params>
   if (!language) notFound()
 
   return (
-    <div lang={lang} dir={language.dir}>
+    <div lang={lang} dir={language.dir ?? 'ltr'}>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
         <span aria-hidden>{language.flag}</span> {language.nativeName}
       </h1>

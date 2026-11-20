@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import WritingCard from './WritingCard'
+import { useI18n } from './I18n'
 import type { Genre, Language, Writing } from '@/lib/types'
 
 type Item = { writing: Writing; langs: string[] }
@@ -9,12 +10,13 @@ type Item = { writing: Writing; langs: string[] }
 /** Content-type menu (All / Stories / Poems …) + filtered feed. Featured = newest of the selection. */
 export default function HomeFeed({ items, genres, languages }: { items: Item[]; genres: Genre[]; languages: Language[] }) {
   const [genre, setGenre] = useState('')
+  const { locale, t } = useI18n()
   const byCode = Object.fromEntries(languages.map(l => [l.code, l]))
   const shown = genre ? items.filter(i => i.writing.genre === genre) : items
   const [first, ...rest] = shown
   // Count the merged feed items, not per-language files, so tab numbers match what is shown
-  const tabs = [{ slug: '', label: 'All', icon: '✨', count: items.length },
-    ...genres.map(g => ({ ...g, count: items.filter(i => i.writing.genre === g.slug).length }))]
+  const tabs = [{ slug: '', label: t('feed.all'), icon: '✨', count: items.length },
+    ...genres.map(g => ({ ...g, label: g.names?.[locale] ?? g.label, count: items.filter(i => i.writing.genre === g.slug).length }))]
   const card = (i: Item, featured = false) => (
     <WritingCard key={i.writing.url} writing={i.writing} featured={featured}
       languages={i.langs.map(c => byCode[c]).filter(Boolean)} />
@@ -23,8 +25,8 @@ export default function HomeFeed({ items, genres, languages }: { items: Item[]; 
   return (
     <section aria-labelledby="feed-title">
       <div className="sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 mb-6 bg-gray-50/90 dark:bg-slate-900/90 backdrop-blur-md">
-        <h2 id="feed-title" className="sr-only">Writings</h2>
-        <div role="tablist" aria-label="Content types" className="flex gap-2 overflow-x-auto [scrollbar-width:none]">
+        <h2 id="feed-title" className="sr-only">{t('feed.title')}</h2>
+        <div role="tablist" aria-label={t('feed.contentTypes')} className="flex gap-2 overflow-x-auto [scrollbar-width:none]">
           {tabs.map(t => (
             <button
               key={t.slug}

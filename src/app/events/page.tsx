@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getEvents } from '@/lib/content'
 import EventList from '@/components/EventList'
 import JsonLd from '@/components/JsonLd'
+import { T } from '@/components/I18n'
 import { absUrl } from '@/lib/url'
 import config from '@/config'
 
@@ -23,8 +24,8 @@ export default function EventsPage() {
         organizer: { '@type': 'Organization', name: config.app.name, url: absUrl('/') },
         url: absUrl(`/events/#${e.slug}`),
       }))} />
-      <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">Events</h1>
-      <p className="mb-8 text-gray-500 dark:text-gray-400">Everyone is welcome — bring something you wrote, or just come and listen.</p>
+      <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white"><T k="events.title" /></h1>
+      <p className="mb-8 text-gray-500 dark:text-gray-400"><T k="events.intro" /></p>
       <EventList events={events} />
     </div>
   )

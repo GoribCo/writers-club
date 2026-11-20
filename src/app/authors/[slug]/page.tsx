@@ -7,6 +7,7 @@ import { getAuthor, getAuthors, getLanguages, groupTranslations } from '@/lib/co
 import AuthorAvatar from '@/components/AuthorAvatar'
 import WritingCard from '@/components/WritingCard'
 import JsonLd from '@/components/JsonLd'
+import { T } from '@/components/I18n'
 import { absAsset, absUrl } from '@/lib/url'
 
 export const dynamicParams = false
@@ -37,9 +38,9 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
   const langs = [...new Set(a.writings.map(w => w.lang))]
   const genres = [...new Set(works.map(i => i.writing.genreLabel))]
   const stats = [
-    { n: works.length, label: works.length === 1 ? 'Writing' : 'Writings' },
-    { n: langs.length, label: langs.length === 1 ? 'Language' : 'Languages' },
-    { n: new Set(a.writings.map(w => w.genre)).size, label: 'Genres' },
+    { n: works.length, label: 'author.statWritings' },
+    { n: langs.length, label: 'author.statLanguages' },
+    { n: new Set(a.writings.map(w => w.genre)).size, label: 'author.statGenres' },
   ]
 
   return (
@@ -61,7 +62,7 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
         },
         hasPart: works.map(i => ({ '@type': 'Article', headline: i.writing.title, url: absUrl(i.writing.url), inLanguage: i.langs })),
       }} />
-      <Link href="/authors/" className="inline-flex items-center gap-1 mb-4 text-sm font-medium text-gray-500 hover:text-indigo-600">← All authors</Link>
+      <Link href="/authors/" className="inline-flex items-center gap-1 mb-4 text-sm font-medium text-gray-500 hover:text-indigo-600"><T k="author.all" /></Link>
 
       {/* Profile header */}
       <section className={`${card} overflow-hidden mb-8`}>
@@ -71,7 +72,7 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
         <div className="px-5 sm:px-8 pb-6">
           <div className="relative -mt-14 sm:-mt-16 flex flex-col gap-3">
             <AuthorAvatar author={a} size={112} className="ring-4 ring-white dark:ring-gray-800 shadow-lg" />
-            <div className="min-w-0">
+            <div dir="auto" className="min-w-0">
               <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">{a.name}</h1>
               {a.tagline && <p className="mt-1 text-gray-600 dark:text-gray-300">{a.tagline}</p>}
               {a.country && <p className="mt-1 text-sm font-semibold text-indigo-600 dark:text-indigo-400">{a.flag || '📍'} {a.country}</p>}
@@ -93,7 +94,7 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
             {stats.map(s => (
               <div key={s.label}>
                 <div className="text-2xl font-extrabold text-gray-900 dark:text-white">{s.n}</div>
-                <div className="text-xs uppercase tracking-wider text-gray-500">{s.label}</div>
+                <div className="text-xs uppercase tracking-wider text-gray-500"><T k={s.label} n={s.n} /></div>
               </div>
             ))}
           </div>
@@ -104,8 +105,8 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
         <div className="space-y-8 min-w-0">
           {a.about && (
             <section className={`${card} p-6 sm:p-8`}>
-              <h2 className="mb-3 text-xl font-bold text-gray-900 dark:text-white">About</h2>
-              <div className="prose writing max-w-none text-gray-700 dark:text-gray-300">
+              <h2 className="mb-3 text-xl font-bold text-gray-900 dark:text-white"><T k="author.about" /></h2>
+              <div dir="auto" className="prose writing max-w-none text-gray-700 dark:text-gray-300">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{a.about}</ReactMarkdown>
               </div>
             </section>
@@ -113,14 +114,14 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
 
           {works.length > 0 && (
             <section>
-              <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Writings by {a.name.split(' ')[0]}</h2>
+              <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white"><T k="author.writingsBy" name={a.name.split(' ')[0]} /></h2>
               <div className="grid gap-5 sm:grid-cols-2">
                 {works.map(i => (
                   <div key={i.writing.url} className="flex flex-col gap-2">
                     <WritingCard writing={i.writing} languages={i.langs.map(c => byCode[c]).filter(Boolean)} />
                     {i.langs.length > 1 && (
                       <nav aria-label={`${i.writing.title} in other languages`} className="flex flex-wrap gap-1.5 px-2 text-xs">
-                        <span className="text-gray-400">Read in:</span>
+                        <span className="text-gray-400"><T k="author.readIn" /></span>
                         {i.langs.map(c => byCode[c] && (
                           <Link key={c} href={`/${c}/${i.writing.genre}/${i.writing.slug}/`} lang={c} hrefLang={c}
                             className="font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
@@ -138,18 +139,18 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
 
         <aside className="space-y-4 lg:sticky lg:top-20 self-start">
           <section className={`${card} p-5`}>
-            <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-gray-500">Profile</h2>
+            <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-gray-500"><T k="author.profile" /></h2>
             <dl className="space-y-3 text-sm">
-              {Object.entries({ ...a.details, 'Writes about': genres.join(', ') }).filter(([, v]) => v).map(([k, v]) => (
+              {Object.entries({ ...a.details, 'author.writesAbout': genres.join(', ') }).filter(([, v]) => v).map(([k, v]) => (
                 <div key={k}>
-                  <dt className="text-xs text-gray-400">{k}</dt>
-                  <dd className="font-medium text-gray-800 dark:text-gray-200">{v}</dd>
+                  <dt className="text-xs text-gray-400">{k === 'author.writesAbout' ? <T k={k} /> : k}</dt>
+                  <dd dir="auto" className="font-medium text-gray-800 dark:text-gray-200">{v}</dd>
                 </div>
               ))}
             </dl>
           </section>
           <section className={`${card} p-5`}>
-            <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-gray-500">Published in</h2>
+            <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-gray-500"><T k="author.publishedIn" /></h2>
             <div className="flex flex-wrap gap-2">
               {langs.map(c => byCode[c] && (
                 <Link key={c} href={`/${c}/`} lang={c}

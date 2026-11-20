@@ -16,7 +16,7 @@ const slugify = s => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').r
 
 const languages = JSON.parse(fs.readFileSync(path.join(root, 'languages.json'), 'utf-8')).languages.map(l => l.code)
 const genres = Object.keys(JSON.parse(fs.readFileSync(path.join(root, 'genres.json'), 'utf-8')))
-const special = new Set(['authors', 'events', 'collections', 'pages'])
+const special = new Set(['authors', 'events', 'collections', 'pages', 'ui'])
 const authors = new Set(mdFiles(path.join(root, 'authors')).map(f => f.slice(0, -3)))
 const collections = new Set(mdFiles(path.join(root, 'collections')).map(f => f.slice(0, -3)))
 const writings = new Map() // genre/slug -> langs

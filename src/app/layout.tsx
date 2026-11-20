@@ -3,7 +3,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import ThemeProvider from '@/components/ThemeProvider'
 import { TopNav, SideNav, BottomNav } from '@/components/SiteNav'
-import { getGenres, getLanguages } from '@/lib/content'
+import { getGenres, getLanguages, getUiDictionaries } from '@/lib/content'
+import { I18nProvider } from '@/components/I18n'
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import InstallBanner from '@/components/InstallBanner'
@@ -88,8 +89,8 @@ export default function RootLayout({
         {/* Android / Chrome: status bar colour */}
         <meta name="theme-color" content="#4f46e5" />
 
-        {/* Static export has one root layout, so set <html lang/dir> from the URL's language before paint */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){var c=location.pathname.slice(${JSON.stringify(config.url.basePath.length)}).split('/')[1],l=${JSON.stringify(Object.fromEntries(languages.map(l => [l.code, l.dir ?? 'ltr'])))};if(l[c]){document.documentElement.lang=c;document.documentElement.dir=l[c]}})()` }} />
+        {/* Before paint: <html lang> = the page's content language (SEO); <html dir> = the visitor's site language */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var c=location.pathname.slice(${JSON.stringify(config.url.basePath.length)}).split('/')[1];if(${JSON.stringify(languages.map(l => l.code))}.indexOf(c)>-1)document.documentElement.lang=c;try{if(['ar','fa','he','ur'].indexOf(localStorage.getItem('uiLang'))>-1)document.documentElement.dir='rtl'}catch(e){}})()` }} />
         <JsonLd data={{
           '@context': 'https://schema.org',
           '@graph': [
@@ -109,6 +110,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} font-sans antialiased bg-gray-50 dark:bg-slate-900 min-h-dvh`}>
         <ThemeProvider>
+        <I18nProvider dicts={getUiDictionaries()}>
           <GoogleAnalytics />
           <ServiceWorkerRegistrar />
           <TopNav languages={languages} />
@@ -122,6 +124,7 @@ export default function RootLayout({
           <SiteFooter />
           <BottomNav languages={languages} />
           <InstallBanner />
+        </I18nProvider>
         </ThemeProvider>
       </body>
     </html>

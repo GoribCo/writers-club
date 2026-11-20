@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getLanguages, getTags } from '@/lib/content'
 import WritingCard from '@/components/WritingCard'
+import { T } from '@/components/I18n'
 
 export const dynamicParams = false
 
@@ -23,7 +24,7 @@ export default async function TagPage({ params }: { params: Promise<Params> }) {
   const byCode = Object.fromEntries(getLanguages().map(l => [l.code, l]))
   return (
     <div className="max-w-5xl mx-auto">
-      <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">Theme</p>
+      <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400"><T k="tag.theme" /></p>
       <h1 className="mb-6 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">#{tag}</h1>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {t.items.map(i => <WritingCard key={i.writing.url} writing={i.writing} languages={i.langs.map(c => byCode[c]).filter(Boolean)} />)}

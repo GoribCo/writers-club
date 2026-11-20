@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getAuthors, getLanguages } from '@/lib/content'
 import AuthorAvatar from '@/components/AuthorAvatar'
+import { T } from '@/components/I18n'
 
 export const dynamic = 'force-static'
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default function AuthorsPage() {
     .sort((a, b) => b.authors.length - a.authors.length || a.country.localeCompare(b.country))
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-6">Authors</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-6"><T k="authors.title" /></h1>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {authors.map(a => (
           <Link
@@ -33,7 +34,7 @@ export default function AuthorsPage() {
               <div className="font-semibold text-gray-900 dark:text-white">{a.name}</div>
               <div className="text-sm text-indigo-600 dark:text-indigo-400">{[a.tagline, a.country].filter(Boolean).join(' · ')}</div>
               <div className="text-xs text-gray-400">
-                {a.writings.length} writing{a.writings.length !== 1 && 's'} ·{' '}
+                <T k="count.writings" n={a.writings.length} /> ·{' '}
                 {[...new Set(a.writings.map(w => w.lang))].map(c => byCode[c]?.flag).join(' ')}
               </div>
             </div>
@@ -41,8 +42,8 @@ export default function AuthorsPage() {
         ))}
       </div>
       <section className="mt-12">
-        <h2 className="mb-1 text-2xl font-bold text-gray-900 dark:text-white">Where we come from</h2>
-        <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">{countries.length} countries, one club.</p>
+        <h2 className="mb-1 text-2xl font-bold text-gray-900 dark:text-white"><T k="authors.whereFrom" /></h2>
+        <p className="mb-4 text-sm text-gray-500 dark:text-gray-400"><T k="authors.countries" n={countries.length} /></p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {countries.map(c => (
             <div key={c.country} className="rounded-2xl bg-white dark:bg-gray-800/80 ring-1 ring-gray-200/70 dark:ring-gray-700/60 p-4">

@@ -5,6 +5,7 @@ import CollectionCard from '@/components/CollectionCard'
 import HomeFeed from '@/components/HomeFeed'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import config from '@/config'
+import { T } from '@/components/I18n'
 
 export const dynamic = 'force-static'
 
@@ -16,9 +17,9 @@ export default function HomePage() {
   const collections = getCollections()
   const tags = getTags()
   const stats = [
-    { n: items.length, label: 'Writings' },
-    { n: authors.length, label: 'Authors' },
-    { n: languages.length, label: 'Languages' },
+    { n: items.length, label: 'stat.writings' },
+    { n: authors.length, label: 'stat.authors' },
+    { n: languages.length, label: 'stat.languages' },
   ]
 
   return (
@@ -29,20 +30,19 @@ export default function HomePage() {
         <div aria-hidden className="absolute -bottom-20 left-1/3 h-56 w-56 rounded-full bg-fuchsia-300/20 blur-3xl" />
         <div className="relative max-w-2xl">
           <p className="mb-3 inline-block rounded-full bg-white/15 px-3 py-1 text-xs font-semibold tracking-wide backdrop-blur">
-            BTU Cottbus-Senftenberg · International Students
+            <T k="home.kicker" />
           </p>
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-            Stories from every corner of the world.
+            <T k="home.title" />
           </h1>
           <p className="mt-4 text-white/85 text-base sm:text-lg">
-            {config.app.name} members meet every week to share their writing — stories, poems, travel diaries,
-            guides and drama, published in the languages they were written in.
+            <T k="home.intro" name={config.app.name} />
           </p>
           <div className="mt-8 flex gap-8">
             {stats.map(s => (
               <div key={s.label}>
                 <div className="text-3xl font-extrabold">{s.n}</div>
-                <div className="text-xs uppercase tracking-wider text-white/70">{s.label}</div>
+                <div className="text-xs uppercase tracking-wider text-white/70"><T k={s.label} /></div>
               </div>
             ))}
           </div>
@@ -56,8 +56,8 @@ export default function HomePage() {
       {collections.length > 0 && (
         <section>
           <div className="mb-4 flex items-end justify-between">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Collections</h2>
-            <Link href="/collections/" className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">See all →</Link>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white"><T k="home.collections" /></h2>
+            <Link href="/collections/" className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"><T k="home.seeAll" /></Link>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">{collections.slice(0, 2).map(c => <CollectionCard key={c.slug} c={c} />)}</div>
         </section>
@@ -65,7 +65,7 @@ export default function HomePage() {
 
       {tags.length > 0 && (
         <section>
-          <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Explore themes</h2>
+          <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white"><T k="home.themes" /></h2>
           <div className="flex flex-wrap gap-2">
             {tags.map(t => (
               <Link key={t.slug} href={`/tags/${t.slug}/`}
@@ -80,8 +80,8 @@ export default function HomePage() {
       {/* Authors */}
       <section>
         <div className="mb-4 flex items-end justify-between">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Meet the authors</h2>
-          <Link href="/authors/" className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">See all →</Link>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white"><T k="home.meetAuthors" /></h2>
+          <Link href="/authors/" className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"><T k="home.seeAll" /></Link>
         </div>
         <div className="-mx-4 sm:mx-0 px-4 sm:px-0 flex gap-4 overflow-x-auto pb-2 [scrollbar-width:none]">
           {authors.map(a => (
@@ -98,17 +98,17 @@ export default function HomePage() {
       {/* Submit */}
       <section className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between rounded-[2rem] bg-gray-900 dark:bg-white px-6 py-8 sm:px-10 text-white dark:text-gray-900">
         <div>
-          <h2 className="text-2xl font-bold">Have something to share?</h2>
-          <p className="mt-1 text-white/70 dark:text-gray-600">Stories, poems, guides — in any language. Every member's voice belongs here.</p>
+          <h2 className="text-2xl font-bold"><T k="home.shareTitle" /></h2>
+          <p className="mt-1 text-white/70 dark:text-gray-600"><T k="home.shareText" /></p>
         </div>
         <Link href="/submit/" className="shrink-0 rounded-full bg-white dark:bg-gray-900 px-6 py-3 text-center font-semibold text-gray-900 dark:text-white hover:opacity-90">
-          Submit your writing →
+          <T k="home.shareCta" />
         </Link>
       </section>
 
       {/* Languages */}
       <section>
-        <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Read in your language</h2>
+        <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white"><T k="home.readInYourLanguage" /></h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {languages.map(l => (
             <Link key={l.code} href={`/${l.code}/`} lang={l.code}
@@ -116,7 +116,7 @@ export default function HomePage() {
               <span className="text-3xl" aria-hidden>{l.flag}</span>
               <span className="min-w-0">
                 <span className="block truncate font-semibold text-gray-900 dark:text-white">{l.nativeName}</span>
-                <span className="block text-xs text-gray-400">{getWritings(l.code).length} writings</span>
+                <span className="block text-xs text-gray-400"><T k="count.writings" n={getWritings(l.code).length} /></span>
               </span>
             </Link>
           ))}

@@ -9,6 +9,7 @@ import {
 } from '@/lib/content'
 import WritingCard from '@/components/WritingCard'
 import ReaderTools from '@/components/ReaderTools'
+import { LocaleDate, T } from '@/components/I18n'
 import JsonLd from '@/components/JsonLd'
 import { absAsset, absUrl, asset } from '@/lib/url'
 import config from '@/config'
@@ -78,7 +79,7 @@ export default async function WritingPage({ params }: { params: Promise<Params> 
           .map(l => ({ '@type': 'CreativeWork', inLanguage: l.code, url: absUrl(`/${l.code}/${genre}/${slug}/`) })),
       }} />
 
-      <nav className="text-sm text-gray-500 dark:text-gray-400 mb-4" lang={lang} dir={language.dir}>
+      <nav className="text-sm text-gray-500 dark:text-gray-400 mb-4" lang={lang} dir={language.dir ?? 'ltr'}>
         <Link href={`/${lang}/`} className="hover:text-indigo-600">{language.nativeName}</Link>
         {' / '}
         <Link href={`/${lang}/${genre}/`} className="hover:text-indigo-600">{g?.label ?? genre}</Link>
@@ -86,7 +87,7 @@ export default async function WritingPage({ params }: { params: Promise<Params> 
 
       {translations.length > 1 && (
         <div className="flex flex-wrap items-center gap-2 mb-6">
-          <span className="text-xs text-gray-400">Also in:</span>
+          <span className="text-xs text-gray-400"><T k="writing.alsoIn" /></span>
           {translations.map(l => (
             <Link
               key={l.code}
@@ -106,7 +107,7 @@ export default async function WritingPage({ params }: { params: Promise<Params> 
         </div>
       )}
 
-      <div lang={lang} dir={language.dir}>
+      <div lang={lang} dir={language.dir ?? 'ltr'}>
         <header className="mb-6">
           {w.cover && <img src={asset(w.cover)} alt="" className="mb-6 w-full aspect-[2/1] object-cover rounded-3xl" />}
           {collection && (
@@ -120,7 +121,7 @@ export default async function WritingPage({ params }: { params: Promise<Params> 
             {w.country && ` · ${w.country}`}
           </p>
           <p className="text-xs text-gray-400 mt-1">
-            {w.date} · {w.minutes} min{w.translator && ` · translated by ${w.translator}`}
+            <LocaleDate date={w.date} /> · <T k="card.min" n={w.minutes} />{w.translator && <> · <T k="writing.translatedBy" name={w.translator} /></>}
           </p>
         </header>
 
@@ -146,13 +147,13 @@ export default async function WritingPage({ params }: { params: Promise<Params> 
           <nav aria-label={`More ${g?.label ?? genre}`} className="mt-10 grid grid-cols-2 gap-3">
             {prev ? (
               <Link href={prev.url} className="rounded-2xl ring-1 ring-gray-200 dark:ring-gray-700 p-4 hover:ring-indigo-400">
-                <span className="block text-xs text-gray-400">← Previous</span>
+                <span className="block text-xs text-gray-400"><T k="writing.previous" /></span>
                 <span className="block font-semibold text-gray-900 dark:text-white line-clamp-2">{prev.title}</span>
               </Link>
             ) : <span />}
             {next && (
               <Link href={next.url} className="rounded-2xl ring-1 ring-gray-200 dark:ring-gray-700 p-4 text-end hover:ring-indigo-400">
-                <span className="block text-xs text-gray-400">Next →</span>
+                <span className="block text-xs text-gray-400"><T k="writing.next" /></span>
                 <span className="block font-semibold text-gray-900 dark:text-white line-clamp-2">{next.title}</span>
               </Link>
             )}
@@ -162,7 +163,7 @@ export default async function WritingPage({ params }: { params: Promise<Params> 
 
       {related.length > 0 && (
         <section className="mt-14">
-          <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Read next</h2>
+          <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white"><T k="writing.readNext" /></h2>
           <div className="grid gap-5 sm:grid-cols-2">
             {related.map(r => <WritingCard key={r.url} writing={r} languages={[byCode[r.lang]]} />)}
           </div>
