@@ -79,8 +79,9 @@ All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 
 ## Navigation
 
-- **Top bar:** logo, language tabs (scroll horizontally on mobile), search, theme toggle.
-- **Left sidebar (lg+) / chips (mobile):** genres of the current language, read from the URL's first segment. Hidden on home and search.
+- **Top bar:** logo, theme toggle; on lg+ also language tabs, authors, search.
+- **Bottom tab bar (below lg):** Home · Languages (opens a sheet with all languages) · Authors · Search. Safe-area aware (`viewportFit: 'cover'`).
+- **Left sidebar (lg+) / sticky chips (mobile):** genres of the current language, read from the URL's first segment. Hidden on home and search.
 
 ## Theme System
 

@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import ThemeProvider from '@/components/ThemeProvider'
-import { TopNav, SideNav } from '@/components/SiteNav'
+import { TopNav, SideNav, BottomNav } from '@/components/SiteNav'
 import { getGenres, getLanguages } from '@/lib/content'
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
@@ -51,6 +51,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  viewportFit: 'cover', // lets the bars use the iPhone safe areas
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: config.theme.colorLight },
     { media: '(prefers-color-scheme: dark)', color: config.theme.colorDark },
@@ -93,10 +94,11 @@ export default function RootLayout({
           {/* Desktop: genre sidebar left of content. Mobile: genre chips above content. */}
           <div className="max-w-6xl mx-auto lg:flex lg:items-start">
             <SideNav languages={languages} menus={menus} />
-            <main className="flex-1 min-w-0 px-4 sm:px-6 pt-6 pb-16">
+            <main className="flex-1 min-w-0 px-4 sm:px-6 pt-6 pb-[calc(6rem+env(safe-area-inset-bottom))] lg:pb-16">
               {children}
             </main>
           </div>
+          <BottomNav languages={languages} />
           <InstallBanner />
         </ThemeProvider>
       </body>

@@ -53,7 +53,7 @@ export default function InstallBanner() {
   if (!show || isStandalone) return null
 
   return (
-    <div className="fixed bottom-20 lg:bottom-4 left-4 right-4 max-w-sm mx-auto z-40">
+    <div className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] lg:bottom-4 left-4 right-4 max-w-sm mx-auto z-40">
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 flex items-start gap-3">
         {/* Icon */}
         <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shrink-0">
