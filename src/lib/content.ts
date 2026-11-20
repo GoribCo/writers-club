@@ -32,15 +32,21 @@ export function getLanguage(code: string): Language | undefined {
 }
 
 /** Genres that have writings in `lang`, ordered as in genres.json, unknown folders last. */
+const genreMeta = () => readJson('genres.json') as Record<string, { icon?: string; names?: Record<string, string> }>
+const genreLabel = (slug: string, lang: string) => {
+  const m = genreMeta()[slug]
+  return m?.names?.[lang] ?? m?.names?.en ?? titleCase(slug)
+}
+
 export function getGenres(lang: string): Genre[] {
-  const meta = readJson('genres.json') as Record<string, { icon?: string; names?: Record<string, string> }>
+  const meta = genreMeta()
   const order = Object.keys(meta)
   const rank = (slug: string) => (order.includes(slug) ? order.indexOf(slug) : order.length)
   return subdirs(path.join(contentDir, lang))
     .map(slug => ({
       slug,
       icon: meta[slug]?.icon ?? '📄',
-      label: meta[slug]?.names?.[lang] ?? meta[slug]?.names?.en ?? titleCase(slug),
+      label: genreLabel(slug, lang),
       count: getWritings(lang, slug).length,
     }))
     .filter(g => g.count > 0)
@@ -54,6 +60,8 @@ function parseWriting(lang: string, genre: string, slug: string): Writing {
   return {
     lang,
     genre,
+    genreLabel: genreLabel(genre, lang),
+    genreIcon: genreMeta()[genre]?.icon ?? '📄',
     slug,
     url: `/${lang}/${genre}/${slug}/`,
     title: String(data.title ?? titleCase(slug)),
@@ -63,6 +71,7 @@ function parseWriting(lang: string, genre: string, slug: string): Writing {
     date,
     description: String(data.description ?? ''),
     translator: String(data.translator ?? ''),
+    minutes: Math.max(1, Math.round(content.split(/\s+/).length / 200)),
     content,
   }
 }
@@ -85,6 +94,17 @@ export function getAllWritings(): Writing[] {
   return getLanguages()
     .flatMap(l => getWritings(l.code))
     .sort((a, b) => b.date.localeCompare(a.date))
+}
+
+/** Every genre across all languages (English labels), with total counts, in genres.json order. */
+export function getAllGenres(): Genre[] {
+  const all = new Map<string, Genre>()
+  for (const l of getLanguages())
+    for (const g of getGenres(l.code)) {
+      const cur = all.get(g.slug)
+      all.set(g.slug, { ...g, label: genreLabel(g.slug, 'en'), count: (cur?.count ?? 0) + g.count })
+    }
+  return [...all.values()]
 }
 
 export function getWriting(lang: string, genre: string, slug: string): Writing | null {
@@ -142,4 +162,14 @@ export function getAuthors(): Author[] {
 
 export function getAuthor(slug: string): Author | undefined {
   return getAuthors().find(a => a.slug === slug)
+}
+
+/** One entry per writing (translations merged), preferring the English version; `langs` = every language it exists in. */
+export function groupTranslations(writings: Writing[]): { writing: Writing; langs: string[] }[] {
+  const groups = new Map<string, Writing[]>()
+  for (const w of writings) groups.set(`${w.genre}/${w.slug}`, [...(groups.get(`${w.genre}/${w.slug}`) ?? []), w])
+  return [...groups.values()].map(ws => ({
+    writing: ws.find(w => w.lang === 'en') ?? ws[0],
+    langs: ws.map(w => w.lang),
+  }))
 }

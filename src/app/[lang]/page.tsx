@@ -23,11 +23,11 @@ export default async function LanguagePage({ params }: { params: Promise<Params>
   if (!language) notFound()
 
   return (
-    <div className="max-w-3xl" lang={lang} dir={language.dir}>
+    <div lang={lang} dir={language.dir}>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
         <span aria-hidden>{language.flag}</span> {language.nativeName}
       </h1>
-      <div className="space-y-3">
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {getWritings(lang).map(w => <WritingCard key={w.url} writing={w} />)}
       </div>
     </div>

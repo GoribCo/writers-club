@@ -16,6 +16,8 @@ export interface Genre {
 export interface Writing {
   lang: string
   genre: string
+  genreLabel: string // in the writing's own language
+  genreIcon: string
   slug: string
   url: string
   title: string
@@ -25,6 +27,7 @@ export interface Writing {
   date: string // YYYY-MM-DD
   description: string
   translator: string
+  minutes: number // reading time
   content: string
 }
 

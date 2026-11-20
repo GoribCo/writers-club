@@ -31,7 +31,7 @@ Without `@variant dark`, all `dark:` utility classes are silently ignored.
 src/
   app/
     layout.tsx                      # Builds menus from content, renders TopNav + SideNav
-    page.tsx                        # Home: language cards + latest writings
+    page.tsx                        # Home: hero + stats, content-type tabs + feed (HomeFeed), authors strip, languages
     [lang]/page.tsx                 # All writings in a language
     [lang]/[genre]/page.tsx         # Writings in one genre + language
     [lang]/[genre]/[slug]/page.tsx  # A writing + "Also in" translation switcher
@@ -41,7 +41,9 @@ src/
     sitemap.ts, robots.ts
   components/
     SiteNav.tsx                     # TopNav (languages) + SideNav (genres; chips on mobile)
-    WritingCard.tsx                 # List item for a writing
+    WritingCard.tsx                 # Magazine card (genre gradient cover, author, date, reading time); `featured` variant
+    HomeFeed.tsx                    # Client: genre filter tabs + featured + grid
+    AuthorAvatar.tsx                # Photo or coloured initials
     ThemeProvider/ThemeToggle, GoogleAnalytics, InstallBanner, ServiceWorkerRegistrar
   lib/content.ts                    # All fs-based loaders
   lib/types.ts
@@ -73,6 +75,8 @@ All paths use `process.cwd()` — never `__dirname`.
 | `getAllWritings()` | All writings across languages |
 | `getWriting(lang, genre, slug)` | One writing or null |
 | `getTranslations(genre, slug)` | Languages the writing exists in |
+| `getAllGenres()` | Genres across all languages (English labels, total counts) |
+| `groupTranslations(writings)` | One entry per writing (English preferred) + its languages |
 | `getAuthors()` / `getAuthor(id)` | Author files + anyone named in a writing, with their writings |
 
 All route `generateStaticParams` are data-driven, with `dynamicParams = false`.

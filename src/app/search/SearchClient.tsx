@@ -14,7 +14,7 @@ export default function SearchClient({ index, languages }: { index: Writing[]; l
     : []
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-4xl">
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Search</h1>
       <input
         type="search"
@@ -26,8 +26,8 @@ export default function SearchClient({ index, languages }: { index: Writing[]; l
         className="w-full px-4 py-3 mb-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
       />
       {q && <p className="text-xs text-gray-400 mb-2">{results.length} result{results.length !== 1 && 's'}</p>}
-      <div className="space-y-3">
-        {results.map(w => <WritingCard key={w.url} writing={w} language={byCode[w.lang]} />)}
+      <div className="grid gap-5 sm:grid-cols-2">
+        {results.map(w => <WritingCard key={w.url} writing={w} languages={[byCode[w.lang]]} />)}
       </div>
     </div>
   )
