@@ -1,6 +1,6 @@
 ---
 title: "Die Spree bei Nacht"
-author: "Amara Okafor"
+author: amara-okafor
 country: "Nigeria"
 translator: "Lena Hoffmann"
 date: 2026-11-14

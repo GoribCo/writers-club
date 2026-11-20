@@ -1,6 +1,6 @@
 ---
 title: "The Spree at Night"
-author: "Amara Okafor"
+author: amara-okafor
 country: "Nigeria"
 date: 2026-11-14
 description: "A short poem about the first winter far from home, written after a late walk along the river."

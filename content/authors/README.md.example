@@ -1,0 +1,18 @@
+---
+# Copy to content/authors/{id}.md. The file name is the author id: the page is /authors/{id}/
+# and writings use it in their frontmatter as `author: {id}` (the full name also works).
+name: "Full Name"
+country: "Country"
+photo: ""                # https://… or a file in public/, e.g. "/authors/full-name.jpg"
+tagline: "One line about them"
+links:                    # any label: URL
+  website: "https://…"
+  instagram: "https://…"
+  linkedin: "https://…"
+details:                  # any label: value (lists are joined with commas)
+  Joined: "2025-10"
+  Studies: "Program name"
+  Writes in: [English, German]
+---
+
+About the author, in Markdown.

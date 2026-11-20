@@ -36,6 +36,8 @@ src/
     [lang]/[genre]/page.tsx         # Writings in one genre + language
     [lang]/[genre]/[slug]/page.tsx  # A writing + "Also in" translation switcher
     search/                         # Client-side search over all writings
+    authors/page.tsx                # All authors
+    authors/[slug]/page.tsx         # Author details + all their writings (every language)
     sitemap.ts, robots.ts
   components/
     SiteNav.tsx                     # TopNav (languages) + SideNav (genres; chips on mobile)
@@ -46,6 +48,7 @@ src/
 content/
   languages.json                    # Known languages (order = top menu order; "dir": "rtl" optional)
   genres.json                       # Optional icon + translated names per genre folder
+  authors/{id}.md                   # Author profile; file name = id. Frontmatter: name, country, photo, tagline, links{}, details{}; body = About. See authors/README.md.example
   {lang}/{genre}/{slug}.md          # One writing
 ```
 
@@ -55,7 +58,7 @@ content/
 - Same `{genre}/{slug}` in another `{lang}` folder = translation of the same writing (linked via "Also in" + hreflang).
 - A language appears only if it is in `languages.json` AND has at least one writing. A genre appears only if it has writings.
 - Genre label: `genres.json` name for that language → English name → title-cased folder name.
-- Frontmatter: `title`, `author`, `country`, `date` (YYYY-MM-DD), `description`, optional `translator`. Lists sort newest first.
+- Frontmatter: `title`, `author` (author id = file name in `content/authors/`, or a full name), `country`, `date` (YYYY-MM-DD), `description`, optional `translator`. Lists sort newest first.
 - `.writing p { white-space: pre-line }` keeps authors' line breaks (poems, dialogue).
 
 ## Content Loaders (`src/lib/content.ts`)
@@ -70,6 +73,7 @@ All paths use `process.cwd()` — never `__dirname`.
 | `getAllWritings()` | All writings across languages |
 | `getWriting(lang, genre, slug)` | One writing or null |
 | `getTranslations(genre, slug)` | Languages the writing exists in |
+| `getAuthors()` / `getAuthor(id)` | Author files + anyone named in a writing, with their writings |
 
 All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 

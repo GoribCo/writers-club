@@ -20,9 +20,22 @@ export interface Writing {
   url: string
   title: string
   author: string
+  authorSlug: string
   country: string
   date: string // YYYY-MM-DD
   description: string
   translator: string
   content: string
+}
+
+export interface Author {
+  slug: string // = file name in content/authors/
+  name: string
+  country: string
+  photo: string // URL or path under public/, may be empty
+  tagline: string // one line, e.g. "Poet · MSc Environmental Engineering"
+  links: Record<string, string> // label → URL (website, instagram, linkedin, …)
+  details: Record<string, string> // free label → value facts (Joined, Studies, Languages, …)
+  about: string // Markdown body of the author file
+  writings: Writing[] // newest first, all languages
 }

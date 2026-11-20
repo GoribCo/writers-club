@@ -1,6 +1,6 @@
 ---
 title: "রাতের স্প্রে নদী"
-author: "Amara Okafor"
+author: amara-okafor
 country: "Nigeria"
 translator: "Tanvir Ahmed"
 date: 2026-11-14

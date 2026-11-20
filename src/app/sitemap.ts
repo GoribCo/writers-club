@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getAllWritings, getGenres, getLanguages } from '@/lib/content'
+import { getAllWritings, getAuthors, getGenres, getLanguages } from '@/lib/content'
 import config from '@/config'
 
 export const dynamic = 'force-static'
@@ -11,5 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     urls.push(`/${l.code}/`, ...getGenres(l.code).map(g => `/${l.code}/${g.slug}/`))
   }
   urls.push(...getAllWritings().map(w => w.url))
+  urls.push('/authors/', ...getAuthors().map(a => `/authors/${a.slug}/`))
   return urls.map(u => ({ url: base + u }))
 }

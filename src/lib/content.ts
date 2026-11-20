@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import type { Genre, Language, Writing } from './types'
+import type { Author, Genre, Language, Writing } from './types'
 
 // Layout: content/{lang}/{genre}/{slug}.md — the same {genre}/{slug} in another
 // {lang} folder is treated as a translation of the same writing.
@@ -13,6 +13,11 @@ const subdirs = (dir: string) =>
   fs.existsSync(dir)
     ? fs.readdirSync(dir, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name)
     : []
+
+/** "Amara Okafor" → "amara-okafor"; keeps non-Latin letters. */
+export const slugify = (name: string) =>
+  name.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '')
 
 const titleCase = (slug: string) => slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 
@@ -52,7 +57,8 @@ function parseWriting(lang: string, genre: string, slug: string): Writing {
     slug,
     url: `/${lang}/${genre}/${slug}/`,
     title: String(data.title ?? titleCase(slug)),
-    author: String(data.author ?? 'Anonymous'),
+    author: readAuthorFile(slugify(String(data.author ?? 'Anonymous')))?.name ?? String(data.author ?? 'Anonymous'),
+    authorSlug: slugify(String(data.author ?? 'Anonymous')),
     country: String(data.country ?? ''),
     date,
     description: String(data.description ?? ''),
@@ -88,4 +94,52 @@ export function getWriting(lang: string, genre: string, slug: string): Writing |
 /** Every language this genre/slug exists in (including the current one). */
 export function getTranslations(genre: string, slug: string): Language[] {
   return getLanguages().filter(l => fs.existsSync(path.join(contentDir, l.code, genre, `${slug}.md`)))
+}
+
+const authorsDir = path.join(contentDir, 'authors')
+
+/** Reads content/authors/{slug}.md (writings only; no `writings` list). */
+function readAuthorFile(slug: string): Omit<Author, 'writings'> | null {
+  const file = path.join(authorsDir, `${slug}.md`)
+  if (!fs.existsSync(file)) return null
+  const { data, content } = matter(fs.readFileSync(file, 'utf-8'))
+  const strMap = (v: unknown) =>
+    Object.fromEntries(Object.entries((v ?? {}) as Record<string, unknown>)
+      .map(([k, x]) => [k, x instanceof Date ? x.toISOString().slice(0, 10) : Array.isArray(x) ? x.join(', ') : String(x)]))
+  return {
+    slug,
+    name: String(data.name ?? titleCase(slug)),
+    country: String(data.country ?? ''),
+    photo: String(data.photo ?? ''),
+    tagline: String(data.tagline ?? ''),
+    links: strMap(data.links),
+    details: strMap(data.details),
+    about: content.trim(),
+  }
+}
+
+/**
+ * Authors A–Z: everyone with a file in content/authors/ plus anyone named in a writing's `author`
+ * without one. A writing's `author` may be the id ("amara-okafor") or the full name ("Amara Okafor").
+ */
+export function getAuthors(): Author[] {
+  const writings = getAllWritings()
+  const fileSlugs = fs.existsSync(authorsDir)
+    ? fs.readdirSync(authorsDir).filter(f => f.endsWith('.md')).map(f => f.slice(0, -3))
+    : []
+  const slugs = new Set([...fileSlugs, ...writings.map(w => w.authorSlug)])
+  return [...slugs].map(slug => {
+    const own = writings.filter(w => w.authorSlug === slug)
+    const ref = own.find(w => w.lang === 'en') ?? own[0]
+    const file = readAuthorFile(slug)
+    return {
+      ...(file ?? { slug, name: ref.author, country: ref.country, photo: '', tagline: '', links: {}, details: {}, about: '' }),
+      country: file?.country || ref?.country || '',
+      writings: own,
+    }
+  }).sort((a, b) => a.name.localeCompare(b.name))
+}
+
+export function getAuthor(slug: string): Author | undefined {
+  return getAuthors().find(a => a.slug === slug)
 }
