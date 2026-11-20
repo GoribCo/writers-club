@@ -1,0 +1,7 @@
+{
+  "story":  { "icon": "📖", "names": { "en": "Stories", "de": "Geschichten", "bn": "গল্প", "ar": "قصص" } },
+  "poem":   { "icon": "🪶", "names": { "en": "Poems", "de": "Gedichte", "bn": "কবিতা", "ar": "قصائد" } },
+  "travel": { "icon": "🧭", "names": { "en": "Travel Stories", "de": "Reiseberichte", "bn": "ভ্রমণকাহিনি", "ar": "أدب الرحلات" } },
+  "guide":  { "icon": "🗺️", "names": { "en": "Guides", "de": "Ratgeber", "bn": "নির্দেশিকা", "ar": "أدلة" } },
+  "drama":  { "icon": "🎭", "names": { "en": "Drama", "de": "Drama", "bn": "নাটক", "ar": "مسرح" } }
+}

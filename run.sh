@@ -9,4 +9,4 @@ if [ ! -d node_modules ]; then
 fi
 
 # Port is set in src/config.ts → dev.port
-npm run dev -- --port 3010
+npm run dev -- --port 3011

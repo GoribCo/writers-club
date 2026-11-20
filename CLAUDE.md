@@ -1,8 +1,8 @@
-# Lexora — Project Knowledge
+# Writers Club — Project Knowledge
 
 ## What This Is
 
-A mobile-first language learning website. No database — all content is plain Markdown files. Deployable to GitHub Pages as a fully static site.
+**Writers Club** — website of the international writers club at BTU Cottbus-Senftenberg. Students publish stories, poems, travel writing, guides and drama in many languages. No database — all content is plain Markdown. Static export for GitHub Pages. (Converted from the "Lexora" language-learning app; the old learning features were removed.)
 
 ## Tech Stack
 
@@ -10,7 +10,7 @@ A mobile-first language learning website. No database — all content is plain M
 - **React 19**
 - **Tailwind CSS v4** — uses `@import "tailwindcss"` in globals.css, NOT `@tailwind base/components/utilities`
 - **gray-matter** — parses Markdown frontmatter
-- **react-markdown + remark-gfm** — renders Markdown with table support
+- **react-markdown + remark-gfm + rehype-slug** — renders Markdown (server-side)
 - TypeScript throughout
 
 ## Critical: Tailwind v4 Dark Mode
@@ -28,110 +28,55 @@ Without `@variant dark`, all `dark:` utility classes are silently ignored.
 ## Project Structure
 
 ```
-lexora/
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx                  # Root layout — wraps ThemeProvider + BottomNav
-│   │   ├── page.tsx                    # Home page (server) → renders HomeClient
-│   │   ├── HomeClient.tsx              # 'use client' — language selector dropdowns
-│   │   ├── globals.css                 # Tailwind v4 + dark mode variant + prose styles
-│   │   ├── [pair]/page.tsx             # Level selection (A1–C2) — server component
-│   │   ├── [pair]/[level]/page.tsx     # Stage list — server component
-│   │   ├── [pair]/[level]/[stage]/
-│   │   │   ├── page.tsx                # Stage content — server component
-│   │   │   └── StageContent.tsx        # 'use client' — renders react-markdown
-│   │   ├── courses/page.tsx            # All courses list — bottom nav "Courses" points here
-│   │   └── settings/page.tsx           # Settings page
-│   ├── components/
-│   │   ├── BottomNav.tsx               # 'use client' — fixed bottom nav (Home/Courses/Settings)
-│   │   ├── ThemeProvider.tsx           # 'use client' — reads localStorage, sets .dark on <html>
-│   │   └── ThemeToggle.tsx             # 'use client' — sun/moon toggle, uses useTheme()
-│   └── lib/
-│       ├── content.ts                  # All fs-based content loaders
-│       └── types.ts                    # TypeScript interfaces
-├── content/                            # All lesson content lives here
-│   ├── languages.json                  # Language definitions + pairs list
-│   ├── levels.json                     # CEFR level definitions (A1–C2)
-│   ├── bn-de/
-│   │   ├── meta.json
-│   │   ├── a1/ (stage-01.md … stage-20.md)
-│   │   ├── a2/ (stage-01.md … stage-20.md)
-│   │   └── b1/ (stage-01.md … stage-24.md)
-│   └── bn-pl/
-│       ├── meta.json
-│       └── a1/ (stage-01.md … stage-05.md)
-├── public/.nojekyll                    # Required for GitHub Pages
-├── next.config.ts
-├── run.sh                              # ./run.sh installs deps + starts dev server
-├── CLAUDE.md                           # This file
-└── README.md
+src/
+  app/
+    layout.tsx                      # Builds menus from content, renders TopNav + SideNav
+    page.tsx                        # Home: language cards + latest writings
+    [lang]/page.tsx                 # All writings in a language
+    [lang]/[genre]/page.tsx         # Writings in one genre + language
+    [lang]/[genre]/[slug]/page.tsx  # A writing + "Also in" translation switcher
+    search/                         # Client-side search over all writings
+    sitemap.ts, robots.ts
+  components/
+    SiteNav.tsx                     # TopNav (languages) + SideNav (genres; chips on mobile)
+    WritingCard.tsx                 # List item for a writing
+    ThemeProvider/ThemeToggle, GoogleAnalytics, InstallBanner, ServiceWorkerRegistrar
+  lib/content.ts                    # All fs-based loaders
+  lib/types.ts
+content/
+  languages.json                    # Known languages (order = top menu order; "dir": "rtl" optional)
+  genres.json                       # Optional icon + translated names per genre folder
+  {lang}/{genre}/{slug}.md          # One writing
 ```
 
-## Routing
+## Content Model
 
-| URL | Page |
-|-----|------|
-| `/` | Home — language selector + available courses |
-| `/courses` | All courses list (bottom nav "Courses" links here) |
-| `/bn-de` | Level selection for Bengali → German |
-| `/bn-pl` | Level selection for Bengali → Polish |
-| `/bn-de/a1` | Stage list for A1 |
-| `/bn-de/a1/1` | Stage 1 content |
-| `/settings` | Settings page |
+- `content/{lang}/{genre}/{slug}.md` → URL `/{lang}/{genre}/{slug}/`
+- Same `{genre}/{slug}` in another `{lang}` folder = translation of the same writing (linked via "Also in" + hreflang).
+- A language appears only if it is in `languages.json` AND has at least one writing. A genre appears only if it has writings.
+- Genre label: `genres.json` name for that language → English name → title-cased folder name.
+- Frontmatter: `title`, `author`, `country`, `date` (YYYY-MM-DD), `description`, optional `translator`. Lists sort newest first.
+- `.writing p { white-space: pre-line }` keeps authors' line breaks (poems, dialogue).
 
-`generateStaticParams` in all route pages is **data-driven** — reads from `languages.json` / `levels.json` / content filesystem. No hardcoded slugs (except `[level]/page.tsx` which iterates all levels × all pairs).
+## Content Loaders (`src/lib/content.ts`)
 
-## Content System (`src/lib/content.ts`)
-
-All functions use `process.cwd()` to resolve paths — never `__dirname`.
+All paths use `process.cwd()` — never `__dirname`.
 
 | Function | Returns |
 |----------|---------|
-| `getLanguagePairs()` | All pairs from `languages.json` |
-| `getLanguages()` | All languages from `languages.json` |
-| `getLevels()` | All CEFR levels from `levels.json` |
-| `getPairMeta(pair)` | `meta.json` for a pair slug |
-| `getStages(pair, level)` | All stages for a pair+level, sorted by filename |
-| `getStage(pair, level, n)` | Single stage by number |
+| `getLanguages()` / `getLanguage(code)` | Languages that have content |
+| `getGenres(lang)` | Genres with counts for a language |
+| `getWritings(lang, genre?)` | Writings, newest first |
+| `getAllWritings()` | All writings across languages |
+| `getWriting(lang, genre, slug)` | One writing or null |
+| `getTranslations(genre, slug)` | Languages the writing exists in |
 
-## Stage Markdown Format
+All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 
-```markdown
----
-stage: 1
-title: "Powitania – Greetings"
-titleBn: "শুভেচ্ছা"
-description: "Short description shown on stage list."
-duration: "15 min"
-vocabulary: 9
----
+## Navigation
 
-## Section heading
-
-Content with **bold**, tables, blockquotes, etc.
-```
-
-Files must be named `stage-01.md`, `stage-02.md`, … (zero-padded, sorted alphabetically = correct order).
-
-## Adding a New Language Pair
-
-1. Add to `content/languages.json` → `pairs` array with `from`, `to`, `slug`, `description`, `totalLearners`
-2. Create `content/{slug}/meta.json` with `title` (native), `titleEn`, `description`, `totalStages`
-3. Create `content/{slug}/a1/stage-01.md` … (at least 1 stage to activate the route)
-4. Nothing else — routes generate automatically
-
-## Available Language Pairs
-
-| Slug | From | To | Levels built |
-|------|------|----|--------------|
-| `bn-de` | Bengali 🇧🇩 | German 🇩🇪 | A1 (20 stages) + A2 (20 stages) + B1 (24 stages) — see below |
-| `bn-pl` | Bengali 🇧🇩 | Polish 🇵🇱 | A1 (5 stages: Greetings, Numbers, Colors, Days, Family) |
-
-**bn-de A1** (Goethe-Zertifikat A1 / Start Deutsch 1 exam-aligned): 1 Alphabet, 2 Greetings & Introductions, 3 Numbers & Personal Details, 4 Countries & Languages, 5 Family, 6 Objects, 7 Food & Drinks, 8 Shopping & Prices, 9 Time & Daily Routine, 10 Free Time & Hobbies, 11 Appointments, 12 City & Directions, 13 Transport & Travel, 14 Home & Apartment, 15 Work & Jobs, 16 Body & Health, 17 Clothes & Weather, 18 Past Events (Perfekt), 19 Past Continued (Präteritum), 20 Writing & Forms.
-
-**bn-de A2** (Goethe-Zertifikat A2 exam-aligned, builds on A1): 1 Personal History, 2 Family & Relationships, 3 Living & Neighbours, 4 Work & Colleagues, 5 Leisure & Clubs, 6 Shopping & Complaints, 7 Clothes & Style, 8 Health & Doctor, 9 Food & Restaurants, 10 Travel & Holidays, 11 Media & Technology, 12 Education & School, 13 Celebrations, 14 Weather & Nature, 15 Services (Bank/Post/Authorities), 16 Politeness (Konjunktiv II), 17 Plans & Wishes (werden-future), 18 Sport & Fitness, 19 Emails & Letters, 20 Review & Exam Practice.
-
-**bn-de B1** (Goethe-Zertifikat B1 exam-aligned, builds on A1/A2): 1 Biography & Memories (Präteritum), 2 Relationships & Friendship (relative clauses), 3 Living Together (relative clauses + prepositions), 4 Work & Career (zu-infinitive), 5 Job Applications (um...zu/damit), 6 Education & Further Training (Plusquamperfekt), 7 Consumption & Money (genitive), 8 Environment (passive, all tenses), 9 Media & News (passive + modal), 10 Health & Lifestyle (past Konjunktiv II), 11 Travel Problems & Complaints (obwohl/trotzdem), 12 Culture & Traditions (N-declension), 13 Society & Integration (two-part conjunctions), 14 Politics & Institutions (nominalization), 15 Science & Technology (participles as adjectives), 16 Feelings & Opinions, 17 Discussions, 18 Stories & Literature (temporal clauses), 19 Customer Service, 20 Living in Germany (bureaucratic language), 21 Formal Writing, 22 Presentations, 23 Full Grammar Review, 24 Exam Practice.
+- **Top bar:** logo, language tabs (scroll horizontally on mobile), search, theme toggle.
+- **Left sidebar (lg+) / chips (mobile):** genres of the current language, read from the URL's first segment. Hidden on home and search.
 
 ## Theme System
 
@@ -141,25 +86,15 @@ Files must be named `stage-01.md`, `stage-02.md`, … (zero-padded, sorted alpha
 - `useTheme()` hook exported from `ThemeProvider.tsx` — use in any client component
 - `ThemeToggle` button appears in every page header
 
-## Bottom Navigation
-
-Three items: **Home** (`/`), **Courses** (`/courses`), **Settings** (`/settings`).
-
-Active detection in `BottomNav.tsx`:
-- Home: exact match `pathname === '/'`
-- Courses: `/courses` OR any `/{xx}-{xx}/...` pattern (regex `^\/[a-z]{2}-[a-z]{2}`)
-- Settings: `pathname.startsWith('/settings')`
-
 ## Key Decisions & Why
 
 | Decision | Reason |
 |----------|--------|
 | Static export (`output: 'export'`) | GitHub Pages deployment, no server needed |
-| Content in Markdown files | No database setup, version-controllable, portable |
-| `src/` directory layout | Standard Next.js 15 convention |
+| Content in Markdown files | No database, version-controllable; club admin publishes via git |
+| URL `/{lang}/{genre}/{slug}/` | Language-first browsing; translations share genre+slug |
+| Network-first service worker | New writings must appear for returning visitors; cache is offline fallback |
 | `@variant dark` in CSS | Tailwind v4 defaults to media query; class-based needed for JS toggle |
-| `/courses` page (not `/bn-de` in nav) | BottomNav was hardcoded to one pair — now shows all pairs |
-| `process.cwd()` not `__dirname` | Works correctly in Next.js server components |
 
 ## Running Locally
 

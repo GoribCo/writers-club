@@ -62,7 +62,7 @@ export default function InstallBanner() {
 
         {/* Text */}
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-sm text-gray-900 dark:text-white">Install Lexora</p>
+          <p className="font-semibold text-sm text-gray-900 dark:text-white">Install Writers Club</p>
           {isIos && !deferredPrompt ? (
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
               Tap <strong>Share</strong> then <strong>Add to Home Screen</strong> in Safari

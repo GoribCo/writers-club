@@ -1,14 +1,17 @@
 {
-  "name": "Lexora – Language Learning",
-  "short_name": "Lexora",
-  "description": "Learn German, Polish and Arabic from Bengali. Step-by-step CEFR lessons.",
+  "name": "Writers Club – BTU Cottbus",
+  "short_name": "Writers Club",
+  "description": "Stories, poems, travel writing, guides and drama by the international students of the BTU Cottbus writers club.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#f9fafb",
   "theme_color": "#4f46e5",
-  "categories": ["education"],
+  "categories": [
+    "books",
+    "education"
+  ],
   "lang": "en",
   "icons": [
     {

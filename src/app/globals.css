@@ -100,4 +100,9 @@
   .prose hr {
     @apply border-gray-200 dark:border-gray-700 my-6;
   }
+
+  /* Keep the author's line breaks — poems and dialogue depend on them */
+  .writing p {
+    white-space: pre-line;
+  }
 }
