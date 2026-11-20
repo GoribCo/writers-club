@@ -6,8 +6,8 @@
 
 ## Tech Stack
 
-- **Next.js 15** — App Router, `output: 'export'` (static), `trailingSlash: true`
-- **React 19**
+- **Next.js 16** (Turbopack build) — App Router, `output: 'export'` (static), `trailingSlash: true`
+- **React 19.3**
 - **Tailwind CSS v4** — uses `@import "tailwindcss"` in globals.css, NOT `@tailwind base/components/utilities`
 - **gray-matter** — parses Markdown frontmatter
 - **react-markdown + remark-gfm + rehype-slug** — renders Markdown (server-side)
