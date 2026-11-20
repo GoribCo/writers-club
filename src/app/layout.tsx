@@ -90,7 +90,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#4f46e5" />
 
         {/* Before paint: <html lang> = the page's content language (SEO); <html dir> = the visitor's site language */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){var c=location.pathname.slice(${JSON.stringify(config.url.basePath.length)}).split('/')[1];if(${JSON.stringify(languages.map(l => l.code))}.indexOf(c)>-1)document.documentElement.lang=c;try{if(['ar','fa','he','ur'].indexOf(localStorage.getItem('uiLang'))>-1)document.documentElement.dir='rtl'}catch(e){}})()` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var c=location.pathname.slice(${JSON.stringify(config.url.basePath.length)}).split('/')[1];if(${JSON.stringify(languages.map(l => l.code))}.indexOf(c)>-1)document.documentElement.lang=c;try{var d=document.documentElement,s=localStorage,t=s.getItem('theme'),f={small:'15px',large:'18px'}[s.getItem('fontSize')];if(['ar','fa','he','ur'].indexOf(s.getItem('uiLang'))>-1)d.dir='rtl';if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(f)d.style.fontSize=f}catch(e){}})()` }} />
         <JsonLd data={{
           '@context': 'https://schema.org',
           '@graph': [

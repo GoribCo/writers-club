@@ -110,8 +110,8 @@
     white-space: pre-line;
   }
 
-  /* Reader text size (ReaderTools sets --reader-scale); em-based prose sizes scale with it */
+  /* Slightly larger reading text; scales with the root font size (Settings → Font size) */
   .reader {
-    font-size: calc(1.0625rem * var(--reader-scale, 1));
+    font-size: 1.0625rem;
   }
 }

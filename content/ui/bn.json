@@ -7,9 +7,6 @@
   "nav.search": "খুঁজুন",
   "nav.chooseLanguage": "পড়ার ভাষা বেছে নিন",
   "nav.close": "বন্ধ করুন",
-  "nav.siteLanguage": "সাইটের ভাষা",
-  "nav.lightMode": "লাইট মোডে যান",
-  "nav.darkMode": "ডার্ক মোডে যান",
   "footer.tagline": "বিটিইউ কটবুসের আন্তর্জাতিক শিক্ষার্থীদের লেখা",
   "footer.collections": "সংকলন",
   "footer.events": "অনুষ্ঠান",
@@ -28,7 +25,9 @@
   "home.shareText": "গল্প, কবিতা, নির্দেশিকা — যেকোনো ভাষায়। প্রত্যেক সদস্যের কণ্ঠস্বরের জায়গা এখানে।",
   "home.shareCta": "আপনার লেখা পাঠান →",
   "home.readInYourLanguage": "আপনার ভাষায় পড়ুন",
-  "count.writings": { "other": "{n}টি লেখা" },
+  "count.writings": {
+    "other": "{n}টি লেখা"
+  },
   "feed.title": "লেখা",
   "feed.all": "সব",
   "feed.contentTypes": "লেখার ধরন",
@@ -39,17 +38,23 @@
   "writing.previous": "← আগের",
   "writing.next": "পরের →",
   "writing.readNext": "এরপর পড়ুন",
-  "reader.smaller": "ছোট লেখা",
-  "reader.larger": "বড় লেখা",
   "reader.share": "শেয়ার ↗",
   "reader.copied": "লিংক কপি হয়েছে ✓",
   "authors.title": "লেখক",
   "authors.whereFrom": "আমরা কোথা থেকে এসেছি",
-  "authors.countries": { "other": "{n}টি দেশ, একটি ক্লাব।" },
+  "authors.countries": {
+    "other": "{n}টি দেশ, একটি ক্লাব।"
+  },
   "author.all": "← সব লেখক",
-  "author.statWritings": { "other": "লেখা" },
-  "author.statLanguages": { "other": "ভাষা" },
-  "author.statGenres": { "other": "ধরন" },
+  "author.statWritings": {
+    "other": "লেখা"
+  },
+  "author.statLanguages": {
+    "other": "ভাষা"
+  },
+  "author.statGenres": {
+    "other": "ধরন"
+  },
   "author.about": "পরিচিতি",
   "author.writingsBy": "{name}-এর লেখা",
   "author.profile": "প্রোফাইল",
@@ -67,5 +72,17 @@
   "tag.theme": "বিষয়",
   "search.title": "খুঁজুন",
   "search.placeholder": "শিরোনাম, লেখক, দেশ, বিষয়, শব্দ…",
-  "search.results": { "other": "{n}টি ফলাফল" }
+  "search.results": {
+    "other": "{n}টি ফলাফল"
+  },
+  "settings.title": "সেটিংস",
+  "settings.theme": "থিম",
+  "theme.system": "সিস্টেম",
+  "theme.light": "লাইট",
+  "theme.dark": "ডার্ক",
+  "settings.fontSize": "লেখার আকার",
+  "font.small": "ছোট",
+  "font.medium": "মাঝারি",
+  "font.large": "বড়",
+  "settings.language": "ভাষা"
 }

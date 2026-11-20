@@ -7,9 +7,6 @@
   "nav.search": "Buscar",
   "nav.chooseLanguage": "Elige un idioma de lectura",
   "nav.close": "Cerrar",
-  "nav.siteLanguage": "Idioma del sitio",
-  "nav.lightMode": "Cambiar a modo claro",
-  "nav.darkMode": "Cambiar a modo oscuro",
   "footer.tagline": "Textos de los estudiantes internacionales de la BTU Cottbus",
   "footer.collections": "Colecciones",
   "footer.events": "Eventos",
@@ -28,7 +25,10 @@
   "home.shareText": "Cuentos, poemas, guías — en cualquier idioma. Aquí hay sitio para cada voz.",
   "home.shareCta": "Envía tu texto →",
   "home.readInYourLanguage": "Lee en tu idioma",
-  "count.writings": { "one": "{n} texto", "other": "{n} textos" },
+  "count.writings": {
+    "one": "{n} texto",
+    "other": "{n} textos"
+  },
   "feed.title": "Textos",
   "feed.all": "Todo",
   "feed.contentTypes": "Tipos de texto",
@@ -39,17 +39,27 @@
   "writing.previous": "← Anterior",
   "writing.next": "Siguiente →",
   "writing.readNext": "Sigue leyendo",
-  "reader.smaller": "Texto más pequeño",
-  "reader.larger": "Texto más grande",
   "reader.share": "Compartir ↗",
   "reader.copied": "Enlace copiado ✓",
   "authors.title": "Autores",
   "authors.whereFrom": "De dónde venimos",
-  "authors.countries": { "one": "{n} país, un club.", "other": "{n} países, un club." },
+  "authors.countries": {
+    "one": "{n} país, un club.",
+    "other": "{n} países, un club."
+  },
   "author.all": "← Todos los autores",
-  "author.statWritings": { "one": "Texto", "other": "Textos" },
-  "author.statLanguages": { "one": "Idioma", "other": "Idiomas" },
-  "author.statGenres": { "one": "Género", "other": "Géneros" },
+  "author.statWritings": {
+    "one": "Texto",
+    "other": "Textos"
+  },
+  "author.statLanguages": {
+    "one": "Idioma",
+    "other": "Idiomas"
+  },
+  "author.statGenres": {
+    "one": "Género",
+    "other": "Géneros"
+  },
   "author.about": "Sobre mí",
   "author.writingsBy": "Textos de {name}",
   "author.profile": "Perfil",
@@ -67,5 +77,18 @@
   "tag.theme": "Tema",
   "search.title": "Buscar",
   "search.placeholder": "Título, autor, país, tema, palabras…",
-  "search.results": { "one": "{n} resultado", "other": "{n} resultados" }
+  "search.results": {
+    "one": "{n} resultado",
+    "other": "{n} resultados"
+  },
+  "settings.title": "Ajustes",
+  "settings.theme": "Tema",
+  "theme.system": "Sistema",
+  "theme.light": "Claro",
+  "theme.dark": "Oscuro",
+  "settings.fontSize": "Tamaño de letra",
+  "font.small": "Pequeño",
+  "font.medium": "Mediano",
+  "font.large": "Grande",
+  "settings.language": "Idioma"
 }

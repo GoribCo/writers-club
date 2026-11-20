@@ -7,9 +7,6 @@
   "nav.search": "検索",
   "nav.chooseLanguage": "読む言語を選ぶ",
   "nav.close": "閉じる",
-  "nav.siteLanguage": "サイトの言語",
-  "nav.lightMode": "ライトモードに切り替え",
-  "nav.darkMode": "ダークモードに切り替え",
   "footer.tagline": "BTUコトブスの留学生による作品集",
   "footer.collections": "コレクション",
   "footer.events": "イベント",
@@ -28,7 +25,9 @@
   "home.shareText": "小説、詩、ガイド — どの言語でも。すべてのメンバーの声がここにあります。",
   "home.shareCta": "作品を投稿する →",
   "home.readInYourLanguage": "あなたの言語で読む",
-  "count.writings": { "other": "{n}作品" },
+  "count.writings": {
+    "other": "{n}作品"
+  },
   "feed.title": "作品",
   "feed.all": "すべて",
   "feed.contentTypes": "作品の種類",
@@ -39,17 +38,23 @@
   "writing.previous": "← 前へ",
   "writing.next": "次へ →",
   "writing.readNext": "次に読む",
-  "reader.smaller": "文字を小さく",
-  "reader.larger": "文字を大きく",
   "reader.share": "共有 ↗",
   "reader.copied": "リンクをコピーしました ✓",
   "authors.title": "作家",
   "authors.whereFrom": "私たちの出身地",
-  "authors.countries": { "other": "{n}か国、ひとつのクラブ。" },
+  "authors.countries": {
+    "other": "{n}か国、ひとつのクラブ。"
+  },
   "author.all": "← 作家一覧",
-  "author.statWritings": { "other": "作品" },
-  "author.statLanguages": { "other": "言語" },
-  "author.statGenres": { "other": "ジャンル" },
+  "author.statWritings": {
+    "other": "作品"
+  },
+  "author.statLanguages": {
+    "other": "言語"
+  },
+  "author.statGenres": {
+    "other": "ジャンル"
+  },
   "author.about": "プロフィール",
   "author.writingsBy": "{name}の作品",
   "author.profile": "詳細",
@@ -67,5 +72,17 @@
   "tag.theme": "テーマ",
   "search.title": "検索",
   "search.placeholder": "タイトル、作家、国、テーマ、言葉…",
-  "search.results": { "other": "{n}件" }
+  "search.results": {
+    "other": "{n}件"
+  },
+  "settings.title": "設定",
+  "settings.theme": "テーマ",
+  "theme.system": "システム",
+  "theme.light": "ライト",
+  "theme.dark": "ダーク",
+  "settings.fontSize": "文字サイズ",
+  "font.small": "小",
+  "font.medium": "中",
+  "font.large": "大",
+  "settings.language": "言語"
 }

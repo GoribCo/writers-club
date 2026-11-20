@@ -69,23 +69,3 @@ export function useLanguageName() {
     try { return new Intl.DisplayNames([locale], { type: 'language' }).of(code) ?? code } catch { return code }
   }
 }
-
-export function SiteLanguageSelect() {
-  const { locale, locales, setLocale, t } = useI18n()
-  return (
-    <label className="relative flex items-center rounded-xl text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
-      <span className="sr-only">{t('nav.siteLanguage')}</span>
-      <svg aria-hidden className="pointer-events-none absolute start-2" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        <path d="m5 8 6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6" />
-      </svg>
-      <select
-        value={locale}
-        onChange={e => setLocale(e.target.value)}
-        title={t('nav.siteLanguage')}
-        className="appearance-none bg-transparent ps-8 pe-2 py-2 text-sm font-semibold cursor-pointer max-w-28 truncate focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-xl"
-      >
-        {locales.map(l => <option key={l.code} value={l.code} className="normal-case text-gray-900">{l.name}</option>)}
-      </select>
-    </label>
-  )
-}

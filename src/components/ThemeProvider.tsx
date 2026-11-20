@@ -2,16 +2,11 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 
-type Theme = 'light' | 'dark'
+export type ThemePreference = 'system' | 'light' | 'dark'
 
-interface ThemeContextValue {
-  theme: Theme
-  toggleTheme: () => void
-}
-
-const ThemeContext = createContext<ThemeContextValue>({
-  theme: 'light',
-  toggleTheme: () => {},
+const ThemeContext = createContext({
+  preference: 'system' as ThemePreference,
+  setPreference: (_: ThemePreference) => {},
 })
 
 export function useTheme() {
@@ -19,36 +14,26 @@ export function useTheme() {
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light')
+  const [preference, setPref] = useState<ThemePreference>('system')
 
   useEffect(() => {
-    const stored = localStorage.getItem('theme') as Theme | null
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const initial = stored ?? (prefersDark ? 'dark' : 'light')
-    setTheme(initial)
-    if (initial === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
+    try { setPref((localStorage.getItem('theme') as ThemePreference | null) ?? 'system') } catch {}
   }, [])
 
-  const toggleTheme = () => {
-    setTheme(prev => {
-      const next = prev === 'light' ? 'dark' : 'light'
-      localStorage.setItem('theme', next)
-      if (next === 'dark') {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
-      return next
-    })
+  // Apply, and follow the OS setting live while on "system"
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-color-scheme: dark)')
+    const apply = () =>
+      document.documentElement.classList.toggle('dark', preference === 'dark' || (preference === 'system' && media.matches))
+    apply()
+    media.addEventListener('change', apply)
+    return () => media.removeEventListener('change', apply)
+  }, [preference])
+
+  const setPreference = (p: ThemePreference) => {
+    setPref(p)
+    try { p === 'system' ? localStorage.removeItem('theme') : localStorage.setItem('theme', p) } catch {}
   }
 
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  )
+  return <ThemeContext.Provider value={{ preference, setPreference }}>{children}</ThemeContext.Provider>
 }

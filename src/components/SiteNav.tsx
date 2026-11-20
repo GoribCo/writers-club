@@ -3,8 +3,8 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import ThemeToggle from './ThemeToggle'
-import { SiteLanguageSelect, useI18n, useLanguageName } from './I18n'
+import SettingsMenu from './SettingsMenu'
+import { useI18n, useLanguageName } from './I18n'
 import config from '@/config'
 import type { Genre, Language } from '@/lib/types'
 
@@ -62,8 +62,7 @@ export function TopNav({ languages }: { languages: Language[] }) {
             <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
           </svg>
         </Link>
-        <SiteLanguageSelect />
-        <ThemeToggle />
+        <SettingsMenu languages={languages} />
       </div>
     </header>
   )

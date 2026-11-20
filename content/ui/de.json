@@ -7,9 +7,6 @@
   "nav.search": "Suche",
   "nav.chooseLanguage": "Lesesprache wählen",
   "nav.close": "Schließen",
-  "nav.siteLanguage": "Sprache der Website",
-  "nav.lightMode": "Zum hellen Modus wechseln",
-  "nav.darkMode": "Zum dunklen Modus wechseln",
   "footer.tagline": "Texte der internationalen Studierenden der BTU Cottbus",
   "footer.collections": "Sammlungen",
   "footer.events": "Termine",
@@ -28,7 +25,10 @@
   "home.shareText": "Geschichten, Gedichte, Ratgeber — in jeder Sprache. Jede Stimme gehört hierher.",
   "home.shareCta": "Text einreichen →",
   "home.readInYourLanguage": "In deiner Sprache lesen",
-  "count.writings": { "one": "{n} Text", "other": "{n} Texte" },
+  "count.writings": {
+    "one": "{n} Text",
+    "other": "{n} Texte"
+  },
   "feed.title": "Texte",
   "feed.all": "Alle",
   "feed.contentTypes": "Textarten",
@@ -39,17 +39,27 @@
   "writing.previous": "← Vorheriger",
   "writing.next": "Nächster →",
   "writing.readNext": "Weiterlesen",
-  "reader.smaller": "Kleinere Schrift",
-  "reader.larger": "Größere Schrift",
   "reader.share": "Teilen ↗",
   "reader.copied": "Link kopiert ✓",
   "authors.title": "Autor:innen",
   "authors.whereFrom": "Woher wir kommen",
-  "authors.countries": { "one": "{n} Land, ein Club.", "other": "{n} Länder, ein Club." },
+  "authors.countries": {
+    "one": "{n} Land, ein Club.",
+    "other": "{n} Länder, ein Club."
+  },
   "author.all": "← Alle Autor:innen",
-  "author.statWritings": { "one": "Text", "other": "Texte" },
-  "author.statLanguages": { "one": "Sprache", "other": "Sprachen" },
-  "author.statGenres": { "one": "Gattung", "other": "Gattungen" },
+  "author.statWritings": {
+    "one": "Text",
+    "other": "Texte"
+  },
+  "author.statLanguages": {
+    "one": "Sprache",
+    "other": "Sprachen"
+  },
+  "author.statGenres": {
+    "one": "Gattung",
+    "other": "Gattungen"
+  },
   "author.about": "Über mich",
   "author.writingsBy": "Texte von {name}",
   "author.profile": "Profil",
@@ -67,5 +77,18 @@
   "tag.theme": "Thema",
   "search.title": "Suche",
   "search.placeholder": "Titel, Autor:in, Land, Thema, Wörter…",
-  "search.results": { "one": "{n} Ergebnis", "other": "{n} Ergebnisse" }
+  "search.results": {
+    "one": "{n} Ergebnis",
+    "other": "{n} Ergebnisse"
+  },
+  "settings.title": "Einstellungen",
+  "settings.theme": "Design",
+  "theme.system": "System",
+  "theme.light": "Hell",
+  "theme.dark": "Dunkel",
+  "settings.fontSize": "Schriftgröße",
+  "font.small": "Klein",
+  "font.medium": "Mittel",
+  "font.large": "Groß",
+  "settings.language": "Sprache"
 }

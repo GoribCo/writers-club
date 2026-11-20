@@ -50,7 +50,8 @@ src/
     WritingCard.tsx                 # Magazine card (genre gradient cover, author, date, reading time); `featured` variant
     HomeFeed.tsx                    # Client: genre filter tabs + featured + grid
     AuthorAvatar.tsx                # Photo or coloured initials
-    ThemeProvider/ThemeToggle, GoogleAnalytics, InstallBanner, ServiceWorkerRegistrar
+    SettingsMenu.tsx                # Theme / font size / site language popover
+    ThemeProvider, GoogleAnalytics, InstallBanner, ServiceWorkerRegistrar
   lib/content.ts                    # All fs-based loaders
   lib/types.ts
 content/
@@ -60,6 +61,7 @@ content/
   events/{yyyy-mm-dd-slug}.md       # title, date, time, place, description; body = details
   collections/{id}.md               # title, description, cover; body = intro. Writings join with `collection: {id}`
   pages/submit.md                   # Submit page text
+  ui/{code}.json                    # Site (interface) language dictionaries — NOT content. en.json is the fallback
   {lang}/{genre}/{slug}.md          # One writing
 ```
 
@@ -90,6 +92,14 @@ All paths use `process.cwd()` — never `__dirname`.
 
 All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 
+## Site language (interface i18n)
+
+- Separate from content language. Visitor picks it in Settings (`SettingsMenu`); saved in `localStorage.uiLang`; first visit uses the browser language if a dictionary exists, else English.
+- Dictionaries: `content/ui/{code}.json`. `_name` = name in the select. Value is a string with `{vars}`, or a plural object `{ "one": …, "other": … }` (Intl.PluralRules categories). Missing keys fall back to `en.json`. Add a language = add a file.
+- Use `<T k="key" n={3} />` in server components, `useI18n().t()` in client components, `<LocaleDate date=…/>` for dates (`components/I18n.tsx`).
+- Static HTML is rendered in English and switches after hydration (no per-language routes). Metadata/SEO stays English.
+- `<html dir>` follows the site language (rtl for ar); content blocks carry their own `lang`/`dir` (`dir="auto"` on authored text).
+
 ## SEO / GEO
 
 - Every page: title, description, canonical. Writings: hreflang between translations, OG image `/og/{lang}/{genre}/{slug}.png`.
@@ -105,13 +115,11 @@ All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 - **Footer:** Authors · Collections · Events · Submit · Search.
 - **Left sidebar (lg+) / sticky chips (mobile):** genres of the current language, read from the URL's first segment. Hidden on home and search.
 
-## Theme System
+## Settings (top-right palette button)
 
-- `ThemeProvider` wraps the entire app in `layout.tsx`
-- On mount: reads `localStorage.theme`, falls back to `prefers-color-scheme`
-- Toggles by adding/removing `.dark` class on `document.documentElement`
-- `useTheme()` hook exported from `ThemeProvider.tsx` — use in any client component
-- `ThemeToggle` button appears in every page header
+- `SettingsMenu.tsx` popover: **Theme** (System/Light/Dark), **Font size** (Small/Medium/Large → root font-size 15/16/18px, everything is rem), **Language** (site language).
+- `ThemeProvider` holds the theme preference; "system" follows `prefers-color-scheme` live. `useTheme()` → `{ preference, setPreference }`.
+- Stored in localStorage: `theme`, `fontSize`, `uiLang`. The inline script in `layout.tsx` applies all three before paint (keep its font sizes in sync with `FONT_SIZES`).
 
 ## Key Decisions & Why
 
