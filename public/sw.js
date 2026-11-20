@@ -1,6 +1,6 @@
 const CACHE = 'campus-writer-v1'
 
-// Drop caches from older versions (e.g. the old cache-first 'lexora-v1').
+// Drop caches from older versions (e.g. the old cache-first 'writers-club-v1').
 self.addEventListener('activate', e => e.waitUntil(
   caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
 ))

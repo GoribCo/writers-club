@@ -2,7 +2,7 @@
 
 ## What This Is
 
-**Writers Club** — website of the international writers club at BTU Cottbus-Senftenberg. Students publish stories, poems, travel writing, guides and drama in many languages. No database — all content is plain Markdown. Static export for GitHub Pages. (Converted from the "Lexora" language-learning app; the old learning features were removed.)
+**Writers Club** — website of the international writers club at BTU Cottbus-Senftenberg. Students publish stories, poems, travel writing, guides and drama in many languages. No database — all content is plain Markdown. Static export for GitHub Pages. (Converted from the "writers-club" language-learning app; the old learning features were removed.)
 
 ## Tech Stack
 
