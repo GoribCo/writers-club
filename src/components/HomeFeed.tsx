@@ -12,7 +12,9 @@ export default function HomeFeed({ items, genres, languages }: { items: Item[]; 
   const byCode = Object.fromEntries(languages.map(l => [l.code, l]))
   const shown = genre ? items.filter(i => i.writing.genre === genre) : items
   const [first, ...rest] = shown
-  const tabs = [{ slug: '', label: 'All', icon: '✨', count: items.length }, ...genres]
+  // Count the merged feed items, not per-language files, so tab numbers match what is shown
+  const tabs = [{ slug: '', label: 'All', icon: '✨', count: items.length },
+    ...genres.map(g => ({ ...g, count: items.filter(i => i.writing.genre === g.slug).length }))]
   const card = (i: Item, featured = false) => (
     <WritingCard key={i.writing.url} writing={i.writing} featured={featured}
       languages={i.langs.map(c => byCode[c]).filter(Boolean)} />
