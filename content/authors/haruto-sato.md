@@ -1,6 +1,7 @@
 ---
 name: "Haruto Sato"
 country: "Japan"
+countryCode: "JP"
 photo: ""
 tagline: "Haiku poet · MSc Power Engineering"
 links:

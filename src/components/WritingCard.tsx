@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Language, Writing } from '@/lib/types'
 import AuthorAvatar from './AuthorAvatar'
+import { asset } from '@/lib/url'
 
 const covers: Record<string, string> = {
   story: 'from-amber-200 via-orange-200 to-rose-300 dark:from-amber-900 dark:via-orange-900 dark:to-rose-900',
@@ -25,8 +26,10 @@ export default function WritingCard({ writing: w, languages, featured = false }:
       lang={w.lang}
       className={`group flex flex-col overflow-hidden rounded-3xl bg-white dark:bg-gray-800/80 ring-1 ring-gray-200/70 dark:ring-gray-700/60 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 ${featured ? 'md:flex-row' : ''}`}
     >
-      <div className={`relative bg-gradient-to-br ${genreCover(w.genre)} flex items-center justify-center ${featured ? 'h-48 md:h-auto md:w-2/5' : 'h-32'}`}>
-        <span aria-hidden className={`${featured ? 'text-7xl' : 'text-5xl'} drop-shadow-sm group-hover:scale-110 transition-transform duration-300`}>{w.genreIcon}</span>
+      <div className={`relative bg-gradient-to-br ${genreCover(w.genre)} flex items-center justify-center overflow-hidden ${featured ? 'h-48 md:h-auto md:w-2/5' : 'h-32'}`}>
+        {w.cover
+          ? <img src={asset(w.cover)} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          : <span aria-hidden className={`${featured ? 'text-7xl' : 'text-5xl'} drop-shadow-sm group-hover:scale-110 transition-transform duration-300`}>{w.genreIcon}</span>}
         <span className="absolute top-3 left-3 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur px-2.5 py-1 text-[11px] font-semibold text-gray-800 dark:text-gray-100">
           {w.genreLabel}
         </span>

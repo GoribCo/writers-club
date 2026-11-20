@@ -1,6 +1,7 @@
 ---
 name: "Lucía Fernández"
 country: "Spain"
+countryCode: "ES"
 photo: ""
 tagline: "Poet · MA World Heritage Studies"
 links:

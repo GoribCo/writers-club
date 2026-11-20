@@ -1,6 +1,7 @@
 ---
 name: "Lena Hoffmann"
 country: "Germany"
+countryCode: "DE"
 photo: ""
 tagline: "Club organiser · Translator · BA Social Work"
 links:

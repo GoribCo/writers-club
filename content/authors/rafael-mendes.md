@@ -1,6 +1,7 @@
 ---
 name: "Rafael Mendes"
 country: "Brazil"
+countryCode: "BR"
 photo: ""
 tagline: "Travel writer · MSc Environmental Engineering"
 links:

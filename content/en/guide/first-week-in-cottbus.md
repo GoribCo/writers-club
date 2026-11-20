@@ -4,6 +4,8 @@ author: "Lena Hoffmann"
 country: "Germany"
 date: 2026-10-10
 description: "A practical checklist from club members who arrived before you. Always confirm details with the university's international office."
+tags: [first-semester, practical]
+collection: first-semester
 ---
 
 ## Before anything else

@@ -4,6 +4,8 @@ author: haruto-sato
 country: "日本"
 date: 2026-11-16
 description: "コトブスで初めて見た雪について、五つの俳句。"
+tags: [winter, homesickness]
+collection: winter-2026
 ---
 
 初雪や

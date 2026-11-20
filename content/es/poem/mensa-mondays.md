@@ -4,6 +4,8 @@ author: lucia-fernandez
 country: "España"
 date: 2026-11-12
 description: "Una oda al comedor universitario, a sus patatas y a los amigos que solo encuentras en su cola."
+tags: [food, friendship]
+collection: first-semester
 ---
 
 Los lunes la Mensa huele a patatas

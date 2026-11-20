@@ -1,6 +1,7 @@
 ---
 name: "Amara Okafor"
 country: "Nigeria"
+countryCode: "NG"
 photo: ""
 tagline: "Poet · MSc Environmental Engineering"
 links:

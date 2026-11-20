@@ -4,6 +4,8 @@ author: priya-nair
 country: "India"
 date: 2026-10-28
 description: "How to eat well for about 40 euros a week — tips from the club's unofficial kitchen."
+tags: [food, practical]
+collection: first-semester
 ---
 
 ## Shop smart

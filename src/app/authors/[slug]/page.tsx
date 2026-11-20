@@ -6,6 +6,8 @@ import remarkGfm from 'remark-gfm'
 import { getAuthor, getAuthors, getLanguages, groupTranslations } from '@/lib/content'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import WritingCard from '@/components/WritingCard'
+import JsonLd from '@/components/JsonLd'
+import { absAsset, absUrl } from '@/lib/url'
 
 export const dynamicParams = false
 
@@ -42,6 +44,23 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
 
   return (
     <div className="max-w-5xl mx-auto">
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'ProfilePage',
+        url: absUrl(`/authors/${a.slug}/`),
+        mainEntity: {
+          '@type': 'Person',
+          name: a.name,
+          description: a.tagline || undefined,
+          ...(a.country && { nationality: { '@type': 'Country', name: a.country } }),
+          ...(a.photo && { image: absAsset(a.photo) }),
+          sameAs: Object.values(a.links),
+          knowsLanguage: langs,
+          memberOf: { '@type': 'Organization', name: 'Writers Club', url: absUrl('/') },
+          url: absUrl(`/authors/${a.slug}/`),
+        },
+        hasPart: works.map(i => ({ '@type': 'Article', headline: i.writing.title, url: absUrl(i.writing.url), inLanguage: i.langs })),
+      }} />
       <Link href="/authors/" className="inline-flex items-center gap-1 mb-4 text-sm font-medium text-gray-500 hover:text-indigo-600">← All authors</Link>
 
       {/* Profile header */}
@@ -55,7 +74,7 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
             <div className="min-w-0">
               <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">{a.name}</h1>
               {a.tagline && <p className="mt-1 text-gray-600 dark:text-gray-300">{a.tagline}</p>}
-              {a.country && <p className="mt-1 text-sm font-semibold text-indigo-600 dark:text-indigo-400">📍 {a.country}</p>}
+              {a.country && <p className="mt-1 text-sm font-semibold text-indigo-600 dark:text-indigo-400">{a.flag || '📍'} {a.country}</p>}
             </div>
           </div>
 
@@ -97,7 +116,20 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
               <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Writings by {a.name.split(' ')[0]}</h2>
               <div className="grid gap-5 sm:grid-cols-2">
                 {works.map(i => (
-                  <WritingCard key={i.writing.url} writing={i.writing} languages={i.langs.map(c => byCode[c]).filter(Boolean)} />
+                  <div key={i.writing.url} className="flex flex-col gap-2">
+                    <WritingCard writing={i.writing} languages={i.langs.map(c => byCode[c]).filter(Boolean)} />
+                    {i.langs.length > 1 && (
+                      <nav aria-label={`${i.writing.title} in other languages`} className="flex flex-wrap gap-1.5 px-2 text-xs">
+                        <span className="text-gray-400">Read in:</span>
+                        {i.langs.map(c => byCode[c] && (
+                          <Link key={c} href={`/${c}/${i.writing.genre}/${i.writing.slug}/`} lang={c} hrefLang={c}
+                            className="font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
+                            {byCode[c].flag} {byCode[c].nativeName}
+                          </Link>
+                        ))}
+                      </nav>
+                    )}
+                  </div>
                 ))}
               </div>
             </section>

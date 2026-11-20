@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import type { Author, Genre, Language, Writing } from './types'
+import type { Author, ClubEvent, Collection, Genre, Language, Writing } from './types'
 
 // Layout: content/{lang}/{genre}/{slug}.md — the same {genre}/{slug} in another
 // {lang} folder is treated as a translation of the same writing.
@@ -18,6 +18,21 @@ const subdirs = (dir: string) =>
 export const slugify = (name: string) =>
   name.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '')
+
+// YAML turns unquoted dates into Date objects
+const ymd = (v: unknown) => (v instanceof Date ? v.toISOString().slice(0, 10) : String(v ?? ''))
+
+/** "NG" → 🇳🇬 */
+const flagOf = (code: string) =>
+  /^[a-z]{2}$/i.test(code) ? String.fromCodePoint(...[...code.toUpperCase()].map(c => 0x1f1a5 + c.charCodeAt(0))) : ''
+
+/** Every content/{dir}/*.md parsed, file name as slug. */
+const readMdDir = (dir: string) => {
+  const full = path.join(contentDir, dir)
+  if (!fs.existsSync(full)) return []
+  return fs.readdirSync(full).filter(f => f.endsWith('.md'))
+    .map(f => ({ slug: f.slice(0, -3), ...matter(fs.readFileSync(path.join(full, f), 'utf-8')) }))
+}
 
 const titleCase = (slug: string) => slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 
@@ -55,8 +70,7 @@ export function getGenres(lang: string): Genre[] {
 
 function parseWriting(lang: string, genre: string, slug: string): Writing {
   const { data, content } = matter(fs.readFileSync(path.join(contentDir, lang, genre, `${slug}.md`), 'utf-8'))
-  // YAML turns unquoted dates into Date objects
-  const date = data.date instanceof Date ? data.date.toISOString().slice(0, 10) : String(data.date ?? '')
+  const date = ymd(data.date)
   return {
     lang,
     genre,
@@ -72,6 +86,9 @@ function parseWriting(lang: string, genre: string, slug: string): Writing {
     description: String(data.description ?? ''),
     translator: String(data.translator ?? ''),
     minutes: Math.max(1, Math.round(content.split(/\s+/).length / 200)),
+    tags: (Array.isArray(data.tags) ? data.tags : []).map((t: unknown) => slugify(String(t))),
+    collection: String(data.collection ?? ''),
+    cover: String(data.cover ?? ''),
     content,
   }
 }
@@ -125,11 +142,12 @@ function readAuthorFile(slug: string): Omit<Author, 'writings'> | null {
   const { data, content } = matter(fs.readFileSync(file, 'utf-8'))
   const strMap = (v: unknown) =>
     Object.fromEntries(Object.entries((v ?? {}) as Record<string, unknown>)
-      .map(([k, x]) => [k, x instanceof Date ? x.toISOString().slice(0, 10) : Array.isArray(x) ? x.join(', ') : String(x)]))
+      .map(([k, x]) => [k, Array.isArray(x) ? x.join(', ') : ymd(x)]))
   return {
     slug,
     name: String(data.name ?? titleCase(slug)),
     country: String(data.country ?? ''),
+    flag: flagOf(String(data.countryCode ?? '')),
     photo: String(data.photo ?? ''),
     tagline: String(data.tagline ?? ''),
     links: strMap(data.links),
@@ -153,7 +171,7 @@ export function getAuthors(): Author[] {
     const ref = own.find(w => w.lang === 'en') ?? own[0]
     const file = readAuthorFile(slug)
     return {
-      ...(file ?? { slug, name: ref.author, country: ref.country, photo: '', tagline: '', links: {}, details: {}, about: '' }),
+      ...(file ?? { slug, name: ref.author, country: ref.country, flag: '', photo: '', tagline: '', links: {}, details: {}, about: '' }),
       country: file?.country || ref?.country || '',
       writings: own,
     }
@@ -172,4 +190,66 @@ export function groupTranslations(writings: Writing[]): { writing: Writing; lang
     writing: ws.find(w => w.lang === 'en') ?? ws[0],
     langs: ws.map(w => w.lang),
   }))
+}
+
+/** Other writings to read next: same author or shared tags first, then same genre. One per translation group, `lang` version preferred. */
+export function getRelated(w: Writing, limit = 3): Writing[] {
+  const score = (o: Writing) =>
+    (o.authorSlug === w.authorSlug ? 3 : 0) + o.tags.filter(t => w.tags.includes(t)).length * 2 + (o.genre === w.genre ? 1 : 0)
+  const groups = new Map<string, Writing[]>()
+  for (const o of getAllWritings())
+    if (`${o.genre}/${o.slug}` !== `${w.genre}/${w.slug}`) groups.set(`${o.genre}/${o.slug}`, [...(groups.get(`${o.genre}/${o.slug}`) ?? []), o])
+  return [...groups.values()]
+    .map(ws => ws.find(o => o.lang === w.lang) ?? ws.find(o => o.lang === 'en') ?? ws[0])
+    .map(o => ({ o, s: score(o) }))
+    .filter(x => x.s > 0)
+    .sort((a, b) => b.s - a.s || b.o.date.localeCompare(a.o.date))
+    .slice(0, limit)
+    .map(x => x.o)
+}
+
+/** Older / newer writing in the same language + genre. */
+export function getNeighbours(w: Writing): { prev?: Writing; next?: Writing } {
+  const list = getWritings(w.lang, w.genre)
+  const i = list.findIndex(o => o.slug === w.slug)
+  return { next: list[i - 1], prev: list[i + 1] }
+}
+
+/** All tags with their writings (translations merged), A–Z. */
+export function getTags(): { slug: string; items: ReturnType<typeof groupTranslations> }[] {
+  const grouped = groupTranslations(getAllWritings())
+  const slugs = [...new Set(grouped.flatMap(i => i.writing.tags))].sort()
+  return slugs.map(slug => ({ slug, items: grouped.filter(i => i.writing.tags.includes(slug)) }))
+}
+
+/** Events, soonest first. */
+export function getEvents(): ClubEvent[] {
+  return readMdDir('events').map(({ slug, data, content }) => ({
+    slug,
+    title: String(data.title ?? titleCase(slug)),
+    date: ymd(data.date),
+    time: String(data.time ?? ''),
+    place: String(data.place ?? ''),
+    description: String(data.description ?? ''),
+    body: content.trim(),
+  })).sort((a, b) => a.date.localeCompare(b.date))
+}
+
+/** Collections, newest file first (by name). */
+export function getCollections(): (Collection & { items: ReturnType<typeof groupTranslations> })[] {
+  const grouped = groupTranslations(getAllWritings())
+  return readMdDir('collections').map(({ slug, data, content }) => ({
+    slug,
+    title: String(data.title ?? titleCase(slug)),
+    description: String(data.description ?? ''),
+    cover: String(data.cover ?? ''),
+    body: content.trim(),
+    items: grouped.filter(i => i.writing.collection === slug),
+  })).sort((a, b) => b.slug.localeCompare(a.slug))
+}
+
+/** content/pages/{slug}.md, e.g. the submit page. */
+export function getPage(slug: string): { title: string; description: string; body: string } | null {
+  const p = readMdDir('pages').find(x => x.slug === slug)
+  return p ? { title: String(p.data.title ?? titleCase(slug)), description: String(p.data.description ?? ''), body: p.content.trim() } : null
 }

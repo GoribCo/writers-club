@@ -4,15 +4,25 @@ import { getAuthors, getLanguages } from '@/lib/content'
 import AuthorAvatar from '@/components/AuthorAvatar'
 
 export const dynamic = 'force-static'
-export const metadata: Metadata = { title: 'Authors', alternates: { canonical: '/authors/' } }
+export const metadata: Metadata = {
+  title: 'Authors',
+  description: 'Meet the international students who write for the club — where they come from and what they write.',
+  alternates: { canonical: '/authors/' },
+}
 
 export default function AuthorsPage() {
   const byCode = Object.fromEntries(getLanguages().map(l => [l.code, l]))
+  const authors = getAuthors()
+  // "Where we come from": countries with their authors, most authors first
+  const countries = Object.values(Object.groupBy(authors, a => a.country || '—'))
+    .map(as => ({ country: as![0].country, flag: as!.find(a => a.flag)?.flag ?? '🌍', authors: as! }))
+    .filter(c => c.country)
+    .sort((a, b) => b.authors.length - a.authors.length || a.country.localeCompare(b.country))
   return (
     <div className="max-w-5xl mx-auto">
       <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-6">Authors</h1>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {getAuthors().map(a => (
+        {authors.map(a => (
           <Link
             key={a.slug}
             href={`/authors/${a.slug}/`}
@@ -30,6 +40,23 @@ export default function AuthorsPage() {
           </Link>
         ))}
       </div>
+      <section className="mt-12">
+        <h2 className="mb-1 text-2xl font-bold text-gray-900 dark:text-white">Where we come from</h2>
+        <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">{countries.length} countries, one club.</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          {countries.map(c => (
+            <div key={c.country} className="rounded-2xl bg-white dark:bg-gray-800/80 ring-1 ring-gray-200/70 dark:ring-gray-700/60 p-4">
+              <div className="flex items-center gap-2">
+                <span className="text-3xl" aria-hidden>{c.flag}</span>
+                <span className="font-semibold text-gray-900 dark:text-white">{c.country}</span>
+              </div>
+              <div className="mt-2 flex flex-wrap gap-x-2 text-xs">
+                {c.authors.map(a => <Link key={a.slug} href={`/authors/${a.slug}/`} className="text-indigo-600 dark:text-indigo-400 hover:underline">{a.name}</Link>)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

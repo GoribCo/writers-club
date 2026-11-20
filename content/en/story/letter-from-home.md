@@ -4,6 +4,8 @@ author: "Tanvir Ahmed"
 country: "Bangladesh"
 date: 2026-11-07
 description: "A real paper letter arrives in a student dorm, and nobody remembers how to open one properly."
+tags: [homesickness, family, dorm-life]
+collection: winter-2026
 ---
 
 The envelope was too thick for a bill and too thin for a parcel. Jonas held it up to the kitchen light like it was evidence.

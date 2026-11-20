@@ -3,6 +3,7 @@
 # and writings use it in their frontmatter as `author: {id}` (the full name also works).
 name: "Full Name"
 country: "Country"
+countryCode: "XX"          # ISO 2-letter code, shows the flag
 photo: ""                # https://… or a file in public/, e.g. "/authors/full-name.jpg"
 tagline: "One line about them"
 links:                    # any label: URL

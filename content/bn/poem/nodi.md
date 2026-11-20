@@ -4,6 +4,7 @@ author: tanvir-ahmed
 country: "বাংলাদেশ"
 date: 2026-10-22
 description: "দুটো নদী — পদ্মা আর স্প্রে — এবং তাদের মাঝখানে একজন ছাত্র।"
+tags: [rivers, homesickness, family]
 ---
 
 পদ্মা আমার নাম জানত,

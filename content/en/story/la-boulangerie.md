@@ -5,6 +5,7 @@ country: "France"
 translator: "Lena Hoffmann"
 date: 2026-11-03
 description: "A French student looks for a baguette in Lusatia and finds something else."
+tags: [food, kindness]
 ---
 
 On the first morning I went looking for a baguette. It's ridiculous, I know. You don't go abroad to find exactly what you left behind. But I was hungry, and hunger is not reasonable.

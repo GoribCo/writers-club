@@ -5,6 +5,8 @@ country: "Indien"
 translator: "Lena Hoffmann"
 date: 2026-10-28
 description: "Gut essen für etwa 40 Euro pro Woche — Tipps aus der inoffiziellen Club-Küche."
+tags: [food, practical]
+collection: first-semester
 ---
 
 ## Clever einkaufen

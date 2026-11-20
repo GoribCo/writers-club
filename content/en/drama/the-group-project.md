@@ -4,6 +4,8 @@ author: "Mei Lin"
 country: "Taiwan"
 date: 2026-10-24
 description: "A one-scene comedy. Four students, three time zones of habits, one deadline."
+tags: [dorm-life, friendship, humour]
+collection: first-semester
 ---
 
 *A study room in the library. 23:40. Laptops, empty cups.*

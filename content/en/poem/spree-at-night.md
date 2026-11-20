@@ -4,6 +4,8 @@ author: amara-okafor
 country: "Nigeria"
 date: 2026-11-14
 description: "A short poem about the first winter far from home, written after a late walk along the river."
+tags: [homesickness, winter, rivers]
+collection: winter-2026
 ---
 
 The river does not know my name,

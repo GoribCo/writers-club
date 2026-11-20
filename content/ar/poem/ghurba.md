@@ -4,6 +4,8 @@ author: "Yousef Haddad"
 country: "Jordan"
 date: 2026-11-07
 description: "قصيدة قصيرة عن الحنين إلى الوطن في مدينة صغيرة باردة."
+tags: [homesickness, winter]
+collection: winter-2026
 ---
 
 أمشي في شوارع لا تعرفني،

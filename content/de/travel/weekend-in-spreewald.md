@@ -4,6 +4,7 @@ author: "Rafael Mendes"
 country: "Brasilien"
 date: 2026-10-31
 description: "Kanäle statt Straßen, Gurken statt Feijoada — Notizen von einem ersten Ausflug aus Cottbus."
+tags: [day-trips, food, friendship]
 ---
 
 ## Die Anreise

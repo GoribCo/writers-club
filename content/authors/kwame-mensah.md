@@ -1,6 +1,7 @@
 ---
 name: "Kwame Mensah"
 country: "Ghana"
+countryCode: "GH"
 photo: ""
 tagline: "Short-story writer · BSc Civil Engineering"
 links:

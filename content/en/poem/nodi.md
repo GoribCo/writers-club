@@ -5,6 +5,7 @@ country: "Bangladesh"
 translator: "Tanvir Ahmed"
 date: 2026-10-22
 description: "Two rivers — the Padma and the Spree — and a student standing between them."
+tags: [rivers, homesickness, family]
 ---
 
 The Padma knew my name,

@@ -4,6 +4,7 @@ author: camille-dubois
 country: "France"
 date: 2026-11-03
 description: "Une Française cherche une baguette en Lusace et trouve autre chose."
+tags: [food, kindness]
 ---
 
 Le premier matin, j'ai cherché une baguette. C'est ridicule, je sais. On ne part pas étudier à l'étranger pour retrouver exactement ce qu'on a laissé. Mais j'avais faim, et la faim n'est pas raisonnable.

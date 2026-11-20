@@ -5,6 +5,8 @@ country: "Japan"
 translator: "Haruto Sato"
 date: 2026-11-16
 description: "Five haiku about the first snow in Cottbus."
+tags: [winter, homesickness]
+collection: winter-2026
 ---
 
 first snow —

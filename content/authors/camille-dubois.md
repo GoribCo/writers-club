@@ -1,6 +1,7 @@
 ---
 name: "Camille Dubois"
 country: "France"
+countryCode: "FR"
 photo: ""
 tagline: "Prose writer · MSc Architecture"
 links:

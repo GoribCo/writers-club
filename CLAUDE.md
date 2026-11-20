@@ -36,7 +36,13 @@ src/
     [lang]/[genre]/page.tsx         # Writings in one genre + language
     [lang]/[genre]/[slug]/page.tsx  # A writing + "Also in" translation switcher
     search/                         # Client-side search over all writings
-    authors/page.tsx                # All authors
+    authors/page.tsx                # All authors + "Where we come from" (by country)
+    tags/[tag]/                     # Writings with a theme tag
+    collections/, collections/[slug]/  # Themed collections / anthologies
+    events/                         # Meetings (upcoming/past decided in the browser)
+    submit/                         # Renders content/pages/submit.md
+    og/site.png, og/[lang]/[genre]/[file]/  # Social preview PNGs (route handlers, built statically)
+    llms.txt/                       # Plain site map for AI tools
     authors/[slug]/page.tsx         # Author details + all their writings (every language)
     sitemap.ts, robots.ts
   components/
@@ -51,6 +57,9 @@ content/
   languages.json                    # Known languages (order = top menu order; "dir": "rtl" optional)
   genres.json                       # Optional icon + translated names per genre folder
   authors/{id}.md                   # Author profile; file name = id. Frontmatter: name, country, photo, tagline, links{}, details{}; body = About. See authors/README.md.example
+  events/{yyyy-mm-dd-slug}.md       # title, date, time, place, description; body = details
+  collections/{id}.md               # title, description, cover; body = intro. Writings join with `collection: {id}`
+  pages/submit.md                   # Submit page text
   {lang}/{genre}/{slug}.md          # One writing
 ```
 
@@ -60,7 +69,7 @@ content/
 - Same `{genre}/{slug}` in another `{lang}` folder = translation of the same writing (linked via "Also in" + hreflang).
 - A language appears only if it is in `languages.json` AND has at least one writing. A genre appears only if it has writings.
 - Genre label: `genres.json` name for that language → English name → title-cased folder name.
-- Frontmatter: `title`, `author` (author id = file name in `content/authors/`, or a full name), `country`, `date` (YYYY-MM-DD), `description`, optional `translator`. Lists sort newest first.
+- Frontmatter: `title`, `author` (author id = file name in `content/authors/`, or a full name), `country`, `date` (YYYY-MM-DD), `description`, optional `translator`, `tags: [a, b]`, `collection: id`, `cover: /path.jpg`. Lists sort newest first.
 - `.writing p { white-space: pre-line }` keeps authors' line breaks (poems, dialogue).
 
 ## Content Loaders (`src/lib/content.ts`)
@@ -81,10 +90,19 @@ All paths use `process.cwd()` — never `__dirname`.
 
 All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 
+## SEO / GEO
+
+- Every page: title, description, canonical. Writings: hreflang between translations, OG image `/og/{lang}/{genre}/{slug}.png`.
+- JSON-LD: Organization + WebSite (with SearchAction → `/search/?q=`) in layout; Article on writings; ProfilePage/Person on authors; Event on events; Collection on collections. Use `components/JsonLd`.
+- `<html lang/dir>` is set from the URL by an inline script in layout (one root layout in static export).
+- Paths to files in public/ go through `asset()` (basePath); absolute URLs through `absUrl()` / `absAsset()` in `lib/url.ts`.
+- `npm run check` (runs before every build) validates content: dates, authors, collections, links.
+
 ## Navigation
 
 - **Top bar:** logo, theme toggle; on lg+ also language tabs, authors, search.
 - **Bottom tab bar (below lg):** Home · Languages (opens a sheet with all languages) · Authors · Search. Safe-area aware (`viewportFit: 'cover'`).
+- **Footer:** Authors · Collections · Events · Submit · Search.
 - **Left sidebar (lg+) / sticky chips (mobile):** genres of the current language, read from the URL's first segment. Hidden on home and search.
 
 ## Theme System

@@ -5,6 +5,8 @@ country: "Nigeria"
 translator: "Lena Hoffmann"
 date: 2026-11-14
 description: "Ein kurzes Gedicht über den ersten Winter fern von zu Hause."
+tags: [homesickness, winter, rivers]
+collection: winter-2026
 ---
 
 Der Fluss kennt meinen Namen nicht,

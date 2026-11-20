@@ -5,6 +5,8 @@ country: "Nigeria"
 translator: "Tanvir Ahmed"
 date: 2026-11-14
 description: "বাড়ি থেকে দূরে প্রথম শীত নিয়ে একটি ছোট কবিতা।"
+tags: [homesickness, winter, rivers]
+collection: winter-2026
 ---
 
 নদীটা আমার নাম জানে না,

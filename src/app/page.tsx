@@ -1,5 +1,7 @@
 import Link from 'next/link'
-import { getAllGenres, getAllWritings, getAuthors, getLanguages, getWritings, groupTranslations } from '@/lib/content'
+import { getAllGenres, getAllWritings, getAuthors, getCollections, getEvents, getLanguages, getTags, getWritings, groupTranslations } from '@/lib/content'
+import NextEvent from '@/components/NextEvent'
+import CollectionCard from '@/components/CollectionCard'
 import HomeFeed from '@/components/HomeFeed'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import config from '@/config'
@@ -11,6 +13,8 @@ export default function HomePage() {
   // Drop the body text: the feed is a client component and only needs card fields
   const items = groupTranslations(getAllWritings()).map(i => ({ ...i, writing: { ...i.writing, content: '' } }))
   const authors = getAuthors()
+  const collections = getCollections()
+  const tags = getTags()
   const stats = [
     { n: items.length, label: 'Writings' },
     { n: authors.length, label: 'Authors' },
@@ -45,7 +49,33 @@ export default function HomePage() {
         </div>
       </section>
 
+      <NextEvent events={getEvents()} />
+
       <HomeFeed items={items} genres={getAllGenres()} languages={languages} />
+
+      {collections.length > 0 && (
+        <section>
+          <div className="mb-4 flex items-end justify-between">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Collections</h2>
+            <Link href="/collections/" className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">See all →</Link>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2">{collections.slice(0, 2).map(c => <CollectionCard key={c.slug} c={c} />)}</div>
+        </section>
+      )}
+
+      {tags.length > 0 && (
+        <section>
+          <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Explore themes</h2>
+          <div className="flex flex-wrap gap-2">
+            {tags.map(t => (
+              <Link key={t.slug} href={`/tags/${t.slug}/`}
+                className="rounded-full bg-white dark:bg-gray-800 ring-1 ring-gray-200 dark:ring-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:ring-indigo-400">
+                #{t.slug} <span className="text-gray-400">{t.items.length}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Authors */}
       <section>
@@ -63,6 +93,17 @@ export default function HomePage() {
             </Link>
           ))}
         </div>
+      </section>
+
+      {/* Submit */}
+      <section className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between rounded-[2rem] bg-gray-900 dark:bg-white px-6 py-8 sm:px-10 text-white dark:text-gray-900">
+        <div>
+          <h2 className="text-2xl font-bold">Have something to share?</h2>
+          <p className="mt-1 text-white/70 dark:text-gray-600">Stories, poems, guides — in any language. Every member's voice belongs here.</p>
+        </div>
+        <Link href="/submit/" className="shrink-0 rounded-full bg-white dark:bg-gray-900 px-6 py-3 text-center font-semibold text-gray-900 dark:text-white hover:opacity-90">
+          Submit your writing →
+        </Link>
       </section>
 
       {/* Languages */}

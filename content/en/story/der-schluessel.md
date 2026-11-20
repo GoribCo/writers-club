@@ -5,6 +5,7 @@ country: "Germany"
 translator: "Lena Hoffmann"
 date: 2026-10-15
 description: "A local loses the house key — and learns what it feels like to be the stranger."
+tags: [kindness, neighbours]
 ---
 
 I have lived in Cottbus for twenty-two years. I know every street, every bakery, every shortcut through the park. And one Tuesday evening in October I stood in front of my own front door without a key.

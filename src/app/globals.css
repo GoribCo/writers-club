@@ -97,6 +97,10 @@
     @apply px-4 py-3 text-gray-700 dark:text-gray-300;
   }
 
+  .prose a {
+    @apply font-medium text-indigo-600 dark:text-indigo-400 underline underline-offset-2 hover:text-indigo-800;
+  }
+
   .prose hr {
     @apply border-gray-200 dark:border-gray-700 my-6;
   }
@@ -104,5 +108,10 @@
   /* Keep the author's line breaks — poems and dialogue depend on them */
   .writing p {
     white-space: pre-line;
+  }
+
+  /* Reader text size (ReaderTools sets --reader-scale); em-based prose sizes scale with it */
+  .reader {
+    font-size: calc(1.0625rem * var(--reader-scale, 1));
   }
 }

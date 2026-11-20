@@ -8,6 +8,9 @@ import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import InstallBanner from '@/components/InstallBanner'
 import config from '@/config'
+import JsonLd from '@/components/JsonLd'
+import SiteFooter from '@/components/SiteFooter'
+import { absUrl, asset } from '@/lib/url'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -28,13 +31,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: config.seo.defaultTitle,
     description: config.seo.defaultDescription,
-    url: config.url.site,
     siteName: config.app.name,
     locale: 'en_US',
     type: 'website',
+    images: [{ url: '/og/site.png', width: 1200, height: 630 }],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: config.seo.defaultTitle,
     description: config.seo.defaultDescription,
   },
@@ -68,13 +71,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href={asset('/manifest.json')} />
 
         {/* Apple PWA — enables "Add to Home Screen" via Safari on iOS */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Writers Club" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" href={asset('/apple-touch-icon.png')} />
 
         {/* Splash screens for common iPhone sizes */}
         <link rel="apple-touch-startup-image" href="/apple-touch-icon.png" />
@@ -85,6 +88,24 @@ export default function RootLayout({
         {/* Android / Chrome: status bar colour */}
         <meta name="theme-color" content="#4f46e5" />
 
+        {/* Static export has one root layout, so set <html lang/dir> from the URL's language before paint */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var c=location.pathname.slice(${JSON.stringify(config.url.basePath.length)}).split('/')[1],l=${JSON.stringify(Object.fromEntries(languages.map(l => [l.code, l.dir ?? 'ltr'])))};if(l[c]){document.documentElement.lang=c;document.documentElement.dir=l[c]}})()` }} />
+        <JsonLd data={{
+          '@context': 'https://schema.org',
+          '@graph': [
+            {
+              '@type': 'Organization', '@id': absUrl('/#org'), name: config.app.name, url: absUrl('/'),
+              logo: absUrl('/icon-512.png'), description: config.seo.defaultDescription,
+              parentOrganization: { '@type': 'CollegeOrUniversity', name: 'BTU Cottbus-Senftenberg', url: 'https://www.b-tu.de' },
+            },
+            {
+              '@type': 'WebSite', '@id': absUrl('/#site'), name: config.app.name, url: absUrl('/'),
+              publisher: { '@id': absUrl('/#org') }, inLanguage: languages.map(l => l.code),
+              potentialAction: { '@type': 'SearchAction', target: absUrl('/search/?q={query}'), 'query-input': 'required name=query' },
+            },
+          ],
+        }} />
+
       </head>
       <body className={`${inter.variable} font-sans antialiased bg-gray-50 dark:bg-slate-900 min-h-dvh`}>
         <ThemeProvider>
@@ -94,10 +115,11 @@ export default function RootLayout({
           {/* Desktop: genre sidebar left of content. Mobile: genre chips above content. */}
           <div className="max-w-6xl mx-auto lg:flex lg:items-start">
             <SideNav languages={languages} menus={menus} />
-            <main className="flex-1 min-w-0 px-4 sm:px-6 pt-6 pb-[calc(6rem+env(safe-area-inset-bottom))] lg:pb-16">
+            <main className="flex-1 min-w-0 px-4 sm:px-6 pt-6 pb-12">
               {children}
             </main>
           </div>
+          <SiteFooter />
           <BottomNav languages={languages} />
           <InstallBanner />
         </ThemeProvider>

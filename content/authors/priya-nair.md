@@ -1,6 +1,7 @@
 ---
 name: "Priya Nair"
 country: "India"
+countryCode: "IN"
 photo: ""
 tagline: "Guide writer · MSc Environmental and Resource Management"
 links:

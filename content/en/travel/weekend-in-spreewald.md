@@ -4,6 +4,7 @@ author: "Rafael Mendes"
 country: "Brazil"
 date: 2026-10-31
 description: "Canals instead of streets, pickles instead of feijoada — notes from a first trip outside Cottbus."
+tags: [day-trips, food, friendship]
 ---
 
 ## Getting there

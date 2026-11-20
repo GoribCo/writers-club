@@ -4,6 +4,8 @@ author: kwame-mensah
 country: "Ghana"
 date: 2026-11-18
 description: "Midnight, minus two degrees, and a bus driver who has clearly seen everything."
+tags: [winter, kindness, first-semester]
+collection: winter-2026
 ---
 
 The timetable said 23:52. My phone said 23:51. The street said nothing at all, because in Cottbus the street goes to bed at nine.

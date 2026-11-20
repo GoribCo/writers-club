@@ -1,6 +1,7 @@
 ---
 name: "Yousef Haddad"
 country: "Jordan"
+countryCode: "JO"
 photo: ""
 tagline: "Poet · Comedy writer"
 links:

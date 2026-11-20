@@ -4,6 +4,7 @@ author: mei-lin
 country: "Taiwan"
 date: 2026-10-18
 description: "Ninety minutes by train, one rebuilt church, and too many photos of the Elbe."
+tags: [day-trips, history]
 ---
 
 ## Morning

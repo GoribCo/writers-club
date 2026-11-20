@@ -1,16 +1,32 @@
 import type { MetadataRoute } from 'next'
-import { getAllWritings, getAuthors, getGenres, getLanguages } from '@/lib/content'
+import { getAllWritings, getAuthors, getCollections, getGenres, getLanguages, getTags, getTranslations } from '@/lib/content'
 import config from '@/config'
 
 export const dynamic = 'force-static'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = config.url.site
-  const urls = ['/', '/search/']
-  for (const l of getLanguages()) {
-    urls.push(`/${l.code}/`, ...getGenres(l.code).map(g => `/${l.code}/${g.slug}/`))
-  }
-  urls.push(...getAllWritings().map(w => w.url))
-  urls.push('/authors/', ...getAuthors().map(a => `/authors/${a.slug}/`))
-  return urls.map(u => ({ url: base + u }))
+  const writings = getAllWritings()
+  const newest = (ws: { date: string }[]) => ws.map(w => w.date).sort().at(-1) || undefined
+  const entry = (u: string, lastModified?: string) => ({ url: base + u, lastModified })
+
+  return [
+    entry('/', newest(writings)),
+    entry('/authors/', newest(writings)),
+    entry('/events/'),
+    entry('/collections/'),
+    entry('/submit/'),
+    entry('/search/'),
+    ...getLanguages().flatMap(l => [
+      entry(`/${l.code}/`, newest(writings.filter(w => w.lang === l.code))),
+      ...getGenres(l.code).map(g => entry(`/${l.code}/${g.slug}/`, newest(writings.filter(w => w.lang === l.code && w.genre === g.slug)))),
+    ]),
+    ...writings.map(w => ({
+      ...entry(w.url, w.date),
+      alternates: { languages: Object.fromEntries(getTranslations(w.genre, w.slug).map(l => [l.code, `${base}/${l.code}/${w.genre}/${w.slug}/`])) },
+    })),
+    ...getAuthors().map(a => entry(`/authors/${a.slug}/`, newest(a.writings))),
+    ...getCollections().map(c => entry(`/collections/${c.slug}/`, newest(c.items.map(i => i.writing)))),
+    ...getTags().map(t => entry(`/tags/${t.slug}/`, newest(t.items.map(i => i.writing)))),
+  ]
 }

@@ -4,6 +4,7 @@ author: lena-hoffmann
 country: "Deutschland"
 date: 2026-10-15
 description: "Eine Einheimische verliert ihren Schlüssel — und findet heraus, wie es ist, fremd zu sein."
+tags: [kindness, neighbours]
 ---
 
 Ich wohne seit zweiundzwanzig Jahren in Cottbus. Ich kenne jede Straße, jeden Bäcker, jede Abkürzung durch den Park. Und an einem Dienstagabend im Oktober stand ich vor meiner eigenen Haustür und hatte keinen Schlüssel.

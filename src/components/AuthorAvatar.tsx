@@ -1,4 +1,4 @@
-import config from '@/config'
+import { asset } from '@/lib/url'
 
 const tints = [
   'from-rose-400 to-orange-300', 'from-indigo-500 to-sky-400', 'from-emerald-400 to-teal-500',
@@ -10,7 +10,7 @@ export default function AuthorAvatar({ author: a, size = 48, className = '' }:
   { author: { name: string; photo?: string }; size?: number; className?: string }) {
   const style = { width: size, height: size }
   if (a.photo)
-    return <img src={a.photo.startsWith('/') ? config.url.basePath + a.photo : a.photo} alt="" style={style} className={`rounded-full object-cover shrink-0 ${className}`} />
+    return <img src={asset(a.photo)} alt="" style={style} className={`rounded-full object-cover shrink-0 ${className}`} />
   const initials = a.name.split(/\s+/).map(p => [...p][0]).slice(0, 2).join('').toUpperCase()
   const tint = tints[[...a.name].reduce((n, c) => n + c.charCodeAt(0), 0) % tints.length]
   return (

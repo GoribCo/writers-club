@@ -4,6 +4,8 @@ author: lucia-fernandez
 country: "Spain"
 date: 2026-11-12
 description: "An ode to the university canteen, its potatoes, and the friends you only meet in its queue."
+tags: [food, friendship]
+collection: first-semester
 ---
 
 On Mondays the Mensa smells of potatoes

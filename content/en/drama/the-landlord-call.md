@@ -4,6 +4,8 @@ author: yousef-haddad
 country: "Jordan"
 date: 2026-10-05
 description: "A two-person comedy about a broken heater and a very polite misunderstanding."
+tags: [humour, bureaucracy]
+collection: first-semester
 ---
 
 *A cold room. YOUSEF in a blanket, phone on speaker. A recorded voice plays hold music.*
