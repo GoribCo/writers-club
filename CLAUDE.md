@@ -110,11 +110,11 @@ All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 
 ## Navigation
 
-- **Top bar:** logo, settings; on lg+ also a language dropdown (`LanguageMenu`), authors, search.
-- **Bottom tab bar (below lg):** Home · Languages (sheet with all languages) · Authors · Search · Menu (sheet with the site menu). Safe-area aware (`viewportFit: 'cover'`).
+- **Top bar:** logo, search (lg+), settings (theme / font size / site language). No reading-language picker: languages are linked from the home page's languages section and the top of `/posts/`; each writing has "Also in".
+- **Bottom tab bar (below lg):** Home · Authors · **Posts** (raised centre button) · Events · Menu (sheet: search link + the rest of the site menu as 3-column tiles; items already in the bar are left out). Safe-area aware (`viewportFit: 'cover'`).
 - **Footer:** Authors · Collections · Events · Submit · Search.
 - **Left sidebar (lg+, every page):** fixed site menu (`MENU` in `SiteNav.tsx`): Home, Posts, Magazine, Gallery, Collections, Authors, Events · Submit, Contact, Social · FAQ, Help, Terms, Privacy. On mobile the same menu opens from the bottom bar's **Menu** tab.
-- **Genre chips (all sizes):** sticky above the content on `/{lang}/…` pages only.
+- **Language bar (all sizes, `GenreChips`):** sticky above the content on `/{lang}/…` pages only — a language switcher (keeps the genre if the other language has it), then All + genre chips.
 - **Simple text pages** (submit, contact, gallery, magazine, social, faq, help, terms, privacy): `contents/pages/{slug}.md`, each with a 4-line route `src/app/{slug}/page.tsx` using `markdownPage()` from `components/MarkdownPage.tsx`. `/posts/` lists every writing (reuses `HomeFeed`).
 
 ## Settings (top-right palette button)
