@@ -1,6 +1,7 @@
-import { getAuthors, getCollections, getLanguages, getAllWritings, groupTranslations } from '@/lib/content'
+import { getAllWritings, getAuthors, getClub, getCollections, getLanguages, groupTranslations } from '@/lib/content'
 import { absUrl } from '@/lib/url'
-import config from '@/config'
+
+const club = getClub()
 
 export const dynamic = 'force-static'
 
@@ -9,9 +10,9 @@ export function GET() {
   const byCode = Object.fromEntries(getLanguages().map(l => [l.code, l.name]))
   const writings = groupTranslations(getAllWritings())
   const lines = [
-    `# ${config.app.name}`,
+    `# ${club.name}`,
     '',
-    `> ${config.seo.defaultDescription}`,
+    `> ${club.description}`,
     '',
     'Original creative writing by international students at BTU Cottbus-Senftenberg, Germany. Each writing is published in the language it was written in; some have translations. Author pages describe each writer.',
     '',

@@ -92,6 +92,18 @@ for (const f of mdFiles(path.join(root, 'magazine'))) {
   if (data.cover && missing(String(data.cover))) errors.push(`${file}: cover not found: public${data.cover}`)
 }
 
+{
+  const file = 'contents/club.md'
+  if (!fs.existsSync(path.join(root, 'club.md'))) errors.push(`${file}: missing (club name, email, Instagram, meeting place)`)
+  else {
+    const { data } = read(path.join(root, 'club.md'))
+    if (!data.name) errors.push(`${file}: missing name`)
+    if (!data.description) warnings.push(`${file}: missing description (used by search engines)`)
+    if (data.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email)) errors.push(`${file}: email looks wrong`)
+    if (data.instagram && !/^https:\/\//.test(data.instagram)) errors.push(`${file}: instagram must be a full https:// link`)
+  }
+}
+
 warnings.forEach(w => console.warn(`⚠️  ${w}`))
 errors.forEach(e => console.error(`❌ ${e}`))
 console.log(`Content check: ${writings.size} writings, ${authors.size} authors — ${errors.length} errors, ${warnings.length} warnings`)

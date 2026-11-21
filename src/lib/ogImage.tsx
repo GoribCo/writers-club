@@ -1,5 +1,7 @@
 import { ImageResponse } from 'next/og'
-import config from '@/config'
+import { getClub } from '@/lib/content'
+
+const club = getClub()
 
 export const ogSize = { width: 1200, height: 630 }
 
@@ -20,13 +22,13 @@ export function ogImage({ kicker, title, subtitle, genre = '' }: { kicker: strin
     (
       <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 72, color: 'white', background: gradients[genre] ?? 'linear-gradient(135deg, #4f46e5, #7c3aed, #d946ef)' }}>
         <div style={{ display: 'flex', fontSize: 30, fontWeight: 700, opacity: 0.85, textTransform: 'uppercase', letterSpacing: 4 }}>
-          {latin(kicker) ? kicker : config.app.name}
+          {latin(kicker) ? kicker : club.name}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', fontSize: 76, fontWeight: 800, lineHeight: 1.1 }}>{latin(title) ? title : config.app.name}</div>
+          <div style={{ display: 'flex', fontSize: 76, fontWeight: 800, lineHeight: 1.1 }}>{latin(title) ? title : club.name}</div>
           <div style={{ display: 'flex', fontSize: 36, marginTop: 24, opacity: 0.9 }}>{latin(subtitle) ? subtitle : ''}</div>
         </div>
-        <div style={{ display: 'flex', fontSize: 28, opacity: 0.8 }}>{config.app.name} · BTU Cottbus-Senftenberg</div>
+        <div style={{ display: 'flex', fontSize: 28, opacity: 0.8 }}>{club.name} · BTU Cottbus-Senftenberg</div>
       </div>
     ),
     ogSize,

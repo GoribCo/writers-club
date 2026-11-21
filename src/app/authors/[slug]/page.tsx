@@ -3,13 +3,14 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { getAuthor, getAuthors, getLanguages, groupTranslations } from '@/lib/content'
+import { getAuthor, getAuthors, getClub, getLanguages, groupTranslations } from '@/lib/content'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import WritingCard from '@/components/WritingCard'
 import JsonLd from '@/components/JsonLd'
 import { T } from '@/components/I18n'
 import { absAsset, absUrl } from '@/lib/url'
-import config from '@/config'
+
+const club = getClub()
 
 export const dynamicParams = false
 
@@ -58,7 +59,7 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
           ...(a.photo && { image: absAsset(a.photo) }),
           sameAs: Object.values(a.links),
           knowsLanguage: langs,
-          memberOf: { '@type': 'Organization', name: config.app.name, url: absUrl('/') },
+          memberOf: { '@type': 'Organization', name: club.name, url: absUrl('/') },
           url: absUrl(`/authors/${a.slug}/`),
         },
         hasPart: works.map(i => ({ '@type': 'Article', headline: i.writing.title, url: absUrl(i.writing.url), inLanguage: i.langs })),

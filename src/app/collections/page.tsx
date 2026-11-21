@@ -2,13 +2,10 @@ import type { Metadata } from 'next'
 import { getCollections } from '@/lib/content'
 import CollectionCard from '@/components/CollectionCard'
 import { T } from '@/components/I18n'
+import { markdownPage } from '@/components/MarkdownPage'
 
 export const dynamic = 'force-static'
-export const metadata: Metadata = {
-  title: 'Collections',
-  description: 'Themed collections and semester anthologies from the writers club.',
-  alternates: { canonical: '/collections/' },
-}
+export const metadata: Metadata = markdownPage('collections').generateMetadata()
 
 export default function CollectionsPage() {
   return (

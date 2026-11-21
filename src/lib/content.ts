@@ -245,6 +245,26 @@ export function getCollections(): (Collection & { items: ReturnType<typeof group
   })).sort((a, b) => b.slug.localeCompare(a.slug))
 }
 
+/** contents/club.md: the club's name, description, contact and meeting place. */
+export function getClub() {
+  const { data } = matter(fs.readFileSync(path.join(contentDir, 'club.md'), 'utf-8'))
+  const name = String(data.name ?? 'Writers Club')
+  const instagram = String(data.instagram ?? '')
+  return {
+    name,
+    shortName: String(data.shortName ?? name),
+    title: String(data.title ?? name),
+    description: String(data.description ?? ''),
+    tagline: String(data.tagline ?? ''),
+    keywords: (Array.isArray(data.keywords) ? data.keywords : []).map(String),
+    email: String(data.email ?? ''),
+    instagram,
+    instagramHandle: instagram ? '@' + instagram.replace(/\/+$/, '').split('/').pop() : '',
+    meetingPlace: String(data.meetingPlace ?? ''),
+    meetingAddress: String(data.meetingAddress ?? ''),
+  }
+}
+
 export type MediaItem = { kind: 'image' | 'video' | 'youtube'; src: string; caption: string }
 
 /** "/gallery/a.jpg" → image, ".mp4/.webm/.mov" → video, YouTube link → embed (privacy-enhanced youtube-nocookie). */

@@ -3,9 +3,10 @@ import type { Metadata } from 'next'
 import { getAllGenres, getAllWritings, getLanguages, groupTranslations } from '@/lib/content'
 import HomeFeed from '@/components/HomeFeed'
 import { T } from '@/components/I18n'
+import { markdownPage } from '@/components/MarkdownPage'
 
 export const dynamic = 'force-static'
-export const metadata: Metadata = { title: 'Posts', description: 'Every writing on the site, in every language.', alternates: { canonical: '/posts/' } }
+export const metadata: Metadata = markdownPage('posts').generateMetadata()
 
 export default function PostsPage() {
   // Drop the body text: the feed is a client component and only needs card fields

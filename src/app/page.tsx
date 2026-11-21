@@ -1,11 +1,12 @@
 import Link from 'next/link'
-import { getAllGenres, getAllWritings, getAuthors, getCollections, getEvents, getLanguages, getTags, getWritings, groupTranslations } from '@/lib/content'
+import { getAllGenres, getAllWritings, getAuthors, getClub, getCollections, getEvents, getLanguages, getTags, getWritings, groupTranslations } from '@/lib/content'
 import NextEvent from '@/components/NextEvent'
 import CollectionCard from '@/components/CollectionCard'
 import HomeFeed from '@/components/HomeFeed'
 import AuthorAvatar from '@/components/AuthorAvatar'
-import config from '@/config'
 import { T } from '@/components/I18n'
+
+const club = getClub()
 
 export const dynamic = 'force-static'
 
@@ -36,7 +37,7 @@ export default function HomePage() {
             <T k="home.title" />
           </h1>
           <p className="mt-4 text-white/85 text-base sm:text-lg">
-            <T k="home.intro" name={config.app.name} />
+            <T k="home.intro" name={club.name} />
           </p>
           <Link href="/posts/" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-indigo-700 shadow-lg transition hover:bg-indigo-50 hover:shadow-xl">
             <T k="home.startReading" />

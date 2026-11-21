@@ -55,12 +55,13 @@ src/
   lib/content.ts                    # All fs-based loaders
   lib/types.ts
 contents/
+  club.md                           # Club name, description, email, Instagram, meeting place (frontmatter only)
   languages.json                    # Known languages (order = top menu order; "dir": "rtl" optional)
   genres.json                       # Optional icon + translated names per genre folder
   authors/{id}.md                   # Author profile; file name = id. Frontmatter: name, country, photo, tagline, links{}, details{}; body = About. See authors/README.md.example
   events/{yyyy-mm-dd-slug}.md       # title, date, time, place, description; body = details
   collections/{id}.md               # title, description, cover; body = intro. Writings join with `collection: {id}`
-  pages/{slug}.md                   # Text pages (submit, contact, gallery/magazine intros, faq, help, terms, privacy, social)
+  pages/{slug}.md                   # Text pages (submit, contact, gallery/magazine intros, faq, help, terms, privacy, social); also title/description-only files for posts, authors, search, events, collections
   gallery/{yyyy-mm-dd-slug}.md      # Album: title, date, items[] (src = /gallery/… image/video file or YouTube link). See README.md.example
   magazine/{slug}.md                # Issue: title, date, description, pdf (/magazine/….pdf in public/), cover?. See README.md.example
   ui/{code}.json                    # Site (interface) language dictionaries — NOT content. en.json is the fallback
@@ -102,9 +103,10 @@ All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 - Static HTML is rendered in English and switches after hydration (no per-language routes). Metadata/SEO stays English.
 - `<html dir>` follows the site language (rtl for ar); content blocks carry their own `lang`/`dir` (`dir="auto"` on authored text).
 
-## Club info (`src/config.ts`)
+## Club info (`contents/club.md`)
 
-- `app.name` = "BTU Writer's Club". `contact` (email, Instagram) and `meeting` (place, address) feed the Contact page, footer Instagram link and Organization JSON-LD.
+- **Rule: anything an editor may change lives in `contents/` (Markdown/JSON), never in `src/config.ts`** (that file is developer settings only: URL, analytics, theme colours).
+- `club.md` frontmatter (name, shortName, title, description, keywords, email, instagram, meetingPlace, meetingAddress) → `getClub()`. Used for header/footer name, metadata, JSON-LD, Contact page, `/manifest.json` (route handler). Client components get the name as a prop.
 - Contact map: Google Maps embed by address, loaded only after a click (`MapEmbed`, GDPR). Gallery YouTube embeds use youtube-nocookie.
 - Site URL/basePath come from the GitHub Pages workflow (`configure-pages` outputs), so they follow the repo name (`btu-writers-club`).
 

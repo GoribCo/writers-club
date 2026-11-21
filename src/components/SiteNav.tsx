@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import SettingsMenu from './SettingsMenu'
 import { useI18n, useLanguageName } from './I18n'
-import config from '@/config'
 import type { Genre, Language } from '@/lib/types'
 
 // Menus are built at build time from the content folders (see layout.tsx);
@@ -22,14 +21,14 @@ const pill = (active: boolean) =>
       : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
   }`
 
-export function TopNav({ languages }: { languages: Language[] }) {
+export function TopNav({ languages, siteName }: { languages: Language[]; siteName: string }) {
   const { t } = useI18n()
   return (
     <header className="sticky top-0 z-40 pt-[env(safe-area-inset-top)] backdrop-blur-md bg-white/85 dark:bg-gray-900/85 border-b border-gray-200 dark:border-gray-800">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center gap-3">
-        <Link href="/" className="flex items-center gap-2 shrink-0" aria-label={t('nav.homeAria', { name: config.app.name })}>
+        <Link href="/" className="flex items-center gap-2 shrink-0" aria-label={t('nav.homeAria', { name: siteName })}>
           <span className="w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center text-white text-sm font-bold">✎</span>
-          <span className="hidden min-[360px]:inline text-lg font-bold text-gray-900 dark:text-white">{config.app.name}</span>
+          <span className="hidden min-[360px]:inline text-lg font-bold text-gray-900 dark:text-white">{siteName}</span>
         </Link>
 
         <span className="flex-1" />

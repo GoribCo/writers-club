@@ -1,14 +1,11 @@
 import type { Metadata } from 'next'
 import { getAllWritings, getAuthors, getLanguages } from '@/lib/content'
 import SearchClient from './SearchClient'
+import { markdownPage } from '@/components/MarkdownPage'
 
 export const dynamic = 'force-static'
 
-export const metadata: Metadata = {
-  title: 'Search',
-  description: 'Search all writings and authors by title, name, country, theme or text.',
-  alternates: { canonical: '/search/' },
-}
+export const metadata: Metadata = markdownPage('search').generateMetadata()
 
 export default function SearchPage() {
   const languages = getLanguages()

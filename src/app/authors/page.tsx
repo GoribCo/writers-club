@@ -3,13 +3,10 @@ import type { Metadata } from 'next'
 import { getAuthors, getLanguages } from '@/lib/content'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import { T } from '@/components/I18n'
+import { markdownPage } from '@/components/MarkdownPage'
 
 export const dynamic = 'force-static'
-export const metadata: Metadata = {
-  title: 'Authors',
-  description: 'Meet the international students who write for the club — where they come from and what they write.',
-  alternates: { canonical: '/authors/' },
-}
+export const metadata: Metadata = markdownPage('authors').generateMetadata()
 
 export default function AuthorsPage() {
   const byCode = Object.fromEntries(getLanguages().map(l => [l.code, l]))

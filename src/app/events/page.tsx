@@ -1,17 +1,15 @@
 import type { Metadata } from 'next'
-import { getEvents } from '@/lib/content'
+import { getClub, getEvents } from '@/lib/content'
 import EventList from '@/components/EventList'
 import JsonLd from '@/components/JsonLd'
 import { T } from '@/components/I18n'
 import { absUrl } from '@/lib/url'
-import config from '@/config'
+import { markdownPage } from '@/components/MarkdownPage'
+
+const club = getClub()
 
 export const dynamic = 'force-static'
-export const metadata: Metadata = {
-  title: 'Events',
-  description: 'Weekly meetings, readings and workshops of the writers club.',
-  alternates: { canonical: '/events/' },
-}
+export const metadata: Metadata = markdownPage('events').generateMetadata()
 
 export default function EventsPage() {
   const events = getEvents()
@@ -20,8 +18,8 @@ export default function EventsPage() {
       <JsonLd data={events.map(e => ({
         '@context': 'https://schema.org', '@type': 'Event', name: e.title, description: e.description,
         startDate: e.date, eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-        location: { '@type': 'Place', name: e.place || config.app.name },
-        organizer: { '@type': 'Organization', name: config.app.name, url: absUrl('/') },
+        location: { '@type': 'Place', name: e.place || club.name },
+        organizer: { '@type': 'Organization', name: club.name, url: absUrl('/') },
         url: absUrl(`/events/#${e.slug}`),
       }))} />
       <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white"><T k="events.title" /></h1>
