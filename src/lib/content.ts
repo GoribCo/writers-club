@@ -5,7 +5,7 @@ import type { Author, ClubEvent, Collection, Genre, Language, Writing } from './
 
 // Layout: content/{lang}/{genre}/{slug}.md — the same {genre}/{slug} in another
 // {lang} folder is treated as a translation of the same writing.
-const contentDir = path.join(process.cwd(), 'content')
+const contentDir = path.join(process.cwd(), 'contents')
 
 const readJson = (file: string) => JSON.parse(fs.readFileSync(path.join(contentDir, file), 'utf-8'))
 
