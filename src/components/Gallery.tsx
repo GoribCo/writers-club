@@ -1,3 +1,4 @@
+import ReactMarkdown from 'react-markdown'
 import { getAlbums } from '@/lib/content'
 import { asset } from '@/lib/url'
 import { LocaleDate, T } from './I18n'
@@ -13,7 +14,7 @@ export default function Gallery() {
           <header className="mb-4">
             <h2 id={`album-${a.slug}`} dir="auto" className="text-xl font-bold text-gray-900 dark:text-white">{a.title}</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400"><LocaleDate date={a.date} /> · <T k="gallery.items" n={a.items.length} /></p>
-            {a.body && <p dir="auto" className="mt-2 whitespace-pre-line text-gray-600 dark:text-gray-300">{a.body}</p>}
+            {a.body && <div dir="auto" className="prose prose-sm max-w-none mt-2 text-gray-600 dark:text-gray-300"><ReactMarkdown components={{ a: ({ href, children }) => <a href={href} target="_blank" rel="noopener">{children}</a> }}>{a.body}</ReactMarkdown></div>}
           </header>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
             {a.items.map(m => (

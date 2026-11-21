@@ -12,4 +12,6 @@ items:
     caption: "Full recording"
 ---
 
-Optional short description of the event.
+Optional short description of the event (Markdown).
+
+Using photos you did not take? Credit them here, e.g. *Photo: Jane Doe, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)*.
