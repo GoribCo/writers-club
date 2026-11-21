@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import ThemeProvider from '@/components/ThemeProvider'
-import { TopNav, SideNav, BottomNav } from '@/components/SiteNav'
+import { TopNav, SiteMenu, GenreChips, BottomNav } from '@/components/SiteNav'
 import { getGenres, getLanguages, getUiDictionaries } from '@/lib/content'
 import { I18nProvider } from '@/components/I18n'
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
@@ -114,12 +114,15 @@ export default function RootLayout({
           <GoogleAnalytics />
           <ServiceWorkerRegistrar />
           <TopNav languages={languages} />
-          {/* Desktop: genre sidebar left of content. Mobile: genre chips above content. */}
+          {/* Desktop: site menu sidebar left of content. Genre chips above content on language pages. */}
           <div className="max-w-6xl mx-auto lg:flex lg:items-start">
-            <SideNav languages={languages} menus={menus} />
-            <main className="flex-1 min-w-0 px-4 sm:px-6 pt-6 pb-12">
-              {children}
-            </main>
+            <SiteMenu languages={languages} />
+            <div className="flex-1 min-w-0">
+              <GenreChips languages={languages} menus={menus} />
+              <main className="px-4 sm:px-6 pt-6 pb-12">
+                {children}
+              </main>
+            </div>
           </div>
           <SiteFooter />
           <BottomNav languages={languages} />

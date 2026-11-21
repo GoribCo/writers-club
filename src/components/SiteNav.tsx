@@ -122,45 +122,68 @@ export function TopNav({ languages }: { languages: Language[] }) {
   )
 }
 
-export function SideNav({ languages, menus }: { languages: Language[]; menus: Record<string, Genre[]> }) {
+// Fixed site menu (desktop sidebar + mobile "Menu" sheet). Groups are separated by a divider.
+const MENU = [
+  [['/', '🏠', 'nav.home'], ['/posts/', '📚', 'menu.posts'], ['/magazine/', '📰', 'menu.magazine'], ['/gallery/', '🖼️', 'menu.gallery'],
+    ['/collections/', '🗂️', 'footer.collections'], ['/authors/', '👥', 'nav.authors'], ['/events/', '📅', 'footer.events']],
+  [['/submit/', '✍️', 'footer.submit'], ['/contact/', '✉️', 'menu.contact'], ['/social/', '💬', 'menu.social']],
+  [['/faq/', '❓', 'menu.faq'], ['/help/', '🛟', 'menu.help'], ['/terms/', '📜', 'menu.terms'], ['/privacy/', '🔒', 'menu.privacy']],
+] as const
+
+function MenuList({ languages, onPick }: { languages: Language[]; onPick?: () => void }) {
+  const pathname = usePathname()
+  const { lang } = useSegments()
+  const { t } = useI18n()
+  // Writing pages (/{lang}/…) count as Posts
+  const active = (href: string) =>
+    href === '/' ? pathname === '/' : pathname.startsWith(href) || (href === '/posts/' && languages.some(l => l.code === lang))
+  return MENU.map((group, i) => (
+    <div key={i} className={`flex flex-col gap-1 ${i ? 'mt-3 pt-3 border-t border-gray-200 dark:border-gray-800' : ''}`}>
+      {group.map(([href, icon, key]) => (
+        <Link
+          key={href}
+          href={href}
+          onClick={onPick}
+          aria-current={active(href) ? 'page' : undefined}
+          className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+            active(href)
+              ? 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400'
+              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+          }`}
+        >
+          <span aria-hidden>{icon}</span>
+          <span className="flex-1 truncate">{t(key)}</span>
+        </Link>
+      ))}
+    </div>
+  ))
+}
+
+/** Desktop: always-visible left sidebar with the site menu. */
+export function SiteMenu({ languages }: { languages: Language[] }) {
+  const { t } = useI18n()
+  return (
+    <nav aria-label={t('nav.menu')} className="hidden lg:flex flex-col sticky top-14 w-56 shrink-0 px-3 py-6 h-[calc(100dvh-3.5rem)] overflow-y-auto border-r border-gray-200 dark:border-gray-800">
+      <MenuList languages={languages} />
+    </nav>
+  )
+}
+
+/** Genre chips of the current language, above the content on /{lang}/… pages (all screen sizes). */
+export function GenreChips({ languages, menus }: { languages: Language[]; menus: Record<string, Genre[]> }) {
   const { lang, genre } = useSegments()
   const language = languages.find(l => l.code === lang)
   if (!language) return null
-  const genres = menus[lang] ?? []
-  const total = genres.reduce((n, g) => n + g.count, 0)
-  const items = [{ href: `/${lang}/`, label: language.nativeName, icon: language.flag, count: total, active: !genre }]
-    .concat(genres.map(g => ({ href: `/${lang}/${g.slug}/`, label: g.label, icon: g.icon, count: g.count, active: g.slug === genre })))
-
+  const items = [{ href: `/${lang}/`, label: language.nativeName, icon: language.flag, active: !genre }]
+    .concat((menus[lang] ?? []).map(g => ({ href: `/${lang}/${g.slug}/`, label: g.label, icon: g.icon, active: g.slug === genre })))
   return (
-    <>
-      {/* Mobile: horizontal genre chips */}
-      <nav aria-label="Genres" lang={lang} className="lg:hidden sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-30 flex gap-1 overflow-x-auto px-4 py-2 bg-gray-50/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 [scrollbar-width:none]">
-        {items.map(i => (
-          <Link key={i.href} href={i.href} className={pill(i.active)}>
-            <span aria-hidden>{i.icon}</span>{i.label}
-          </Link>
-        ))}
-      </nav>
-
-      {/* Desktop: left sidebar */}
-      <nav aria-label="Genres" lang={lang} className="hidden lg:flex flex-col gap-1 sticky top-14 w-56 shrink-0 px-3 py-6 h-[calc(100dvh-3.5rem)] overflow-y-auto border-r border-gray-200 dark:border-gray-800">
-        {items.map(i => (
-          <Link
-            key={i.href}
-            href={i.href}
-            className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
-              i.active
-                ? 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-            }`}
-          >
-            <span aria-hidden>{i.icon}</span>
-            <span className="flex-1 truncate">{i.label}</span>
-            <span className="text-xs text-gray-400">{i.count}</span>
-          </Link>
-        ))}
-      </nav>
-    </>
+    <nav aria-label="Genres" lang={lang} className="sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-30 flex gap-1 overflow-x-auto px-4 sm:px-6 py-2 bg-gray-50/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 [scrollbar-width:none]">
+      {items.map(i => (
+        <Link key={i.href} href={i.href} className={pill(i.active)}>
+          <span aria-hidden>{i.icon}</span>{i.label}
+        </Link>
+      ))}
+    </nav>
   )
 }
 
@@ -169,14 +192,17 @@ const icons = {
   globe: <><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" /></>,
   authors: <><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="10" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></>,
   search: <><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></>,
+  menu: <path d="M4 6h16M4 12h16M4 18h16" />,
 }
 
-/** Mobile/tablet: app-style bottom tab bar; "Languages" opens a sheet with every language. */
+/** Mobile/tablet: app-style bottom tab bar; "Languages" and "Menu" each open a bottom sheet. */
 export function BottomNav({ languages }: { languages: Language[] }) {
   const pathname = usePathname()
   const { lang } = useSegments()
-  const [open, setOpen] = useState(false)
-  useEffect(() => setOpen(false), [pathname])
+  const [sheet, setSheet] = useState<'lang' | 'menu' | null>(null)
+  useEffect(() => setSheet(null), [pathname])
+  const open = sheet !== null
+  const close = () => setSheet(null)
   const current = languages.find(l => l.code === lang)
   const { t } = useI18n()
 
@@ -192,23 +218,26 @@ export function BottomNav({ languages }: { languages: Language[] }) {
     <div className="lg:hidden">
       {open && (
         <>
-          <button aria-label={t('nav.close')} onClick={() => setOpen(false)} className="fixed inset-0 z-40 bg-black/40" />
-          <div role="dialog" aria-label={t('nav.chooseLanguage')} className="fixed inset-x-0 bottom-0 z-50 max-h-[75dvh] overflow-y-auto rounded-t-3xl bg-white dark:bg-gray-900 p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] shadow-2xl">
+          <button aria-label={t('nav.close')} onClick={close} className="fixed inset-0 z-40 bg-black/40" />
+          <div role="dialog" aria-label={t(sheet === 'lang' ? 'nav.chooseLanguage' : 'nav.menu')} className="fixed inset-x-0 bottom-0 z-50 max-h-[75dvh] overflow-y-auto rounded-t-3xl bg-white dark:bg-gray-900 p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] shadow-2xl">
             <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-gray-300 dark:bg-gray-700" />
-            <h2 className="mb-3 font-semibold text-gray-900 dark:text-white">{t('nav.chooseLanguage')}</h2>
-            <LanguageGrid languages={languages} lang={lang} onPick={() => setOpen(false)} />
+            <h2 className="mb-3 font-semibold text-gray-900 dark:text-white">{t(sheet === 'lang' ? 'nav.chooseLanguage' : 'nav.menu')}</h2>
+            {sheet === 'lang'
+              ? <LanguageGrid languages={languages} lang={lang} onPick={close} />
+              : <MenuList languages={languages} onPick={close} />}
           </div>
         </>
       )}
 
       <nav aria-label={t('nav.home')} className="fixed inset-x-0 bottom-0 z-50 flex border-t border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md pb-[env(safe-area-inset-bottom)]">
         <Link href="/" className={tab(pathname === '/' && !open)}>{icon(icons.home)}{t('nav.home')}</Link>
-        <button onClick={() => setOpen(o => !o)} aria-expanded={open} className={tab(open || !!current)}>
+        <button onClick={() => setSheet(s => (s === 'lang' ? null : 'lang'))} aria-expanded={sheet === 'lang'} className={tab(sheet === 'lang' || (!!current && !open))}>
           {current && !open ? <span className="text-2xl leading-6" aria-hidden>{current.flag}</span> : icon(icons.globe)}
           <span className="max-w-[5.5rem] truncate">{current && !open ? current.nativeName : t('nav.languages')}</span>
         </button>
         <Link href="/authors/" className={tab(lang === 'authors' && !open)}>{icon(icons.authors)}{t('nav.authors')}</Link>
         <Link href="/search/" className={tab(lang === 'search' && !open)}>{icon(icons.search)}{t('nav.search')}</Link>
+        <button onClick={() => setSheet(s => (s === 'menu' ? null : 'menu'))} aria-expanded={sheet === 'menu'} className={tab(sheet === 'menu')}>{icon(icons.menu)}{t('nav.menu')}</button>
       </nav>
     </div>
   )

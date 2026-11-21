@@ -110,10 +110,12 @@ All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 
 ## Navigation
 
-- **Top bar:** logo, theme toggle; on lg+ also language tabs, authors, search.
-- **Bottom tab bar (below lg):** Home · Languages (opens a sheet with all languages) · Authors · Search. Safe-area aware (`viewportFit: 'cover'`).
+- **Top bar:** logo, settings; on lg+ also a language dropdown (`LanguageMenu`), authors, search.
+- **Bottom tab bar (below lg):** Home · Languages (sheet with all languages) · Authors · Search · Menu (sheet with the site menu). Safe-area aware (`viewportFit: 'cover'`).
 - **Footer:** Authors · Collections · Events · Submit · Search.
-- **Left sidebar (lg+) / sticky chips (mobile):** genres of the current language, read from the URL's first segment. Hidden on home and search.
+- **Left sidebar (lg+, every page):** fixed site menu (`MENU` in `SiteNav.tsx`): Home, Posts, Magazine, Gallery, Collections, Authors, Events · Submit, Contact, Social · FAQ, Help, Terms, Privacy. On mobile the same menu opens from the bottom bar's **Menu** tab.
+- **Genre chips (all sizes):** sticky above the content on `/{lang}/…` pages only.
+- **Simple text pages** (submit, contact, gallery, magazine, social, faq, help, terms, privacy): `contents/pages/{slug}.md`, each with a 4-line route `src/app/{slug}/page.tsx` using `markdownPage()` from `components/MarkdownPage.tsx`. `/posts/` lists every writing (reuses `HomeFeed`).
 
 ## Settings (top-right palette button)
 

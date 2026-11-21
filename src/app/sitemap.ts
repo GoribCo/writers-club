@@ -15,7 +15,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry('/authors/', newest(writings)),
     entry('/events/'),
     entry('/collections/'),
+    entry('/posts/', newest(writings)),
     entry('/submit/'),
+    ...['magazine', 'gallery', 'contact', 'social', 'faq', 'help', 'terms', 'privacy'].map(p => entry(`/${p}/`)),
     entry('/search/'),
     ...getLanguages().flatMap(l => [
       entry(`/${l.code}/`, newest(writings.filter(w => w.lang === l.code))),
