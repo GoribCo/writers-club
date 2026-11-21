@@ -26,7 +26,7 @@ const pill = (active: boolean) =>
 function LanguageGrid({ languages, lang, onPick }: { languages: Language[]; lang: string; onPick: () => void }) {
   const languageName = useLanguageName()
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
       {languages.map(l => (
         <Link
           key={l.code}
@@ -34,16 +34,16 @@ function LanguageGrid({ languages, lang, onPick }: { languages: Language[]; lang
           lang={l.code}
           onClick={onPick}
           aria-current={l.code === lang ? 'page' : undefined}
-          className={`flex items-center gap-1.5 rounded-lg border px-2 py-1.5 ${
+          className={`flex items-center gap-2.5 rounded-xl border px-3 py-2 ${
             l.code === lang
               ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/50'
               : 'border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
           }`}
         >
-          <span className="text-base" aria-hidden>{l.flag}</span>
+          <span className="text-xl" aria-hidden>{l.flag}</span>
           <span className="min-w-0">
-            <span className="block truncate text-xs font-medium text-gray-900 dark:text-white">{l.nativeName}</span>
-            <span className="block truncate text-[10px] leading-tight text-gray-400">{languageName(l.code)}</span>
+            <span className="block truncate text-sm font-medium text-gray-900 dark:text-white">{l.nativeName}</span>
+            <span className="block truncate text-xs text-gray-400">{languageName(l.code)}</span>
           </span>
         </Link>
       ))}
@@ -75,7 +75,7 @@ function LanguageMenu({ languages, lang }: { languages: Language[]; lang: string
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden className={`transition-transform ${open ? 'rotate-180' : ''}`}><path d="m6 9 6 6 6-6" /></svg>
       </button>
       {open && (
-        <div role="dialog" aria-label={t('nav.chooseLanguage')} className="absolute start-0 top-full mt-2 w-[26rem] max-h-[70dvh] overflow-y-auto rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 shadow-xl">
+        <div role="dialog" aria-label={t('nav.chooseLanguage')} className="absolute start-0 top-full mt-2 w-[30rem] max-h-[70dvh] overflow-y-auto rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 shadow-xl">
           <LanguageGrid languages={languages} lang={lang} onPick={() => setOpen(false)} />
         </div>
       )}
