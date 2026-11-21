@@ -5,8 +5,8 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { getPage } from '@/lib/content'
 
-/** Page + metadata for contents/pages/{slug}.md, served at /{slug}/. */
-export function markdownPage(slug: string) {
+/** Page + metadata for contents/pages/{slug}.md, served at /{slug}/. `Extra` renders below the text (full width). */
+export function markdownPage(slug: string, Extra?: () => React.ReactNode) {
   return {
     generateMetadata(): Metadata {
       const p = getPage(slug)
@@ -16,6 +16,7 @@ export function markdownPage(slug: string) {
       const p = getPage(slug)
       if (!p) notFound()
       return (
+        <div className="space-y-10">
         <div className="max-w-2xl mx-auto">
           <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">{p.title}</h1>
           {p.description && <p className="mb-8 text-lg text-gray-500 dark:text-gray-400">{p.description}</p>}
@@ -24,6 +25,8 @@ export function markdownPage(slug: string) {
             components={{ a: ({ href = '', children }) => href.startsWith('/') ? <Link href={href}>{children}</Link> : <a href={href}>{children}</a> }}>
             {p.body}
           </ReactMarkdown></div>
+        </div>
+        {Extra && <Extra />}
         </div>
       )
     },

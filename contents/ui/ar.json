@@ -98,5 +98,25 @@
   "font.small": "صغير",
   "font.medium": "متوسط",
   "font.large": "كبير",
-  "settings.language": "اللغة"
+  "settings.language": "اللغة",
+  "gallery.empty": "لا توجد صور بعد. ستظهر هنا صور ومقاطع فيديو من فعاليتنا القادمة.",
+  "gallery.items": {
+    "zero": "لا صور",
+    "one": "صورة أو فيديو واحد",
+    "two": "صورتان أو مقطعان",
+    "few": "{n} صور ومقاطع",
+    "many": "{n} صورة ومقطعًا",
+    "other": "{n} صورة ومقطع"
+  },
+  "magazine.empty": "العدد الأول قيد الإعداد.",
+  "magazine.open": "فتح بملء الشاشة",
+  "magazine.download": "تنزيل PDF",
+  "magazine.phoneHint": "على الهاتف تُفتح المجلة في عارض PDF: اضغط «فتح بملء الشاشة».",
+  "magazine.back": "كل الأعداد",
+  "contact.email": "البريد الإلكتروني",
+  "contact.meeting": "أين نلتقي",
+  "contact.showMap": "عرض الخريطة",
+  "contact.mapNotice": "تُحمَّل الخريطة من Google Maps، وقد تُضبط ملفات تعريف الارتباط.",
+  "contact.openMap": "فتح في Google Maps",
+  "footer.followUs": "تابعونا"
 }

@@ -95,5 +95,21 @@
   "font.small": "ছোট",
   "font.medium": "মাঝারি",
   "font.large": "বড়",
-  "settings.language": "ভাষা"
+  "settings.language": "ভাষা",
+  "gallery.empty": "এখনও কোনো ছবি নেই। আমাদের পরের অনুষ্ঠানের ছবি ও ভিডিও এখানে দেখা যাবে।",
+  "gallery.items": {
+    "one": "{n}টি ছবি বা ভিডিও",
+    "other": "{n}টি ছবি ও ভিডিও"
+  },
+  "magazine.empty": "প্রথম সংখ্যা প্রস্তুত হচ্ছে।",
+  "magazine.open": "পূর্ণ পর্দায় খুলুন",
+  "magazine.download": "PDF ডাউনলোড করুন",
+  "magazine.phoneHint": "ফোনে ম্যাগাজিনটি আপনার PDF ভিউয়ারে খুলবে: “পূর্ণ পর্দায় খুলুন”-এ চাপুন।",
+  "magazine.back": "সব সংখ্যা",
+  "contact.email": "ইমেইল",
+  "contact.meeting": "আমরা কোথায় মিলিত হই",
+  "contact.showMap": "মানচিত্র দেখান",
+  "contact.mapNotice": "মানচিত্রটি Google Maps থেকে লোড হয়, যা কুকি সেট করতে পারে।",
+  "contact.openMap": "Google Maps-এ খুলুন",
+  "footer.followUs": "আমাদের অনুসরণ করুন"
 }

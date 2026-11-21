@@ -95,5 +95,20 @@
   "font.small": "小",
   "font.medium": "中",
   "font.large": "大",
-  "settings.language": "言語"
+  "settings.language": "言語",
+  "gallery.empty": "まだ写真はありません。次のイベントの写真や動画がここに表示されます。",
+  "gallery.items": {
+    "other": "写真・動画 {n} 件"
+  },
+  "magazine.empty": "創刊号を準備中です。",
+  "magazine.open": "全画面で開く",
+  "magazine.download": "PDF をダウンロード",
+  "magazine.phoneHint": "スマートフォンでは PDF ビューアで開きます。「全画面で開く」をタップしてください。",
+  "magazine.back": "すべての号",
+  "contact.email": "メール",
+  "contact.meeting": "活動場所",
+  "contact.showMap": "地図を表示",
+  "contact.mapNotice": "地図は Google マップから読み込まれ、Cookie が設定される場合があります。",
+  "contact.openMap": "Google マップで開く",
+  "footer.followUs": "フォローする"
 }

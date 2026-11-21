@@ -1,8 +1,8 @@
-# Writers Club — Project Knowledge
+# BTU Writer's Club — Project Knowledge
 
 ## What This Is
 
-**Writers Club** — website of the international writers club at BTU Cottbus-Senftenberg. Students publish stories, poems, travel writing, guides and drama in many languages. No database — all content is plain Markdown. Static export for GitHub Pages. (Converted from the "writers-club" language-learning app; the old learning features were removed.)
+**BTU Writer's Club** — website of the international writers club at BTU Cottbus-Senftenberg. Students publish stories, poems, travel writing, guides and drama in many languages. No database — all content is plain Markdown. Static export for GitHub Pages. (Converted from the "writers-club" language-learning app; the old learning features were removed.)
 
 ## Tech Stack
 
@@ -60,7 +60,9 @@ contents/
   authors/{id}.md                   # Author profile; file name = id. Frontmatter: name, country, photo, tagline, links{}, details{}; body = About. See authors/README.md.example
   events/{yyyy-mm-dd-slug}.md       # title, date, time, place, description; body = details
   collections/{id}.md               # title, description, cover; body = intro. Writings join with `collection: {id}`
-  pages/submit.md                   # Submit page text
+  pages/{slug}.md                   # Text pages (submit, contact, gallery/magazine intros, faq, help, terms, privacy, social)
+  gallery/{yyyy-mm-dd-slug}.md      # Album: title, date, items[] (src = /gallery/… image/video file or YouTube link). See README.md.example
+  magazine/{slug}.md                # Issue: title, date, description, pdf (/magazine/….pdf in public/), cover?. See README.md.example
   ui/{code}.json                    # Site (interface) language dictionaries — NOT content. en.json is the fallback
   posts/{genre}/{slug}/{lang}.md    # One writing in one language
 ```
@@ -99,6 +101,12 @@ All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 - Use `<T k="key" n={3} />` in server components, `useI18n().t()` in client components, `<LocaleDate date=…/>` for dates (`components/I18n.tsx`).
 - Static HTML is rendered in English and switches after hydration (no per-language routes). Metadata/SEO stays English.
 - `<html dir>` follows the site language (rtl for ar); content blocks carry their own `lang`/`dir` (`dir="auto"` on authored text).
+
+## Club info (`src/config.ts`)
+
+- `app.name` = "BTU Writer's Club". `contact` (email, Instagram) and `meeting` (place, address) feed the Contact page, footer Instagram link and Organization JSON-LD.
+- Contact map: Google Maps embed by address, loaded only after a click (`MapEmbed`, GDPR). Gallery YouTube embeds use youtube-nocookie.
+- Site URL/basePath come from the GitHub Pages workflow (`configure-pages` outputs), so they follow the repo name (`btu-writers-club`).
 
 ## SEO / GEO
 

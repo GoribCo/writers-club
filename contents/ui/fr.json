@@ -101,5 +101,21 @@
   "font.small": "Petite",
   "font.medium": "Moyenne",
   "font.large": "Grande",
-  "settings.language": "Langue"
+  "settings.language": "Langue",
+  "gallery.empty": "Pas encore de photos. Les photos et vidéos de notre prochain événement apparaîtront ici.",
+  "gallery.items": {
+    "one": "{n} photo ou vidéo",
+    "other": "{n} photos et vidéos"
+  },
+  "magazine.empty": "Le premier numéro est en préparation.",
+  "magazine.open": "Ouvrir en plein écran",
+  "magazine.download": "Télécharger le PDF",
+  "magazine.phoneHint": "Sur téléphone, le magazine s’ouvre dans votre lecteur PDF : touchez « Ouvrir en plein écran ».",
+  "magazine.back": "Tous les numéros",
+  "contact.email": "E-mail",
+  "contact.meeting": "Où nous nous retrouvons",
+  "contact.showMap": "Afficher la carte",
+  "contact.mapNotice": "La carte est chargée depuis Google Maps, qui peut déposer des cookies.",
+  "contact.openMap": "Ouvrir dans Google Maps",
+  "footer.followUs": "Suivez-nous"
 }

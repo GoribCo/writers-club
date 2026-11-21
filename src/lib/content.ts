@@ -245,6 +245,42 @@ export function getCollections(): (Collection & { items: ReturnType<typeof group
   })).sort((a, b) => b.slug.localeCompare(a.slug))
 }
 
+export type MediaItem = { kind: 'image' | 'video' | 'youtube'; src: string; caption: string }
+
+/** "/gallery/a.jpg" → image, ".mp4/.webm/.mov" → video, YouTube link → embed (privacy-enhanced youtube-nocookie). */
+const mediaItem = (raw: unknown): MediaItem => {
+  const o = (typeof raw === 'string' ? { src: raw } : raw ?? {}) as Record<string, unknown>
+  const src = String(o.src ?? '')
+  const caption = String(o.caption ?? '')
+  const yt = src.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([\w-]{11})/)
+  if (yt) return { kind: 'youtube', src: `https://www.youtube-nocookie.com/embed/${yt[1]}`, caption }
+  return { kind: /\.(mp4|webm|mov)$/i.test(src) ? 'video' : 'image', src, caption }
+}
+
+/** Gallery albums: contents/gallery/{yyyy-mm-dd-slug}.md, newest first. `items` = photos/videos. */
+export function getAlbums() {
+  return readMdDir('gallery').map(({ slug, data, content }) => ({
+    slug,
+    title: String(data.title ?? titleCase(slug)),
+    date: ymd(data.date),
+    body: content.trim(),
+    items: (Array.isArray(data.items) ? data.items : []).map(mediaItem).filter(i => i.src),
+  })).sort((a, b) => b.date.localeCompare(a.date))
+}
+
+/** Magazine issues: contents/magazine/{slug}.md with a `pdf` in public/, newest first. */
+export function getIssues() {
+  return readMdDir('magazine').map(({ slug, data, content }) => ({
+    slug,
+    title: String(data.title ?? titleCase(slug)),
+    date: ymd(data.date),
+    description: String(data.description ?? ''),
+    cover: String(data.cover ?? ''),
+    pdf: String(data.pdf ?? ''),
+    body: content.trim(),
+  })).sort((a, b) => b.date.localeCompare(a.date))
+}
+
 /** content/pages/{slug}.md, e.g. the submit page. */
 export function getPage(slug: string): { title: string; description: string; body: string } | null {
   const p = readMdDir('pages').find(x => x.slug === slug)

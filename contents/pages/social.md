@@ -1,9 +1,7 @@
 ---
 title: "Social"
-description: "Follow the Writers Club."
+description: "Follow the BTU Writer's Club."
 ---
 
-*(Replace these with the club's real accounts.)*
-
-- **Instagram:** [instagram.com/your-club](https://instagram.com/)
-- **Telegram / WhatsApp group:** ask at a [meeting](/events/)
+- **Instagram:** [@btu_writers_club](https://www.instagram.com/btuwritersclub/) — photos from our meetings, new writings and event announcements
+- **Email:** [btuwritersclub@gmail.com](mailto:btuwritersclub@gmail.com)

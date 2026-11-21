@@ -4,7 +4,7 @@ import { T } from './I18n'
 
 const links = [
   ['/authors/', 'nav.authors'], ['/collections/', 'footer.collections'], ['/events/', 'footer.events'],
-  ['/submit/', 'footer.submit'], ['/search/', 'nav.search'],
+  ['/submit/', 'footer.submit'], ['/contact/', 'menu.contact'], ['/search/', 'nav.search'],
 ]
 
 export default function SiteFooter() {
@@ -14,6 +14,10 @@ export default function SiteFooter() {
         <div>
           <p className="font-bold text-gray-900 dark:text-white">{config.app.name}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400"><T k="footer.tagline" /></p>
+          <a href={config.contact.instagram} target="_blank" rel="noopener" className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><rect x="2" y="2" width="20" height="20" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" /></svg>
+            <span><T k="footer.followUs" />: {config.contact.instagramHandle}</span>
+          </a>
         </div>
         <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
           {links.map(([href, key]) => (

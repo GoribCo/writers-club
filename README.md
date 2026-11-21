@@ -1,4 +1,4 @@
-# Writers Club
+# BTU Writer's Club
 
 Website of the international writers club at BTU Cottbus-Senftenberg. Members share stories, poems, travel writing, guides and drama in their own languages; each week's writings are published here.
 

@@ -78,7 +78,7 @@ export default function RootLayout({
         {/* Apple PWA — enables "Add to Home Screen" via Safari on iOS */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Writers Club" />
+        <meta name="apple-mobile-web-app-title" content={config.app.name} />
         <link rel="apple-touch-icon" href={asset('/apple-touch-icon.png')} />
 
         {/* Splash screens for common iPhone sizes */}
@@ -98,6 +98,7 @@ export default function RootLayout({
             {
               '@type': 'Organization', '@id': absUrl('/#org'), name: config.app.name, url: absUrl('/'),
               logo: absUrl('/icon-512.png'), description: config.seo.defaultDescription,
+              email: config.contact.email, sameAs: [config.contact.instagram],
               parentOrganization: { '@type': 'CollegeOrUniversity', name: 'BTU Cottbus-Senftenberg', url: 'https://www.b-tu.de' },
             },
             {

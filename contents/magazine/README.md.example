@@ -1,0 +1,11 @@
+---
+# Copy to contents/magazine/{issue-name}.md (e.g. issue-01-winter-2026.md).
+# Put the PDF (and optional cover image) in public/magazine/. Newest issue (by date) is shown first.
+title: "Issue 1 — Winter 2026"
+date: 2026-12-01
+description: "Stories and poems about our first winter in Cottbus."
+pdf: /magazine/issue-01-winter-2026.pdf
+cover: /magazine/issue-01-winter-2026.jpg   # optional; without it a coloured cover with the title is shown
+---
+
+Optional text shown under the reader (contents, editors, thanks…).

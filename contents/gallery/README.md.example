@@ -1,0 +1,15 @@
+---
+# Copy to contents/gallery/{yyyy-mm-dd-event-name}.md (e.g. 2026-11-07-reading-night.md).
+# Put the files in public/gallery/{same-name}/ and list them below. Newest album is shown first.
+title: "Reading Night at Bebel"
+date: 2026-11-07
+items:
+  - src: /gallery/2026-11-07-reading-night/01.jpg
+    caption: "Amara reading her poem"          # optional
+  - /gallery/2026-11-07-reading-night/02.jpg  # short form, no caption
+  - src: /gallery/2026-11-07-reading-night/clip.mp4   # .mp4/.webm/.mov plays as a video (keep files small, < 50 MB)
+  - src: https://youtu.be/XXXXXXXXXXX                 # YouTube links are embedded
+    caption: "Full recording"
+---
+
+Optional short description of the event.

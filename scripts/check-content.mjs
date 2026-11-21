@@ -66,6 +66,32 @@ for (const f of mdFiles(path.join(root, 'events'))) {
   if (!validDate(rawDate(path.join(root, 'events', f)))) errors.push(`contents/events/${f}: date must be a real YYYY-MM-DD date`)
 }
 
+// public/ file referenced by a content file (external URLs are not checked)
+const missing = src => src.startsWith('/') && !fs.existsSync(path.join(process.cwd(), 'public', src))
+
+for (const f of mdFiles(path.join(root, 'gallery'))) {
+  const file = `contents/gallery/${f}`
+  const { data } = read(path.join(root, 'gallery', f))
+  if (!data.title) errors.push(`${file}: missing title`)
+  if (!validDate(rawDate(path.join(root, 'gallery', f)))) errors.push(`${file}: date must be a real YYYY-MM-DD date`)
+  if (!Array.isArray(data.items) || !data.items.length) errors.push(`${file}: items must be a list of photos/videos`)
+  for (const it of Array.isArray(data.items) ? data.items : []) {
+    const src = String(typeof it === 'string' ? it : it?.src ?? '')
+    if (!src) errors.push(`${file}: an item has no src`)
+    else if (missing(src)) errors.push(`${file}: file not found: public${src}`)
+  }
+}
+
+for (const f of mdFiles(path.join(root, 'magazine'))) {
+  const file = `contents/magazine/${f}`
+  const { data } = read(path.join(root, 'magazine', f))
+  if (!data.title) errors.push(`${file}: missing title`)
+  if (!validDate(rawDate(path.join(root, 'magazine', f)))) errors.push(`${file}: date must be a real YYYY-MM-DD date`)
+  if (!data.pdf) errors.push(`${file}: missing pdf (e.g. pdf: /magazine/issue-01.pdf)`)
+  else if (missing(String(data.pdf))) errors.push(`${file}: file not found: public${data.pdf}`)
+  if (data.cover && missing(String(data.cover))) errors.push(`${file}: cover not found: public${data.cover}`)
+}
+
 warnings.forEach(w => console.warn(`⚠️  ${w}`))
 errors.forEach(e => console.error(`❌ ${e}`))
 console.log(`Content check: ${writings.size} writings, ${authors.size} authors — ${errors.length} errors, ${warnings.length} warnings`)

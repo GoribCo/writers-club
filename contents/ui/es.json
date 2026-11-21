@@ -101,5 +101,21 @@
   "font.small": "Pequeño",
   "font.medium": "Mediano",
   "font.large": "Grande",
-  "settings.language": "Idioma"
+  "settings.language": "Idioma",
+  "gallery.empty": "Aún no hay fotos. Aquí aparecerán fotos y vídeos de nuestro próximo evento.",
+  "gallery.items": {
+    "one": "{n} foto o vídeo",
+    "other": "{n} fotos y vídeos"
+  },
+  "magazine.empty": "El primer número está en preparación.",
+  "magazine.open": "Abrir a pantalla completa",
+  "magazine.download": "Descargar PDF",
+  "magazine.phoneHint": "En el móvil la revista se abre en tu visor de PDF: toca «Abrir a pantalla completa».",
+  "magazine.back": "Todos los números",
+  "contact.email": "Correo",
+  "contact.meeting": "Dónde nos reunimos",
+  "contact.showMap": "Mostrar mapa",
+  "contact.mapNotice": "El mapa se carga desde Google Maps, que puede usar cookies.",
+  "contact.openMap": "Abrir en Google Maps",
+  "footer.followUs": "Síguenos"
 }

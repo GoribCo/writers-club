@@ -1,6 +1,6 @@
 ---
 title: "FAQ"
-description: "Frequently asked questions about the Writers Club."
+description: "Frequently asked questions about the BTU Writer's Club."
 ---
 
 ## Do I need to be a good writer?

@@ -101,5 +101,21 @@
   "font.small": "Small",
   "font.medium": "Medium",
   "font.large": "Large",
-  "settings.language": "Language"
+  "settings.language": "Language",
+  "gallery.empty": "No photos yet. Pictures and videos from our next event will appear here.",
+  "gallery.items": {
+    "one": "{n} photo or video",
+    "other": "{n} photos and videos"
+  },
+  "magazine.empty": "The first issue is in preparation.",
+  "magazine.open": "Open full screen",
+  "magazine.download": "Download PDF",
+  "magazine.phoneHint": "On phones the magazine opens in your PDF viewer: tap “Open full screen”.",
+  "magazine.back": "All issues",
+  "contact.email": "Email",
+  "contact.meeting": "Where we meet",
+  "contact.showMap": "Show map",
+  "contact.mapNotice": "The map is loaded from Google Maps, which may set cookies.",
+  "contact.openMap": "Open in Google Maps",
+  "footer.followUs": "Follow us"
 }

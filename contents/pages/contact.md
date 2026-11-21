@@ -1,12 +1,6 @@
 ---
 title: "Contact"
-description: "Get in touch with the Writers Club."
+description: "Questions, ideas, or want to join? Write to us — we answer in English and German, and often in your language too."
 ---
 
-## Write to us
-
-Email: **writers-club@example.com** *(replace with the club address)*
-
-## Visit a meeting
-
-We meet every week on campus — see [Events](/events/) for the next date and place.
+The easiest way to reach us is by email or a message on Instagram. Or just come to one of our [meetings](/events/) — no registration needed.
