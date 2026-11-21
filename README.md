@@ -6,7 +6,7 @@ Static Next.js site — no database, every writing is a Markdown file. Deploys t
 
 ## Publishing a writing
 
-Add a file at `content/{language}/{genre}/{slug}.md`:
+Add a file at `contents/posts/{genre}/{slug}/{language}.md` (e.g. `contents/posts/poem/nodi/bn.md`):
 
 ```markdown
 ---
@@ -21,9 +21,9 @@ translator: "Lena Hoffmann"   # optional, for translations
 Text in Markdown. Line breaks are kept, so poems can be written line by line.
 ```
 
-- **Translations:** use the same `{genre}/{slug}.md` in another language folder. The pages link to each other automatically ("Also in: English · Deutsch · বাংলা").
-- **New language:** add it to `content/languages.json` (add `"dir": "rtl"` for right-to-left scripts), then create its folder.
-- **New genre:** just create the folder. Optionally add an icon and translated names in `content/genres.json`.
+- **Translations:** add another `{language}.md` next to it in the same `{slug}` folder. The pages link to each other automatically ("Also in: English · Deutsch · বাংলা").
+- **New language:** add it to `contents/languages.json` (add `"dir": "rtl"` for right-to-left scripts), then add `{code}.md` files.
+- **New genre:** create a folder in `contents/posts/`. Optionally add an icon and translated names in `contents/genres.json`.
 - Menus (languages on top, genres on the left) are generated from the folders. Empty languages/genres are hidden.
 
 ## URLs

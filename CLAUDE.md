@@ -40,7 +40,7 @@ src/
     tags/[tag]/                     # Writings with a theme tag
     collections/, collections/[slug]/  # Themed collections / anthologies
     events/                         # Meetings (upcoming/past decided in the browser)
-    submit/                         # Renders content/pages/submit.md
+    submit/                         # Renders contents/pages/submit.md
     og/site.png, og/[lang]/[genre]/[file]/  # Social preview PNGs (route handlers, built statically)
     llms.txt/                       # Plain site map for AI tools
     authors/[slug]/page.tsx         # Author details + all their writings (every language)
@@ -54,7 +54,7 @@ src/
     ThemeProvider, GoogleAnalytics, InstallBanner, ServiceWorkerRegistrar
   lib/content.ts                    # All fs-based loaders
   lib/types.ts
-content/
+contents/
   languages.json                    # Known languages (order = top menu order; "dir": "rtl" optional)
   genres.json                       # Optional icon + translated names per genre folder
   authors/{id}.md                   # Author profile; file name = id. Frontmatter: name, country, photo, tagline, links{}, details{}; body = About. See authors/README.md.example
@@ -62,16 +62,16 @@ content/
   collections/{id}.md               # title, description, cover; body = intro. Writings join with `collection: {id}`
   pages/submit.md                   # Submit page text
   ui/{code}.json                    # Site (interface) language dictionaries — NOT content. en.json is the fallback
-  {lang}/{genre}/{slug}.md          # One writing
+  posts/{genre}/{slug}/{lang}.md    # One writing in one language
 ```
 
 ## Content Model
 
-- `content/{lang}/{genre}/{slug}.md` → URL `/{lang}/{genre}/{slug}/`
-- Same `{genre}/{slug}` in another `{lang}` folder = translation of the same writing (linked via "Also in" + hreflang).
+- `contents/posts/{genre}/{slug}/{lang}.md` → URL `/{lang}/{genre}/{slug}/` (e.g. `posts/poem/nodi/bn.md` → `/bn/poem/nodi/`)
+- Every `{lang}.md` in one `{slug}` folder = translations of the same writing (linked via "Also in" + hreflang).
 - A language appears only if it is in `languages.json` AND has at least one writing. A genre appears only if it has writings.
 - Genre label: `genres.json` name for that language → English name → title-cased folder name.
-- Frontmatter: `title`, `author` (author id = file name in `content/authors/`, or a full name), `country`, `date` (YYYY-MM-DD), `description`, optional `translator`, `tags: [a, b]`, `collection: id`, `cover: /path.jpg`. Lists sort newest first.
+- Frontmatter: `title`, `author` (author id = file name in `contents/authors/`, or a full name), `country`, `date` (YYYY-MM-DD), `description`, optional `translator`, `tags: [a, b]`, `collection: id`, `cover: /path.jpg`. Lists sort newest first.
 - `.writing p { white-space: pre-line }` keeps authors' line breaks (poems, dialogue).
 
 ## Content Loaders (`src/lib/content.ts`)
@@ -95,7 +95,7 @@ All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 ## Site language (interface i18n)
 
 - Separate from content language. Visitor picks it in Settings (`SettingsMenu`); saved in `localStorage.uiLang`; first visit uses the browser language if a dictionary exists, else English.
-- Dictionaries: `content/ui/{code}.json`. `_name` = name in the select. Value is a string with `{vars}`, or a plural object `{ "one": …, "other": … }` (Intl.PluralRules categories). Missing keys fall back to `en.json`. Add a language = add a file.
+- Dictionaries: `contents/ui/{code}.json`. `_name` = name in the select. Value is a string with `{vars}`, or a plural object `{ "one": …, "other": … }` (Intl.PluralRules categories). Missing keys fall back to `en.json`. Add a language = add a file.
 - Use `<T k="key" n={3} />` in server components, `useI18n().t()` in client components, `<LocaleDate date=…/>` for dates (`components/I18n.tsx`).
 - Static HTML is rendered in English and switches after hydration (no per-language routes). Metadata/SEO stays English.
 - `<html dir>` follows the site language (rtl for ar); content blocks carry their own `lang`/`dir` (`dir="auto"` on authored text).
@@ -126,7 +126,7 @@ All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 | Decision | Reason |
 |----------|--------|
 | Static export (`output: 'export'`) | GitHub Pages deployment, no server needed |
-| Content in Markdown files | No database, version-controllable; club admin publishes via git |
+| Content in Markdown files (`contents/posts/{genre}/{slug}/{lang}.md`) | No database, version-controllable; club admin publishes via git |
 | URL `/{lang}/{genre}/{slug}/` | Language-first browsing; translations share genre+slug |
 | Network-first service worker | New writings must appear for returning visitors; cache is offline fallback |
 | `@variant dark` in CSS | Tailwind v4 defaults to media query; class-based needed for JS toggle |

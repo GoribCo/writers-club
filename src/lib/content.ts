@@ -3,9 +3,11 @@ import path from 'path'
 import matter from 'gray-matter'
 import type { Author, ClubEvent, Collection, Genre, Language, Writing } from './types'
 
-// Layout: content/{lang}/{genre}/{slug}.md — the same {genre}/{slug} in another
-// {lang} folder is treated as a translation of the same writing.
+// Layout: contents/posts/{genre}/{slug}/{lang}.md — every {lang}.md in one {slug} folder
+// is a translation of the same writing.
 const contentDir = path.join(process.cwd(), 'contents')
+const postsDir = path.join(contentDir, 'posts')
+const postFile = (lang: string, genre: string, slug: string) => path.join(postsDir, genre, slug, `${lang}.md`)
 
 const readJson = (file: string) => JSON.parse(fs.readFileSync(path.join(contentDir, file), 'utf-8'))
 
@@ -57,7 +59,7 @@ export function getGenres(lang: string): Genre[] {
   const meta = genreMeta()
   const order = Object.keys(meta)
   const rank = (slug: string) => (order.includes(slug) ? order.indexOf(slug) : order.length)
-  return subdirs(path.join(contentDir, lang))
+  return subdirs(postsDir)
     .map(slug => ({
       slug,
       icon: meta[slug]?.icon ?? '📄',
@@ -69,7 +71,7 @@ export function getGenres(lang: string): Genre[] {
 }
 
 function parseWriting(lang: string, genre: string, slug: string): Writing {
-  const { data, content } = matter(fs.readFileSync(path.join(contentDir, lang, genre, `${slug}.md`), 'utf-8'))
+  const { data, content } = matter(fs.readFileSync(postFile(lang, genre, slug), 'utf-8'))
   const date = ymd(data.date)
   return {
     lang,
@@ -95,15 +97,10 @@ function parseWriting(lang: string, genre: string, slug: string): Writing {
 
 /** Writings in a language (optionally one genre), newest first. */
 export function getWritings(lang: string, genre?: string): Writing[] {
-  const langDir = path.join(contentDir, lang)
-  return (genre ? [genre] : subdirs(langDir))
-    .flatMap(g => {
-      const dir = path.join(langDir, g)
-      if (!fs.existsSync(dir)) return []
-      return fs.readdirSync(dir)
-        .filter(f => f.endsWith('.md'))
-        .map(f => parseWriting(lang, g, f.slice(0, -3)))
-    })
+  return (genre ? [genre] : subdirs(postsDir))
+    .flatMap(g => subdirs(path.join(postsDir, g))
+      .filter(s => fs.existsSync(postFile(lang, g, s)))
+      .map(s => parseWriting(lang, g, s)))
     .sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title))
 }
 
@@ -125,12 +122,12 @@ export function getAllGenres(): Genre[] {
 }
 
 export function getWriting(lang: string, genre: string, slug: string): Writing | null {
-  return fs.existsSync(path.join(contentDir, lang, genre, `${slug}.md`)) ? parseWriting(lang, genre, slug) : null
+  return fs.existsSync(postFile(lang, genre, slug)) ? parseWriting(lang, genre, slug) : null
 }
 
 /** Every language this genre/slug exists in (including the current one). */
 export function getTranslations(genre: string, slug: string): Language[] {
-  return getLanguages().filter(l => fs.existsSync(path.join(contentDir, l.code, genre, `${slug}.md`)))
+  return getLanguages().filter(l => fs.existsSync(postFile(l.code, genre, slug)))
 }
 
 const authorsDir = path.join(contentDir, 'authors')
