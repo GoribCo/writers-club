@@ -38,6 +38,10 @@ export default function HomePage() {
           <p className="mt-4 text-white/85 text-base sm:text-lg">
             <T k="home.intro" name={config.app.name} />
           </p>
+          <Link href="/posts/" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-indigo-700 shadow-lg transition hover:bg-indigo-50 hover:shadow-xl">
+            <T k="home.startReading" />
+            <span aria-hidden className="rtl:rotate-180">→</span>
+          </Link>
           <div className="mt-8 flex gap-8">
             {stats.map(s => (
               <div key={s.label}>

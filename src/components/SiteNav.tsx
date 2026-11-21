@@ -124,20 +124,39 @@ export function TopNav({ languages }: { languages: Language[] }) {
 
 // Fixed site menu (desktop sidebar + mobile "Menu" sheet). Groups are separated by a divider.
 const MENU = [
-  [['/', '🏠', 'nav.home'], ['/posts/', '📚', 'menu.posts'], ['/magazine/', '📰', 'menu.magazine'], ['/gallery/', '🖼️', 'menu.gallery'],
+  [['/', '🏠', 'nav.home'], ['/magazine/', '📰', 'menu.magazine'], ['/gallery/', '🖼️', 'menu.gallery'],
     ['/collections/', '🗂️', 'footer.collections'], ['/authors/', '👥', 'nav.authors'], ['/events/', '📅', 'footer.events']],
   [['/submit/', '✍️', 'footer.submit'], ['/contact/', '✉️', 'menu.contact'], ['/social/', '💬', 'menu.social']],
   [['/faq/', '❓', 'menu.faq'], ['/help/', '🛟', 'menu.help'], ['/terms/', '📜', 'menu.terms'], ['/privacy/', '🔒', 'menu.privacy']],
 ] as const
 
-function MenuList({ languages, onPick }: { languages: Language[]; onPick?: () => void }) {
+/** Posts is the site's main section: /posts/ and every /{lang}/… page. */
+function usePostsActive(languages: Language[]) {
   const pathname = usePathname()
   const { lang } = useSegments()
+  return pathname.startsWith('/posts/') || languages.some(l => l.code === lang)
+}
+
+function MenuList({ languages, postCount, onPick }: { languages: Language[]; postCount: number; onPick?: () => void }) {
+  const pathname = usePathname()
   const { t } = useI18n()
-  // Writing pages (/{lang}/…) count as Posts
-  const active = (href: string) =>
-    href === '/' ? pathname === '/' : pathname.startsWith(href) || (href === '/posts/' && languages.some(l => l.code === lang))
-  return MENU.map((group, i) => (
+  const postsActive = usePostsActive(languages)
+  const active = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href))
+  return <>
+    {/* Primary: Posts, filled, above the rest of the menu */}
+    <Link
+      href="/posts/"
+      onClick={onPick}
+      aria-current={postsActive ? 'page' : undefined}
+      className={`mb-3 flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-white shadow-sm transition-colors ${
+        postsActive ? 'bg-indigo-700 ring-2 ring-indigo-300 dark:ring-indigo-800' : 'bg-indigo-600 hover:bg-indigo-700'
+      }`}
+    >
+      <span aria-hidden>📚</span>
+      <span className="flex-1 truncate">{t('menu.posts')}</span>
+      <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs">{postCount}</span>
+    </Link>
+    {MENU.map((group, i) => (
     <div key={i} className={`flex flex-col gap-1 ${i ? 'mt-3 pt-3 border-t border-gray-200 dark:border-gray-800' : ''}`}>
       {group.map(([href, icon, key]) => (
         <Link
@@ -156,15 +175,16 @@ function MenuList({ languages, onPick }: { languages: Language[]; onPick?: () =>
         </Link>
       ))}
     </div>
-  ))
+  ))}
+  </>
 }
 
 /** Desktop: always-visible left sidebar with the site menu. */
-export function SiteMenu({ languages }: { languages: Language[] }) {
+export function SiteMenu({ languages, postCount }: { languages: Language[]; postCount: number }) {
   const { t } = useI18n()
   return (
     <nav aria-label={t('nav.menu')} className="hidden lg:flex flex-col sticky top-14 w-56 shrink-0 px-3 py-6 h-[calc(100dvh-3.5rem)] overflow-y-auto border-r border-gray-200 dark:border-gray-800">
-      <MenuList languages={languages} />
+      <MenuList languages={languages} postCount={postCount} />
     </nav>
   )
 }
@@ -193,16 +213,18 @@ const icons = {
   authors: <><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="10" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></>,
   search: <><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></>,
   menu: <path d="M4 6h16M4 12h16M4 18h16" />,
+  posts: <><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z" /><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z" /></>,
 }
 
 /** Mobile/tablet: app-style bottom tab bar; "Languages" and "Menu" each open a bottom sheet. */
-export function BottomNav({ languages }: { languages: Language[] }) {
+export function BottomNav({ languages, postCount }: { languages: Language[]; postCount: number }) {
   const pathname = usePathname()
   const { lang } = useSegments()
   const [sheet, setSheet] = useState<'lang' | 'menu' | null>(null)
   useEffect(() => setSheet(null), [pathname])
   const open = sheet !== null
   const close = () => setSheet(null)
+  const postsActive = usePostsActive(languages)
   const current = languages.find(l => l.code === lang)
   const { t } = useI18n()
 
@@ -224,7 +246,7 @@ export function BottomNav({ languages }: { languages: Language[] }) {
             <h2 className="mb-3 font-semibold text-gray-900 dark:text-white">{t(sheet === 'lang' ? 'nav.chooseLanguage' : 'nav.menu')}</h2>
             {sheet === 'lang'
               ? <LanguageGrid languages={languages} lang={lang} onPick={close} />
-              : <MenuList languages={languages} onPick={close} />}
+              : <MenuList languages={languages} postCount={postCount} onPick={close} />}
           </div>
         </>
       )}
@@ -235,7 +257,15 @@ export function BottomNav({ languages }: { languages: Language[] }) {
           {current && !open ? <span className="text-2xl leading-6" aria-hidden>{current.flag}</span> : icon(icons.globe)}
           <span className="max-w-[5.5rem] truncate">{current && !open ? current.nativeName : t('nav.languages')}</span>
         </button>
-        <Link href="/authors/" className={tab(lang === 'authors' && !open)}>{icon(icons.authors)}{t('nav.authors')}</Link>
+        {/* Posts: raised centre button (Authors lives in the Menu sheet) */}
+        <Link href="/posts/" aria-current={postsActive ? 'page' : undefined} className={`${tab(postsActive && !open)} !pt-0`}>
+          <span className={`-mt-5 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg ring-4 ring-white dark:ring-gray-900 ${
+            postsActive && !open ? 'bg-indigo-700' : 'bg-indigo-600'
+          }`}>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>{icons.posts}</svg>
+          </span>
+          {t('menu.posts')}
+        </Link>
         <Link href="/search/" className={tab(lang === 'search' && !open)}>{icon(icons.search)}{t('nav.search')}</Link>
         <button onClick={() => setSheet(s => (s === 'menu' ? null : 'menu'))} aria-expanded={sheet === 'menu'} className={tab(sheet === 'menu')}>{icon(icons.menu)}{t('nav.menu')}</button>
       </nav>

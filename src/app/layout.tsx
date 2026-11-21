@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import ThemeProvider from '@/components/ThemeProvider'
 import { TopNav, SiteMenu, GenreChips, BottomNav } from '@/components/SiteNav'
-import { getGenres, getLanguages, getUiDictionaries } from '@/lib/content'
+import { getAllWritings, getGenres, getLanguages, getUiDictionaries, groupTranslations } from '@/lib/content'
 import { I18nProvider } from '@/components/I18n'
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
@@ -69,6 +69,7 @@ export default function RootLayout({
 }) {
   const languages = getLanguages()
   const menus = Object.fromEntries(languages.map(l => [l.code, getGenres(l.code)]))
+  const postCount = groupTranslations(getAllWritings()).length
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -116,7 +117,7 @@ export default function RootLayout({
           <TopNav languages={languages} />
           {/* Desktop: site menu sidebar left of content. Genre chips above content on language pages. */}
           <div className="max-w-6xl mx-auto lg:flex lg:items-start">
-            <SiteMenu languages={languages} />
+            <SiteMenu languages={languages} postCount={postCount} />
             <div className="flex-1 min-w-0">
               <GenreChips languages={languages} menus={menus} />
               <main className="px-4 sm:px-6 pt-6 pb-12">
@@ -125,7 +126,7 @@ export default function RootLayout({
             </div>
           </div>
           <SiteFooter />
-          <BottomNav languages={languages} />
+          <BottomNav languages={languages} postCount={postCount} />
           <InstallBanner />
         </I18nProvider>
         </ThemeProvider>
