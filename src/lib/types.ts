@@ -48,7 +48,7 @@ export interface Author {
   writings: Writing[] // newest first, all languages
 }
 
-export interface ClubEvent {
+export interface EventItem {
   slug: string // file name in content/events/
   title: string
   date: string // YYYY-MM-DD

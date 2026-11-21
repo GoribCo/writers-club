@@ -1,7 +1,7 @@
-import type { ClubEvent } from '@/lib/types'
+import type { EventItem } from '@/lib/types'
 import { LocaleDate, T } from './I18n'
 
-export default function EventCard({ e, highlight = false }: { e: ClubEvent; highlight?: boolean }) {
+export default function EventCard({ e, highlight = false }: { e: EventItem; highlight?: boolean }) {
   return (
     <div className={`flex gap-4 rounded-3xl p-5 ring-1 ${highlight
       ? 'bg-gradient-to-br from-amber-50 to-rose-50 dark:from-amber-950/40 dark:to-rose-950/40 ring-amber-200 dark:ring-amber-900'

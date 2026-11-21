@@ -77,7 +77,7 @@ jobs:
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
         env:
-          # Follows the repository name, e.g. https://goribco.github.io/btu-writers-club
+          # Follows the repository name: https://{owner}.github.io/{repo}
           NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           # Add your GA4 Measurement ID to repo Secrets (Settings → Secrets → Actions → NEXT_PUBLIC_GA_ID)

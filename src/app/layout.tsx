@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import ThemeProvider from '@/components/ThemeProvider'
 import { TopNav, SiteMenu, GenreChips, BottomNav } from '@/components/SiteNav'
-import { getAllWritings, getClub, getGenres, getLanguages, getUiDictionaries, groupTranslations } from '@/lib/content'
+import { getAllWritings, getSite, getGenres, getLanguages, getUiDictionaries, groupTranslations } from '@/lib/content'
 import { I18nProvider } from '@/components/I18n'
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
@@ -13,7 +13,7 @@ import JsonLd from '@/components/JsonLd'
 import SiteFooter from '@/components/SiteFooter'
 import { absUrl, asset } from '@/lib/url'
 
-const club = getClub()
+const site = getSite()
 
 const inter = Inter({
   subsets: ['latin'],
@@ -24,25 +24,25 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(config.url.site),
   title: {
-    default: club.title,
-    template: `%s | ${club.name}`,
+    default: site.title,
+    template: `%s | ${site.name}`,
   },
-  description: club.description,
-  keywords: club.keywords,
-  authors: [{ name: club.name }],
-  creator: club.name,
+  description: site.description,
+  keywords: site.keywords,
+  authors: [{ name: site.name }],
+  creator: site.name,
   openGraph: {
-    title: club.title,
-    description: club.description,
-    siteName: club.name,
+    title: site.title,
+    description: site.description,
+    siteName: site.name,
     locale: 'en_US',
     type: 'website',
     images: [{ url: '/og/site.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: club.title,
-    description: club.description,
+    title: site.title,
+    description: site.description,
   },
   alternates: {
     canonical: config.url.site,
@@ -80,7 +80,7 @@ export default function RootLayout({
         {/* Apple PWA — enables "Add to Home Screen" via Safari on iOS */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content={club.name} />
+        <meta name="apple-mobile-web-app-title" content={site.name} />
         <link rel="apple-touch-icon" href={asset('/apple-touch-icon.png')} />
 
         {/* Splash screens for common iPhone sizes */}
@@ -98,13 +98,13 @@ export default function RootLayout({
           '@context': 'https://schema.org',
           '@graph': [
             {
-              '@type': 'Organization', '@id': absUrl('/#org'), name: club.name, url: absUrl('/'),
-              logo: absUrl('/icon-512.png'), description: club.description,
-              email: club.email, sameAs: [club.instagram],
-              parentOrganization: { '@type': 'CollegeOrUniversity', name: 'BTU Cottbus-Senftenberg', url: 'https://www.b-tu.de' },
+              '@type': 'Organization', '@id': absUrl('/#org'), name: site.name, url: absUrl('/'),
+              logo: absUrl('/icon-512.png'), description: site.description,
+              email: site.email, sameAs: [site.instagram],
+              ...(site.university && { parentOrganization: { '@type': 'CollegeOrUniversity', name: site.university, url: site.universityUrl || undefined } }),
             },
             {
-              '@type': 'WebSite', '@id': absUrl('/#site'), name: club.name, url: absUrl('/'),
+              '@type': 'WebSite', '@id': absUrl('/#site'), name: site.name, url: absUrl('/'),
               publisher: { '@id': absUrl('/#org') }, inLanguage: languages.map(l => l.code),
               potentialAction: { '@type': 'SearchAction', target: absUrl('/search/?q={query}'), 'query-input': 'required name=query' },
             },
@@ -117,7 +117,7 @@ export default function RootLayout({
         <I18nProvider dicts={getUiDictionaries()}>
           <GoogleAnalytics />
           <ServiceWorkerRegistrar />
-          <TopNav languages={languages} siteName={club.name} />
+          <TopNav languages={languages} siteName={site.name} />
           {/* Desktop: site menu sidebar left of content. Genre chips above content on language pages. */}
           <div className="max-w-6xl mx-auto lg:flex lg:items-start">
             <SiteMenu languages={languages} postCount={postCount} />
@@ -130,7 +130,7 @@ export default function RootLayout({
           </div>
           <SiteFooter />
           <BottomNav languages={languages} postCount={postCount} />
-          <InstallBanner name={club.name} />
+          <InstallBanner name={site.name} />
         </I18nProvider>
         </ThemeProvider>
       </body>

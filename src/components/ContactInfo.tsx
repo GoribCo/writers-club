@@ -1,13 +1,13 @@
-import { getClub } from '@/lib/content'
+import { getSite } from '@/lib/content'
 import MapEmbed from './MapEmbed'
 import { T } from './I18n'
 
 const card = 'rounded-2xl bg-white dark:bg-gray-800/60 p-5 ring-1 ring-gray-200 dark:ring-gray-700'
 const label = 'text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'
 
-/** Contact page: email, Instagram, meeting place with map. Values come from contents/club.md. */
+/** Contact page: email, Instagram, meeting place with map. Values come from contents/site.md. */
 export default function ContactInfo() {
-  const { email, instagram, instagramHandle, meetingPlace: place, meetingAddress: address } = getClub()
+  const { email, instagram, instagramHandle, meetingPlace: place, meetingAddress: address } = getSite()
   const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
   return (
     <div className="max-w-2xl mx-auto grid gap-4 sm:grid-cols-2">

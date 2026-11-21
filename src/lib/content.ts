@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import type { Author, ClubEvent, Collection, Genre, Language, Writing } from './types'
+import type { Author, EventItem, Collection, Genre, Language, Writing } from './types'
 
 // Layout: contents/posts/{genre}/{slug}/{lang}.md — every {lang}.md in one {slug} folder
 // is a translation of the same writing.
@@ -220,7 +220,7 @@ export function getTags(): { slug: string; items: ReturnType<typeof groupTransla
 }
 
 /** Events, soonest first. */
-export function getEvents(): ClubEvent[] {
+export function getEvents(): EventItem[] {
   return readMdDir('events').map(({ slug, data, content }) => ({
     slug,
     title: String(data.title ?? titleCase(slug)),
@@ -245,10 +245,10 @@ export function getCollections(): (Collection & { items: ReturnType<typeof group
   })).sort((a, b) => b.slug.localeCompare(a.slug))
 }
 
-/** contents/club.md: the club's name, description, contact and meeting place. */
-export function getClub() {
-  const { data } = matter(fs.readFileSync(path.join(contentDir, 'club.md'), 'utf-8'))
-  const name = String(data.name ?? 'Writers Club')
+/** contents/site.md: site name, description, university, contact, meeting place; body = longer "about" text. */
+export function getSite() {
+  const { data, content } = matter(fs.readFileSync(path.join(contentDir, 'site.md'), 'utf-8'))
+  const name = String(data.name ?? 'Website')
   const instagram = String(data.instagram ?? '')
   return {
     name,
@@ -256,6 +256,9 @@ export function getClub() {
     title: String(data.title ?? name),
     description: String(data.description ?? ''),
     tagline: String(data.tagline ?? ''),
+    university: String(data.university ?? ''),
+    universityUrl: String(data.universityUrl ?? ''),
+    about: content.trim(),
     keywords: (Array.isArray(data.keywords) ? data.keywords : []).map(String),
     email: String(data.email ?? ''),
     instagram,

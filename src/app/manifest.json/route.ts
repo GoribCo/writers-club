@@ -1,16 +1,16 @@
-import { getClub } from '@/lib/content'
+import { getSite } from '@/lib/content'
 import config from '@/config'
 
 export const dynamic = 'force-static'
 
-/** Web app manifest; name/description come from contents/club.md. Icon paths are relative to this file (basePath-safe). */
+/** Web app manifest; name/description come from contents/site.md. Icon paths are relative to this file (basePath-safe). */
 export function GET() {
-  const club = getClub()
+  const site = getSite()
   const icon = (src: string, size: number, purpose: string) => ({ src, sizes: `${size}x${size}`, type: 'image/png', purpose })
   return Response.json({
-    name: club.title,
-    short_name: club.shortName,
-    description: club.description,
+    name: site.title,
+    short_name: site.shortName,
+    description: site.description,
     start_url: './',
     scope: './',
     display: 'standalone',

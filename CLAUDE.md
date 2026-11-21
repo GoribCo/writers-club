@@ -55,7 +55,7 @@ src/
   lib/content.ts                    # All fs-based loaders
   lib/types.ts
 contents/
-  club.md                           # Club name, description, email, Instagram, meeting place (frontmatter only)
+  site.md                           # Site name, university, description, email, Instagram, meeting place; body = about
   languages.json                    # Known languages (order = top menu order; "dir": "rtl" optional)
   genres.json                       # Optional icon + translated names per genre folder
   authors/{id}.md                   # Author profile; file name = id. Frontmatter: name, country, photo, tagline, links{}, details{}; body = About. See authors/README.md.example
@@ -103,10 +103,10 @@ All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 - Static HTML is rendered in English and switches after hydration (no per-language routes). Metadata/SEO stays English.
 - `<html dir>` follows the site language (rtl for ar); content blocks carry their own `lang`/`dir` (`dir="auto"` on authored text).
 
-## Club info (`contents/club.md`)
+## Site info (`contents/site.md`)
 
 - **Rule: anything an editor may change lives in `contents/` (Markdown/JSON), never in `src/config.ts`** (that file is developer settings only: URL, analytics, theme colours).
-- `club.md` frontmatter (name, shortName, title, description, keywords, email, instagram, meetingPlace, meetingAddress) → `getClub()`. Used for header/footer name, metadata, JSON-LD, Contact page, `/manifest.json` (route handler). Client components get the name as a prop.
+- `site.md` frontmatter (name, shortName, title, description, tagline, university, universityUrl, keywords, email, instagram, meetingPlace, meetingAddress; body = about text for llms.txt) → `getSite()`. Used for header/footer name, metadata, JSON-LD, Contact page, `/manifest.json` (route handler). Client components get the name as a prop.
 - Contact map: Google Maps embed by address, loaded only after a click (`MapEmbed`, GDPR). Gallery YouTube embeds use youtube-nocookie.
 - Site URL/basePath come from the GitHub Pages workflow (`configure-pages` outputs), so they follow the repo name (`btu-writers-club`).
 
@@ -132,6 +132,10 @@ All route `generateStaticParams` are data-driven, with `dynamicParams = false`.
 - `SettingsMenu.tsx` popover: **Theme** (System/Light/Dark), **Font size** (Small/Medium/Large → root font-size 15/16/18px, everything is rem), **Language** (site language).
 - `ThemeProvider` holds the theme preference; "system" follows `prefers-color-scheme` live. `useTheme()` → `{ preference, setPreference }`.
 - Stored in localStorage: `theme`, `fontSize`, `uiLang`. The inline script in `layout.tsx` applies all three before paint (keep its font sizes in sync with `FONT_SIZES`).
+
+## Reuse for another club
+
+The code is club-neutral: no club or university names in `src/`. For a new club: edit `contents/site.md`, `contents/languages.json`, `contents/genres.json`, `contents/pages/*.md`, replace `contents/posts|authors|events|collections|gallery|magazine`, swap icons in `public/`. No code changes needed.
 
 ## Key Decisions & Why
 

@@ -1,5 +1,5 @@
-// Developer configuration only. Everything editors may change (club name, description, email,
-// Instagram, meeting place) lives in contents/club.md → getClub() in lib/content.ts.
+// Developer configuration only. Everything editors may change (site name, description, university,
+// email, Instagram, meeting place) lives in contents/site.md → getSite() in lib/content.ts.
 
 const config = {
   // ── Site identity ──────────────────────────────────────────────────────────
@@ -11,7 +11,7 @@ const config = {
   // Override with NEXT_PUBLIC_SITE_URL env var in production.
   // Override with NEXT_PUBLIC_BASE_PATH for GitHub Pages sub-directory deploys.
   url: {
-    site: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://goribco.github.io/btu-writers-club',
+    site: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3010',
     basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? '',
   },
 

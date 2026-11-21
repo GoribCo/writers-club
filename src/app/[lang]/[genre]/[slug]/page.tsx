@@ -4,14 +4,14 @@ import type { Metadata } from 'next'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
-import { getClub, getCollections, getGenres, getLanguage, getLanguages, getNeighbours, getRelated, getTranslations, getWriting, getWritings } from '@/lib/content'
+import { getSite, getCollections, getGenres, getLanguage, getLanguages, getNeighbours, getRelated, getTranslations, getWriting, getWritings } from '@/lib/content'
 import WritingCard from '@/components/WritingCard'
 import ReaderTools from '@/components/ReaderTools'
 import { LocaleDate, T } from '@/components/I18n'
 import JsonLd from '@/components/JsonLd'
 import { absAsset, absUrl, asset } from '@/lib/url'
 
-const club = getClub()
+const site = getSite()
 
 export const dynamicParams = false
 
@@ -73,7 +73,7 @@ export default async function WritingPage({ params }: { params: Promise<Params> 
         author: { '@type': 'Person', name: w.author, url: absUrl(`/authors/${w.authorSlug}/`) },
         ...(w.translator && { translator: { '@type': 'Person', name: w.translator } }),
         ...(collection && { isPartOf: { '@type': 'Collection', name: collection.title, url: absUrl(`/collections/${collection.slug}/`) } }),
-        publisher: { '@type': 'Organization', name: club.name, url: absUrl('/') },
+        publisher: { '@type': 'Organization', name: site.name, url: absUrl('/') },
         workTranslation: translations.filter(l => l.code !== lang)
           .map(l => ({ '@type': 'CreativeWork', inLanguage: l.code, url: absUrl(`/${l.code}/${genre}/${slug}/`) })),
       }} />

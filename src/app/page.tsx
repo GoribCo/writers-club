@@ -1,12 +1,12 @@
 import Link from 'next/link'
-import { getAllGenres, getAllWritings, getAuthors, getClub, getCollections, getEvents, getLanguages, getTags, getWritings, groupTranslations } from '@/lib/content'
+import { getAllGenres, getAllWritings, getAuthors, getSite, getCollections, getEvents, getLanguages, getTags, getWritings, groupTranslations } from '@/lib/content'
 import NextEvent from '@/components/NextEvent'
 import CollectionCard from '@/components/CollectionCard'
 import HomeFeed from '@/components/HomeFeed'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import { T } from '@/components/I18n'
 
-const club = getClub()
+const site = getSite()
 
 export const dynamic = 'force-static'
 
@@ -31,13 +31,13 @@ export default function HomePage() {
         <div aria-hidden className="absolute -bottom-20 left-1/3 h-56 w-56 rounded-full bg-fuchsia-300/20 blur-3xl" />
         <div className="relative max-w-2xl">
           <p className="mb-3 inline-block rounded-full bg-white/15 px-3 py-1 text-xs font-semibold tracking-wide backdrop-blur">
-            <T k="home.kicker" />
+            <T k="home.kicker" university={site.university} />
           </p>
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">
             <T k="home.title" />
           </h1>
           <p className="mt-4 text-white/85 text-base sm:text-lg">
-            <T k="home.intro" name={club.name} />
+            <T k="home.intro" name={site.name} />
           </p>
           <Link href="/posts/" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-indigo-700 shadow-lg transition hover:bg-indigo-50 hover:shadow-xl">
             <T k="home.startReading" />

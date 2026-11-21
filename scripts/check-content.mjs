@@ -93,10 +93,10 @@ for (const f of mdFiles(path.join(root, 'magazine'))) {
 }
 
 {
-  const file = 'contents/club.md'
-  if (!fs.existsSync(path.join(root, 'club.md'))) errors.push(`${file}: missing (club name, email, Instagram, meeting place)`)
+  const file = 'contents/site.md'
+  if (!fs.existsSync(path.join(root, 'site.md'))) errors.push(`${file}: missing (site name, description, email, Instagram, meeting place)`)
   else {
-    const { data } = read(path.join(root, 'club.md'))
+    const { data } = read(path.join(root, 'site.md'))
     if (!data.name) errors.push(`${file}: missing name`)
     if (!data.description) warnings.push(`${file}: missing description (used by search engines)`)
     if (data.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email)) errors.push(`${file}: email looks wrong`)
