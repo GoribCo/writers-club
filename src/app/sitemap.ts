@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getAllWritings, getAuthors, getCollections, getGenres, getIssues, getLanguages, getTags, getTranslations } from '@/lib/content'
+import { getAllWritings, getAuthors, getCollections, getCountries, getGenres, getIssues, getLanguages, getTags, getTranslations } from '@/lib/content'
 import config from '@/config'
 
 export const dynamic = 'force-static'
@@ -30,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...getAuthors().map(a => entry(`/authors/${a.slug}/`, newest(a.writings))),
     ...getCollections().map(c => entry(`/collections/${c.slug}/`, newest(c.items.map(i => i.writing)))),
     ...getIssues().map(i => entry(`/magazine/${i.slug}/`, i.date)),
+    ...getCountries().map(c => entry(`/countries/${c.slug}/`, newest(c.items.map(i => i.writing)))),
     ...getTags().map(t => entry(`/tags/${t.slug}/`, newest(t.items.map(i => i.writing)))),
   ]
 }

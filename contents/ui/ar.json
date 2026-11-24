@@ -118,5 +118,7 @@
   "contact.showMap": "عرض الخريطة",
   "contact.mapNotice": "تُحمَّل الخريطة من Google Maps، وقد تُضبط ملفات تعريف الارتباط.",
   "contact.openMap": "فتح في Google Maps",
-  "footer.followUs": "تابعونا"
+  "footer.followUs": "تابعونا",
+  "countries.title": "الدول",
+  "country.writingsFrom": "كتابات من {country}"
 }

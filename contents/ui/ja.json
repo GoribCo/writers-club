@@ -110,5 +110,7 @@
   "contact.showMap": "地図を表示",
   "contact.mapNotice": "地図は Google マップから読み込まれ、Cookie が設定される場合があります。",
   "contact.openMap": "Google マップで開く",
-  "footer.followUs": "フォローする"
+  "footer.followUs": "フォローする",
+  "countries.title": "国",
+  "country.writingsFrom": "{country}からの作品"
 }

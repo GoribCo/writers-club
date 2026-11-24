@@ -117,7 +117,7 @@ export default async function WritingPage({ params }: { params: Promise<Params> 
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-2">{w.title}</h1>
           <p className="text-indigo-600 dark:text-indigo-400 font-medium">
             <Link href={`/authors/${w.authorSlug}/`} className="hover:underline">{w.author}</Link>
-            {w.country && ` · ${w.country}`}
+            {w.country && <> · <Link href={`/countries/${w.countrySlug}/`} className="hover:underline">{w.country}</Link></>}
           </p>
           <p className="text-xs text-gray-400 mt-1">
             <LocaleDate date={w.date} /> · <T k="card.min" n={w.minutes} />{w.translator && <> · <T k="writing.translatedBy" name={w.translator} /></>}

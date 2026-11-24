@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getAuthors, getLanguages } from '@/lib/content'
+import { getAuthors, getCountries, getLanguages } from '@/lib/content'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import { T } from '@/components/I18n'
 import { markdownPage } from '@/components/MarkdownPage'
@@ -11,12 +11,7 @@ export const metadata: Metadata = markdownPage('authors').generateMetadata()
 export default function AuthorsPage() {
   const byCode = Object.fromEntries(getLanguages().map(l => [l.code, l]))
   const authors = getAuthors()
-  // "Where we come from": countries with their authors, most authors first
-  // Not Object.groupBy: CI builds on Node 20, which doesn't have it
-  const byCountry = new Map<string, typeof authors>()
-  for (const a of authors) if (a.country) byCountry.set(a.country, [...(byCountry.get(a.country) ?? []), a])
-  const countries = [...byCountry].map(([country, as]) => ({ country, flag: as.find(a => a.flag)?.flag ?? '🌍', authors: as }))
-    .sort((a, b) => b.authors.length - a.authors.length || a.country.localeCompare(b.country))
+  const countries = getCountries()
   return (
     <div className="max-w-5xl mx-auto">
       <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-6"><T k="authors.title" /></h1>
@@ -44,11 +39,12 @@ export default function AuthorsPage() {
         <p className="mb-4 text-sm text-gray-500 dark:text-gray-400"><T k="authors.countries" n={countries.length} /></p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {countries.map(c => (
-            <div key={c.country} className="rounded-2xl bg-white dark:bg-gray-800/80 ring-1 ring-gray-200/70 dark:ring-gray-700/60 p-4">
-              <div className="flex items-center gap-2">
+            <div key={c.slug} className="rounded-2xl bg-white dark:bg-gray-800/80 ring-1 ring-gray-200/70 dark:ring-gray-700/60 p-4">
+              <Link href={`/countries/${c.slug}/`} className="flex items-center gap-2 group">
                 <span className="text-3xl" aria-hidden>{c.flag}</span>
-                <span className="font-semibold text-gray-900 dark:text-white">{c.country}</span>
-              </div>
+                <span className="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600">{c.name}</span>
+                <span className="ms-auto text-xs text-gray-400">{c.items.length}</span>
+              </Link>
               <div className="mt-2 flex flex-wrap gap-x-2 text-xs">
                 {c.authors.map(a => <Link key={a.slug} href={`/authors/${a.slug}/`} className="text-indigo-600 dark:text-indigo-400 hover:underline">{a.name}</Link>)}
               </div>

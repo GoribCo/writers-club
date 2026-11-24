@@ -73,6 +73,10 @@ export function getGenres(lang: string): Genre[] {
 function parseWriting(lang: string, genre: string, slug: string): Writing {
   const { data, content } = matter(fs.readFileSync(postFile(lang, genre, slug), 'utf-8'))
   const date = ymd(data.date)
+  const authorSlug = slugify(String(data.author ?? 'Anonymous'))
+  const authorFile = readAuthorFile(authorSlug)
+  // The author's country wins, so it matches the /countries/ pages
+  const country = authorFile?.country || String(data.country ?? '')
   return {
     lang,
     genre,
@@ -81,9 +85,10 @@ function parseWriting(lang: string, genre: string, slug: string): Writing {
     slug,
     url: `/${lang}/${genre}/${slug}/`,
     title: String(data.title ?? titleCase(slug)),
-    author: readAuthorFile(slugify(String(data.author ?? 'Anonymous')))?.name ?? String(data.author ?? 'Anonymous'),
-    authorSlug: slugify(String(data.author ?? 'Anonymous')),
-    country: String(data.country ?? ''),
+    author: authorFile?.name ?? String(data.author ?? 'Anonymous'),
+    authorSlug,
+    country,
+    countrySlug: slugify(country),
     date,
     description: String(data.description ?? ''),
     translator: String(data.translator ?? ''),
@@ -210,6 +215,20 @@ export function getNeighbours(w: Writing): { prev?: Writing; next?: Writing } {
   const list = getWritings(w.lang, w.genre)
   const i = list.findIndex(o => o.slug === w.slug)
   return { next: list[i - 1], prev: list[i + 1] }
+}
+
+/** Countries of the authors (most writings first), each with its authors and their writings (translations merged). */
+export function getCountries() {
+  // Not Object.groupBy: CI builds on Node 20, which doesn't have it
+  const byCountry = new Map<string, Author[]>()
+  for (const a of getAuthors()) if (a.country) byCountry.set(a.country, [...(byCountry.get(a.country) ?? []), a])
+  return [...byCountry].map(([name, authors]) => ({
+    slug: slugify(name),
+    name,
+    flag: authors.find(a => a.flag)?.flag ?? '🌍',
+    authors,
+    items: groupTranslations(authors.flatMap(a => a.writings)).sort((a, b) => b.writing.date.localeCompare(a.writing.date)),
+  })).sort((a, b) => b.items.length - a.items.length || b.authors.length - a.authors.length || a.name.localeCompare(b.name))
 }
 
 /** All tags with their writings (translations merged), A–Z. */

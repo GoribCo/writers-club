@@ -38,6 +38,7 @@ src/
     search/                         # Client-side search over all writings
     authors/page.tsx                # All authors + "Where we come from" (by country)
     tags/[tag]/                     # Writings with a theme tag
+    countries/[country]/            # Writings by authors from one country (getCountries(); linked from authors, author pages, /posts/)
     collections/, collections/[slug]/  # Themed collections / anthologies
     events/                         # Meetings (upcoming/past decided in the browser)
     submit/                         # Renders contents/pages/submit.md

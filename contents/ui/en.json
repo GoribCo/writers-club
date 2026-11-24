@@ -117,5 +117,7 @@
   "contact.showMap": "Show map",
   "contact.mapNotice": "The map is loaded from Google Maps, which may set cookies.",
   "contact.openMap": "Open in Google Maps",
-  "footer.followUs": "Follow us"
+  "footer.followUs": "Follow us",
+  "countries.title": "Countries",
+  "country.writingsFrom": "Writings from {country}"
 }

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { getAuthor, getAuthors, getSite, getLanguages, groupTranslations } from '@/lib/content'
+import { getAuthor, getAuthors, getSite, getLanguages, groupTranslations, slugify } from '@/lib/content'
 import AuthorAvatar from '@/components/AuthorAvatar'
 import WritingCard from '@/components/WritingCard'
 import JsonLd from '@/components/JsonLd'
@@ -77,7 +77,7 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
             <div dir="auto" className="min-w-0">
               <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">{a.name}</h1>
               {a.tagline && <p className="mt-1 text-gray-600 dark:text-gray-300">{a.tagline}</p>}
-              {a.country && <p className="mt-1 text-sm font-semibold text-indigo-600 dark:text-indigo-400">{a.flag || '📍'} {a.country}</p>}
+              {a.country && <Link href={`/countries/${slugify(a.country)}/`} className="mt-1 inline-block text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">{a.flag || '📍'} {a.country}</Link>}
             </div>
           </div>
 

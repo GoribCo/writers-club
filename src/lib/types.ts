@@ -25,6 +25,7 @@ export interface Writing {
   author: string
   authorSlug: string
   country: string
+  countrySlug: string // /countries/{countrySlug}/
   date: string // YYYY-MM-DD
   description: string
   translator: string

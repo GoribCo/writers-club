@@ -19,10 +19,9 @@ export const genreCover = (genre: string) =>
 export default function WritingCard({ writing: w, languages, featured = false }:
   { writing: Writing; languages?: Language[]; featured?: boolean }) {
   return (
-    <Link
-      href={w.url}
+    <article
       lang={w.lang}
-      className={`group flex flex-col overflow-hidden rounded-3xl bg-white dark:bg-gray-800/80 ring-1 ring-gray-200/70 dark:ring-gray-700/60 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 ${featured ? 'md:flex-row' : ''}`}
+      className={`group relative flex flex-col overflow-hidden rounded-3xl bg-white dark:bg-gray-800/80 ring-1 ring-gray-200/70 dark:ring-gray-700/60 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 ${featured ? 'md:flex-row' : ''}`}
     >
       <div className={`relative bg-gradient-to-br ${genreCover(w.genre)} flex items-center justify-center overflow-hidden ${featured ? 'h-48 md:h-auto md:w-2/5' : 'h-32'}`}>
         {w.cover
@@ -40,7 +39,8 @@ export default function WritingCard({ writing: w, languages, featured = false }:
       <div className={`flex flex-1 flex-col p-5 ${featured ? 'md:p-8 md:justify-center' : ''}`}>
         {featured && <span className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400"><T k="card.featured" /></span>}
         <h3 dir="auto" className={`font-bold leading-snug text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors ${featured ? 'text-2xl md:text-3xl' : 'text-lg'}`}>
-          {w.title}
+          {/* Stretched link: the whole card opens the writing; the country link sits above it */}
+          <Link href={w.url} className="after:absolute after:inset-0 after:content-['']">{w.title}</Link>
         </h3>
         {w.description && (
           <p dir="auto" className={`mt-2 text-gray-500 dark:text-gray-400 ${featured ? 'text-base line-clamp-3' : 'text-sm line-clamp-2'}`}>{w.description}</p>
@@ -49,11 +49,11 @@ export default function WritingCard({ writing: w, languages, featured = false }:
           <AuthorAvatar author={{ name: w.author }} size={28} />
           <span className="min-w-0 truncate">
             <span className="font-semibold text-gray-800 dark:text-gray-200">{w.author}</span>
-            {w.country && ` · ${w.country}`}
+            {w.country && <> · <Link href={`/countries/${w.countrySlug}/`} className="relative z-10 hover:text-indigo-600 hover:underline">{w.country}</Link></>}
           </span>
           <span className="ms-auto shrink-0"><LocaleDate date={w.date} /> · <T k="card.min" n={w.minutes} /></span>
         </div>
       </div>
-    </Link>
+    </article>
   )
 }

@@ -111,5 +111,7 @@
   "contact.showMap": "মানচিত্র দেখান",
   "contact.mapNotice": "মানচিত্রটি Google Maps থেকে লোড হয়, যা কুকি সেট করতে পারে।",
   "contact.openMap": "Google Maps-এ খুলুন",
-  "footer.followUs": "আমাদের অনুসরণ করুন"
+  "footer.followUs": "আমাদের অনুসরণ করুন",
+  "countries.title": "দেশসমূহ",
+  "country.writingsFrom": "{country} থেকে লেখা"
 }
